@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HandyCareCuidador.Page.ListaMedicamentoPage"
+  xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador" >
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Name="Novo Medicamento" Command="{Binding AddMedicamento}" Order="Primary" Priority="0" />
+  </ContentPage.ToolbarItems>
+  <ContentPage.Content>
+    <ListView x:Name="lstMedicamento" ItemsSource="{Binding Medicamentos}" SelectedItem="{Binding SelectedMedicamento}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding MedDescricao}"></TextCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </ContentPage.Content>
+</ContentPage>
