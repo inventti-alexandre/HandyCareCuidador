@@ -55,16 +55,6 @@ namespace HandyCareCuidador
         private void Register()
         {
             FreshIOC.Container.Register<ICuidadorRestService, CuidadorRestService>();
-            FreshIOC.Container.Register<IAfazerRestService, AfazerRestService>();
-            FreshIOC.Container.Register<IMaterialRestService, MaterialRestService>();
-            FreshIOC.Container.Register<IMedicamentoRestService, MedicamentoRestService>();
-            FreshIOC.Container.Register<IMedicamentoAdministradoRestService, MedicamentoAdministradoRestService>();
-            FreshIOC.Container.Register<IMaterialUtilizadoRestService, MaterialUtilizadoRestService>();
-            FreshIOC.Container.Register<IConclusaoAfazerRestService, ConclusaoAfazerRestService>();
-            //FreshIOC.Container.Register<IPacienteRestService, PacienteRestService>();
-            //FreshIOC.Container.Register<ICuidadorPacienteRestService, CuidadorPacienteRestService>();
-            FreshIOC.Container.Register<IMotivoCuidadoRestService, MotivoCuidadoRestService>();
-            FreshIOC.Container.Register<IPeriodoTratamentoRestService, PeriodoTratamentoRestService>();
         }
         protected override void OnStart()
         {

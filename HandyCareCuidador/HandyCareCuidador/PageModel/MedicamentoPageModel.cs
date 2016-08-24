@@ -21,7 +21,7 @@ namespace HandyCareCuidador.PageModel
         public bool alterar = false;
         public Medicamento Medicamento { get; set; }
         public HorarioViewModel oHorario { get; set; }
-        public MedicamentoPageModel(IMedicamentoRestService restService)
+        public MedicamentoPageModel()
         {
             //_restService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
         }

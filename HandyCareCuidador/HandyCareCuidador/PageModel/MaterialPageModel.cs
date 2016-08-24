@@ -21,7 +21,7 @@ namespace HandyCareCuidador.PageModel
         public bool novoItem = true;
         public Material Material { get; set; }
         public HorarioViewModel oHorario { get; set; }
-        public MaterialPageModel(IMaterialRestService restService)
+        public MaterialPageModel()
         {
             //_restService = FreshIOC.Container.Resolve<IMaterialRestService>();
         }
