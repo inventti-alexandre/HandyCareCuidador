@@ -32,6 +32,10 @@ namespace HandyCareCuidador.Model
         public string CuiCidade { get; set; }
         [JsonProperty(PropertyName = "CuiEstado")]
         public string CuiEstado { get; set; }
+        public string CuiGoogleId { get; set; }
+        public string CuiFacebookId { get; set; }
+        [JsonProperty(PropertyName = "CuiMicrosoftId")]
+        public string CuiMicrosoftId { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Avaliacao> Avaliacao { get; set; }

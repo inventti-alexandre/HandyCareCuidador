@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HandyCareCuidador.Data;
+using HandyCareCuidador.Helper;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador.PageModel
@@ -17,17 +19,25 @@ namespace HandyCareCuidador.PageModel
 
     public class ListaMaterialPageModel:FreshBasePageModel
     {
-        IMaterialRestService _restService;
+        //IMaterialRestService _restService;
+        //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
+        public Paciente oPaciente { get; set; }
+        public HorarioViewModel oHorario { get; set; }
+
         public bool deleteVisible;
-        public ListaMaterialPageModel(IMaterialRestService restService)
+        public ListaMaterialPageModel()
         {
-            _restService = restService;
+            //_restService = FreshIOC.Container.Resolve<IMaterialRestService>();
+            //_cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
         }
         public ObservableCollection<Material> Materiais { get; set; }
 
         public override async void Init(object initData)
         {
             base.Init(initData);
+            oPaciente = new Paciente();
+            oHorario = new HorarioViewModel { ActivityRunning = true, Visualizar = false };
+            oPaciente = initData as Paciente;
             await GetMateriais();
         }
         public async Task GetMateriais()
@@ -35,8 +45,18 @@ namespace HandyCareCuidador.PageModel
             try
             {
                 await Task.Run(async () => {
-                    Materiais = new ObservableCollection<Material>(await _restService.RefreshDataAsync());
+                    var pacresult = new ObservableCollection<CuidadorPaciente>(await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                    .Where(e => e.PacId == oPaciente.Id)
+                    .AsEnumerable();
+                    var result = new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync())
+                    .Where(e => pacresult.Select(m => m.Id)
+                    .Contains(e.MatPacId))
+                    .AsEnumerable();
+                    Materiais = new ObservableCollection<Material>(result);
+                    if(Materiais.Count==0)
+                        oHorario.Visualizar = true;
                 });
+                oHorario.ActivityRunning = false;
             }
             catch (Exception)
             {

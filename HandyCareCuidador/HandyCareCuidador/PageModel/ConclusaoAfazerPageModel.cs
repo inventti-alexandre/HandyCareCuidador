@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using FreshMvvm;
+using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
 using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
@@ -13,12 +14,12 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class ConclusaoAfazerPageModel:FreshBasePageModel
     {
-        IAfazerRestService _restService;
-        IMaterialRestService _materialRestService;
-        IConclusaoAfazerRestService _concluirRestService;
-        IMaterialUtilizadoRestService _materialUtilizadoRestService;
-        IMedicamentoRestService _medicamentoRestService;
-        private IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
+        //IAfazerRestService _restService;
+        //IMaterialRestService _materialRestService;
+        //IConclusaoAfazerRestService _concluirRestService;
+        //IMaterialUtilizadoRestService _materialUtilizadoRestService;
+        //IMedicamentoRestService _medicamentoRestService;
+        //private IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
         public Afazer Afazer { get; set; }
         public bool newItem { get; set; }
         public Material oMaterial { get; set; }
@@ -35,22 +36,22 @@ namespace HandyCareCuidador.PageModel
 
         public ConclusaoAfazerPageModel()
         {
-            _restService = FreshIOC.Container.Resolve<IAfazerRestService>();
-            _concluirRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
-            _materialRestService = FreshIOC.Container.Resolve<IMaterialRestService>();
-            _medicamentoRestService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
-            _materialUtilizadoRestService = FreshIOC.Container.Resolve<IMaterialUtilizadoRestService>();
-            _medicamentoAdministradoRestService = FreshIOC.Container.Resolve<IMedicamentoAdministradoRestService>();
+            //_restService = FreshIOC.Container.Resolve<IAfazerRestService>();
+            //_concluirRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
+            //_materialRestService = FreshIOC.Container.Resolve<IMaterialRestService>();
+            //_medicamentoRestService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
+            //_materialUtilizadoRestService = FreshIOC.Container.Resolve<IMaterialUtilizadoRestService>();
+            //_medicamentoAdministradoRestService = FreshIOC.Container.Resolve<IMedicamentoAdministradoRestService>();
         }
         public override async void Init(object initData)
         {
             base.Init(initData);
             var detalheAfazer=initData as Tuple<Afazer,ConclusaoAfazer>;
-            MateriaisUtilizados = new ObservableCollection<MaterialUtilizado>(await _materialUtilizadoRestService.RefreshDataAsync(detalheAfazer?.Item1.Id));
-            MedicamentosAdministrados = new ObservableCollection<MedicamentoAdministrado>(await _medicamentoAdministradoRestService.RefreshDataAsync(detalheAfazer?.Item1.Id));
-            Materiais = (ObservableCollection<Material>) new ObservableCollection<Material>(await _materialRestService.RefreshDataExistenteAsync())
+            MateriaisUtilizados = new ObservableCollection<MaterialUtilizado>(await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(detalheAfazer?.Item1.Id));
+            MedicamentosAdministrados = new ObservableCollection<MedicamentoAdministrado>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAdministradoAsync(detalheAfazer?.Item1.Id));
+            Materiais = (ObservableCollection<Material>) new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialExistenteAsync())
                 .Where(m => MateriaisUtilizados.Select(n => n.MatUtilizado).Contains(m.Id));
-            Medicamentos =(ObservableCollection<Medicamento>) new ObservableCollection<Medicamento>(await _medicamentoRestService.RefreshDataAsync())
+            Medicamentos =(ObservableCollection<Medicamento>) new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
                 .Where(m=> MedicamentosAdministrados.Select(n=>n.MedAdministrado).Contains(m.Id));
             if (Afazer == null)
             {

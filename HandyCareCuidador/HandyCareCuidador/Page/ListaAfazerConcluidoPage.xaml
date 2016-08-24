@@ -6,13 +6,9 @@
     <ToolbarItem Name="Nova Tarefa" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>
+    <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
     <StackLayout>
-      <ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding Afazeres, Mode=TwoWay}" SelectedItem="{Binding SelectedAfazer}"  IsVisible="True" RowHeight="60">
-        <ListView.Header>
-          <StackLayout Padding="10">
-            <Label Text="Afazeres concluídos" FontAttributes="Bold" FontSize="22" />
-          </StackLayout>
-        </ListView.Header>
+      <ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding Afazeres, Mode=TwoWay}" SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
         <ListView.ItemTemplate>
           <DataTemplate>
             <ViewCell>

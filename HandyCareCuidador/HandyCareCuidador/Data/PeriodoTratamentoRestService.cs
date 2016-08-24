@@ -1,64 +1,67 @@
-﻿//#define OFFLINE_SYNC_ENABLED
-using HandyCareCuidador.Interface;
-using HandyCareCuidador.Model;
-using Microsoft.WindowsAzure.MobileServices;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-#if OFFLINE_SYNC_ENABLED
-using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
-using Microsoft.WindowsAzure.MobileServices.Sync;
-#endif
+using HandyCareCuidador.Interface;
+using HandyCareCuidador.Model;
+using Microsoft.WindowsAzure.MobileServices;
+
 namespace HandyCareCuidador.Data
 {
-    public class MedicamentoRestService: IMedicamentoRestService
+    public class PeriodoTratamentoRestService:IPeriodoTratamentoRestService
     {
-        static MedicamentoRestService defaultInstance = new MedicamentoRestService();
+        static PeriodoTratamentoRestService defaultInstance = new PeriodoTratamentoRestService();
         MobileServiceClient client;
 #if OFFLINE_SYNC_ENABLED
-        IMobileServiceSyncTable<Medicamento> MedicamentoTable;
+        IMobileServiceSyncTable<PeriodoTratamento> PeriodoTratamentoTable;
 #else
-        IMobileServiceTable<Medicamento> MedicamentoTable;
+        IMobileServiceTable<PeriodoTratamento> PeriodoTratamentoTable;
 #endif
-        public MedicamentoRestService()
+        public PeriodoTratamentoRestService()
         {
-            client = new MobileServiceClient(Constants.ApplicationURL);
+            this.client = new MobileServiceClient(Constants.ApplicationURL);
 #if OFFLINE_SYNC_ENABLED
-            var store = new MobileServiceSQLiteStore("localstore.db");
-            store.DefineTable<Medicamento>();
+            var store = new MobileServiceSQLiteStore("PeriodoTratamentolocalstore.db");
+            store.DefineTable<PeriodoTratamento>();
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
             this.client.SyncContext.InitializeAsync(store);
 
-            MedicamentoTable = client.GetSyncTable<Medicamento>();
+            PeriodoTratamentoTable = client.GetSyncTable<PeriodoTratamento>();
 #else
-            MedicamentoTable = client.GetTable<Medicamento>();
+            PeriodoTratamentoTable = client.GetTable<PeriodoTratamento>();
 #endif
         }
-        public async Task DeleteMedicamentoAsync(Medicamento medicamento)
+
+        //public static PeriodoTratamentoRestService DefaultManager
+        //{
+        //    get
+        //    {
+        //        return defaultInstance;
+        //    }
+        //    private set
+        //    {
+        //        defaultInstance = value;
+        //    }
+        //}
+
+        //public MobileServiceClient CurrentClient
+        //{
+        //    get { return client; }
+        //}
+        public bool IsOfflineEnabled
         {
-            try
-            {
-                await MedicamentoTable.DeleteAsync(medicamento);
-            }
-            catch (ArgumentException e)
-            {
-                Debug.WriteLine("{0}", e.Message);
-                throw e;
-            }
-            catch(MobileServiceInvalidOperationException a)
-            {
-                Debug.WriteLine("{0}", a.Message);
-                throw a;
-            }
+            get { return PeriodoTratamentoTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<PeriodoTratamento>; }
         }
 
-        public async Task<ObservableCollection<Medicamento>> RefreshDataAsync(bool syncItems = false)
+        public async Task DeletePeriodoTratamentoAsync(PeriodoTratamento periodoTratamento)
+        {
+            await PeriodoTratamentoTable.DeleteAsync(periodoTratamento);
+        }
+
+        public async Task<ObservableCollection<PeriodoTratamento>> RefreshDataAsync(bool syncItems = false)
         {
             try
             {
@@ -68,10 +71,10 @@ namespace HandyCareCuidador.Data
                     await SyncAsync();
                 }
 #endif
-          
-                IEnumerable<Medicamento> items = await MedicamentoTable
+                IEnumerable<PeriodoTratamento> items = await PeriodoTratamentoTable
                     .ToEnumerableAsync();
-                return new ObservableCollection<Medicamento>(items);
+                var a = items.Count();
+                return new ObservableCollection<PeriodoTratamento>(items);
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -82,20 +85,32 @@ namespace HandyCareCuidador.Data
                 Debug.WriteLine(@"Sync error: {0}", e.Message);
             }
             return null;
-
         }
 
-        public async Task SaveMedicamentoAsync(Medicamento item, bool isNewItem)
+        public async Task SavePeriodoTratamentoAsync(PeriodoTratamento item, bool isNewItem)
         {
-            if (item.Id == null)
+            try
             {
-                await MedicamentoTable.InsertAsync(item);
+                if (item.Id == null)
+                {
+                    await PeriodoTratamentoTable.InsertAsync(item);
+                }
+                else
+                {
+                    await PeriodoTratamentoTable.UpdateAsync(item);
+                }
             }
-            else
+            catch (MobileServiceInvalidOperationException msioe)
             {
-                await MedicamentoTable.UpdateAsync(item);
+                Debug.WriteLine(msioe.Message);
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
         }
+
 #if OFFLINE_SYNC_ENABLED
         public async Task SyncAsync()
         {
@@ -105,11 +120,11 @@ namespace HandyCareCuidador.Data
             {
                 await this.client.SyncContext.PushAsync();
 
-                await this.CuidadorTable.PullAsync(
+                await this.PeriodoTratamentoTable.PullAsync(
                     //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
                     //Use a different query name for each unique query in your program
-                    "allCuidador",
-                    this.CuidadorTable.CreateQuery());
+                    "allPeriodoTratamento",
+                    this.PeriodoTratamentoTable.CreateQuery());
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -141,5 +156,6 @@ namespace HandyCareCuidador.Data
             }
         }
 #endif
+
     }
 }

@@ -8,47 +8,73 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador
 {
     public class App : Application
     {
+        //static ILoginManager loginManager;
+        public interface IAuthenticate
+        {
+            Task<bool> Authenticate(MobileServiceAuthenticationProvider provider);
+        }
+        public static IAuthenticate Authenticator { get; private set; }
+
+        public static void Init(IAuthenticate authenticator)
+        {
+            Authenticator = authenticator;
+        }
         public App()
         {
             Register();
-            /*var mainPage = new FreshTabbedNavigationContainer("Handy Care");
-            mainPage.AddTab<ListaAfazerPageModel>("Afazeres", null, null);
-            mainPage.AddTab<ListaAfazerConcluidoPageModel>("Afazeres concluídos",null,null);
-            mainPage.AddTab<ListaMaterialPageModel>("Materiais", null, null);
-            mainPage.AddTab<ListaMedicamentoPageModel>("Medicamentos", null, null);*/
-            var page = FreshPageModelResolver.ResolvePageModel<MainMenuPageModel>();
+
+            /*var page = FreshPageModelResolver.ResolvePageModel<MainMenuPageModel>();
+            var mainPage = new FreshNavigationContainer(page);
+            MainPage = mainPage;*/
+            var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>(this);
+            var mainPage = new FreshNavigationContainer(page);
+            MainPage = mainPage;
+
+        }
+
+        public void AbrirMainMenu(string id)
+        {
+            var page = FreshPageModelResolver.ResolvePageModel<MainMenuPageModel>(id);
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;
         }
+        public void NewCuidador()
+        {
+            //var page = FreshPageModelResolver.ResolvePageModel<CuidadorPageModel>();
+            //var mainPage = new FreshNavigationContainer(page);
+            //MainPage = mainPage;
+        }
+
         private void Register()
         {
+            FreshIOC.Container.Register<ICuidadorRestService, CuidadorRestService>();
             FreshIOC.Container.Register<IAfazerRestService, AfazerRestService>();
             FreshIOC.Container.Register<IMaterialRestService, MaterialRestService>();
             FreshIOC.Container.Register<IMedicamentoRestService, MedicamentoRestService>();
             FreshIOC.Container.Register<IMedicamentoAdministradoRestService, MedicamentoAdministradoRestService>();
             FreshIOC.Container.Register<IMaterialUtilizadoRestService, MaterialUtilizadoRestService>();
             FreshIOC.Container.Register<IConclusaoAfazerRestService, ConclusaoAfazerRestService>();
-            FreshIOC.Container.Register<IPacienteRestService, PacienteRestService>();
-            FreshIOC.Container.Register<ICuidadorPacienteRestService, CuidadorPacienteRestService>();
-        }
-        public void LoadTabs()
-        {
-            var mainPage = new FreshTabbedNavigationContainer();
-            mainPage.AddTab<ListaAfazerPageModel>("Afazeres", null, null);
-            mainPage.AddTab<ListaAfazerConcluidoPageModel>("Concluído", null, null);
-            MainPage = mainPage;
+            //FreshIOC.Container.Register<IPacienteRestService, PacienteRestService>();
+            //FreshIOC.Container.Register<ICuidadorPacienteRestService, CuidadorPacienteRestService>();
+            FreshIOC.Container.Register<IMotivoCuidadoRestService, MotivoCuidadoRestService>();
+            FreshIOC.Container.Register<IPeriodoTratamentoRestService, PeriodoTratamentoRestService>();
         }
         protected override void OnStart()
         {
             // Handle when your app starts
         }
-
+        public void Logout()
+        {
+            Properties["IsLoggedIn"] = false; // only gets set to 'true' on the LoginPage
+            MainPage = new LoginPage();
+        }
         protected override void OnSleep()
         {
             // Handle when your app sleeps

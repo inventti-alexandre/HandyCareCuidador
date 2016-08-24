@@ -6,13 +6,17 @@
     <ToolbarItem Name="Novo Material" Command="{Binding AddMaterial}" Order="Primary" Priority="0" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>
-    <ListView x:Name="lstMaterial" ItemsSource="{Binding Materiais}" SelectedItem="{Binding SelectedMaterial}">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <TextCell Text="{Binding MatDescricao}"></TextCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
+    <StackLayout>
+      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
+      <Label Text="Nenhum material cadastrado" IsVisible="{Binding oHorario.Visualizar}"/>
+      <ListView x:Name="lstMaterial" ItemsSource="{Binding Materiais}" SelectedItem="{Binding SelectedMaterial}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextCell Text="{Binding MatDescricao}"></TextCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
   </ContentPage.Content>
 </ContentPage>
 

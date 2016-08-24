@@ -5,14 +5,16 @@
              x:Class="HandyCareCuidador.Page.MainMenuPage">
   <ContentPage.Content>
     <StackLayout Orientation="Vertical" Padding="10">
-      <handyCareCuidador:BindablePicker DisplayMemberPath="PacNome" Title="Selecione um paciente" ItemsSource="{Binding Pacientes}" SelectedItem="{Binding oPaciente, Mode=TwoWay}" />
-      <Button Text="Afazeres" Command="{Binding ShowAfazeres}"></Button>
-      <Button Text="Materiais" Command="{Binding ShowMateriais}"></Button>
-      <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}"></Button>
-      <Button Text="Paciente"></Button>
-      <Button Text="Mapa"></Button>
-      <Button Text="Chamar contatos"></Button>
-      <Button Text="Vídeo/foto"></Button>
+      <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto" IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente" ItemsSource="{Binding Pacientes}" SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}">
+      </handyCareCuidador:BindablePicker>
+      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
+      <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button x:Name="btnMapa" Text="Mapa" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button Text="Chamar contatos" IsVisible="{Binding oHorario.Visualizar}"></Button>
+      <Button Text="Vídeo/foto" IsVisible="{Binding oHorario.Visualizar}"></Button>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

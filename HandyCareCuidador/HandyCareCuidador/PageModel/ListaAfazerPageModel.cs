@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using FreshMvvm;
+using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
 using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
@@ -15,24 +16,28 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class ListaAfazerPageModel : FreshBasePageModel
     {
-        private readonly IConclusaoAfazerRestService _conclusaoRestService;
+        //private readonly IConclusaoAfazerRestService _conclusaoRestService;
 
         private bool _finalizarAfazer;
-        private readonly IAfazerRestService _restService;
+        //private readonly IAfazerRestService _restService;
+        //private readonly ICuidadorPacienteRestService _cuidadorPacienteRestService;
 
         private Afazer _selectedAfazer;
-        private Afazer _selectedAfazerConcluido;
+        //private Afazer _selectedAfazerConcluido;
         public bool AfazerConcluido;
         public Task check;
         public bool deleteVisible;
+        private Paciente _selectedPaciente;
 
         public ListaAfazerPageModel()
         {
-            _restService = FreshIOC.Container.Resolve<IAfazerRestService>();
-            _conclusaoRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
+            //_restService = FreshIOC.Container.Resolve<IAfazerRestService>();
+            //_conclusaoRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
+            //_cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
         }
 
         public HorarioViewModel oHorario { get; set; }
+        //public Paciente oPaciente { get; set; }
         public ObservableCollection<Afazer> Afazeres { get; set; }
         public ObservableCollection<Afazer> ConcluidosAfazeres { get; set; }
 
@@ -105,26 +110,45 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
-        public override async void Init(object initData)
+        public override void Init(object initData)
         {
             base.Init(initData);
+            oPaciente=new Paciente();
+            oPaciente= initData as Paciente;
         }
 
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             AfazerSelecionado = new Afazer();
-            oHorario = new HorarioViewModel();
+            oHorario = new HorarioViewModel { ActivityRunning = true, Visualizar = false };
             await GetAfazeresConcluidos();
             await GetAfazeres();
             oHorario.ActivityRunning = false;
 
         }
-        public Command RetornarMenu
+        public Paciente oPaciente
+        {
+            get
+            {
+                return _selectedPaciente;
+            }
+            set
+            {
+                _selectedPaciente = value;
+                if (value != null)
+                {
+                    //ShowMedicamentos.Execute(value);
+                    //SelectedPaciente = null;
+                }
+            }
+        }
+
+        public Command VisualizarConcluidos
         {
             get
             {
                 return new Command(async () => {
-                 await CoreMethods.PushPageModel<MainMenuPageModel>();
+                 await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente);
                 });
             }
         }
@@ -136,7 +160,7 @@ namespace HandyCareCuidador.PageModel
                 await Task.Run(async () =>
                 {
                     AfazeresConcluidos =
-                        new ObservableCollection<ConclusaoAfazer>(await _conclusaoRestService.RefreshDataAsync());
+                        new ObservableCollection<ConclusaoAfazer>(await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync());
                 });
             }
             catch (Exception)
@@ -154,11 +178,14 @@ namespace HandyCareCuidador.PageModel
                 {
                     oHorario.ActivityRunning = true;
                     oHorario.FinalizarAfazer = false;
-                    var selection = new ObservableCollection<Afazer>(await _restService.RefreshDataAsync());
+                    var selection = new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync());
                     if (selection.Count > 0 && AfazeresConcluidos.Count>0)
                     {
+                        var pacresult = new ObservableCollection<CuidadorPaciente>(await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                        .Where(e => e.PacId == oPaciente.Id)
+                        .AsEnumerable();
                         var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
-                            .Contains(e.Id)).AsEnumerable();
+                            .Contains(e.Id)).Where(e=>pacresult.Select(m=>m.Id).Contains(e.AfaPaciente)).AsEnumerable();
                         Afazeres = new ObservableCollection<Afazer>(result);
                     }
                     else
@@ -166,6 +193,8 @@ namespace HandyCareCuidador.PageModel
                         Afazeres = new ObservableCollection<Afazer>(selection);
                     }
                     oHorario.ActivityRunning = false;
+                    oHorario.Visualizar = true;
+
                 });
             }
             catch (ArgumentNullException e)

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HandyCareCuidador.Data;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador.PageModel
@@ -15,14 +16,14 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class MedicamentoPageModel : FreshBasePageModel
     {
-        IMedicamentoRestService _restService;
+        //IMedicamentoRestService _restService;
         public bool deleteVisible = true;
         public bool alterar = false;
         public Medicamento Medicamento { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public MedicamentoPageModel(IMedicamentoRestService restService)
         {
-            _restService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
+            //_restService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
         }
         public override void Init(object initData)
         {
@@ -62,7 +63,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
-                    await _restService.SaveMedicamentoAsync(Medicamento, alterar);
+                    await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
                     await CoreMethods.PopPageModel(Medicamento);
                 });
             }
@@ -73,7 +74,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    await _restService.DeleteMedicamentoAsync(Medicamento);
+                    await CuidadorRestService.DefaultManager.DeleteMedicamentoAsync(Medicamento);
                     await CoreMethods.PopPageModel(Medicamento);
                 });
             }

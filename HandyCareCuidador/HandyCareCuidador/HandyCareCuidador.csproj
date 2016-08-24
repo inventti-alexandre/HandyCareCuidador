@@ -46,9 +46,12 @@
     <Compile Include="Data\MaterialUtilizadoRestService.cs" />
     <Compile Include="Data\MedicamentoAdministradoRestService.cs" />
     <Compile Include="Data\MedicamentoRestService.cs" />
+    <Compile Include="Data\MotivoCuidadoRestService.cs" />
     <Compile Include="Data\PacienteRestService.cs" />
+    <Compile Include="Data\PeriodoTratamentoRestService.cs" />
     <Compile Include="Helper\BindablePicker.cs" />
     <Compile Include="Helper\HorarioViewModel.cs" />
+    <Compile Include="Helper\ILoginManager.cs" />
     <Compile Include="Helper\ListSwitch.cs" />
     <Compile Include="Helper\NullableValueConverter.cs" />
     <Compile Include="Interface\IAfazerRestService.cs" />
@@ -60,7 +63,9 @@
     <Compile Include="Interface\IMaterialUtilizadoRestService.cs" />
     <Compile Include="Interface\IMedicamentoAdministradoRestService.cs" />
     <Compile Include="Interface\IMedicamentoRestService.cs" />
+    <Compile Include="Interface\IMotivoCuidadoRestService.cs" />
     <Compile Include="Interface\IPacienteRestService.cs" />
+    <Compile Include="Interface\IPeriodoTratamentoRestService.cs" />
     <Compile Include="Model\Afazer.cs" />
     <Compile Include="Model\Avaliacao.cs" />
     <Compile Include="Model\ConCelular.cs" />
@@ -102,7 +107,9 @@
     <Compile Include="PageModel\ListaMaterialPageModel.cs" />
     <Compile Include="PageModel\ListaMedicamentoPageModel.cs" />
     <Compile Include="PageModel\ListaPacientePageModel.cs" />
+    <Compile Include="PageModel\LoginPageModel.cs" />
     <Compile Include="PageModel\MainMenuPageModel.cs" />
+    <Compile Include="PageModel\MapPageModel.cs" />
     <Compile Include="PageModel\MaterialPageModel.cs" />
     <Compile Include="PageModel\MedicamentoPageModel.cs" />
     <Compile Include="PageModel\PacientePageModel.cs" />
@@ -133,6 +140,7 @@
     <Compile Include="Page\MainMenuPage.xaml.cs">
       <DependentUpon>MainMenuPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Page\MapPage.cs" />
     <Compile Include="Page\MaterialPage.xaml.cs">
       <DependentUpon>MaterialPage.xaml</DependentUpon>
     </Compile>
@@ -207,6 +215,10 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6482\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Forms.Maps, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.0.0.6482\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6482\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
@@ -223,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+    <AndroidResource Include="Resource\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Page\ListaAfazerPage.xaml">
@@ -238,12 +251,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Page\MainMenuPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Page\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -292,6 +299,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Page\ConclusaoAfazerPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Page\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

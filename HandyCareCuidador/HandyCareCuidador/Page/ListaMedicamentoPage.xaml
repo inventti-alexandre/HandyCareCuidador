@@ -7,12 +7,15 @@
     <ToolbarItem Name="Novo Medicamento" Command="{Binding AddMedicamento}" Order="Primary" Priority="0" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>
-    <ListView x:Name="lstMedicamento" ItemsSource="{Binding Medicamentos}" SelectedItem="{Binding SelectedMedicamento}">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <TextCell Text="{Binding MedDescricao}"></TextCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
+    <StackLayout>
+      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
+      <ListView x:Name="lstMedicamento" ItemsSource="{Binding Medicamentos}" SelectedItem="{Binding SelectedMedicamento}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextCell Text="{Binding MedDescricao}"></TextCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
   </ContentPage.Content>
 </ContentPage>

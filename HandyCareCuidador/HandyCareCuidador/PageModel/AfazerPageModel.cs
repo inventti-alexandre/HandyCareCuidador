@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HandyCareCuidador.Data;
 using Xamarin.Forms;
 
 
@@ -20,12 +21,12 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class AfazerPageModel : FreshBasePageModel
     {
-        readonly IAfazerRestService _restService;
-        readonly IMaterialRestService _materialRestService;
-        readonly IConclusaoAfazerRestService _concluirRestService;
-        readonly IMaterialUtilizadoRestService _materialUtilizadoRestService;
-        readonly IMedicamentoRestService _medicamentoRestService;
-        private readonly IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
+        //readonly IAfazerRestService _restService;
+        //readonly IMaterialRestService _materialRestService;
+        //readonly IConclusaoAfazerRestService _concluirRestService;
+        //readonly IMaterialUtilizadoRestService _materialUtilizadoRestService;
+        //readonly IMedicamentoRestService _medicamentoRestService;
+        //private readonly IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
         public Afazer Afazer { get; set; }
         public bool NewItem { get; set; }
         public Material oMaterial { get; set; }
@@ -42,20 +43,20 @@ namespace HandyCareCuidador.PageModel
 
         public AfazerPageModel()
         {
-            _restService = FreshIOC.Container.Resolve<IAfazerRestService>();
-            _concluirRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
-            _materialRestService = FreshIOC.Container.Resolve<IMaterialRestService>();
-            _medicamentoRestService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
-            _materialUtilizadoRestService = FreshIOC.Container.Resolve<IMaterialUtilizadoRestService>();
-            _medicamentoAdministradoRestService = FreshIOC.Container.Resolve<IMedicamentoAdministradoRestService>();
+            //_restService = FreshIOC.Container.Resolve<IAfazerRestService>();
+            //_concluirRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
+            //_materialRestService = FreshIOC.Container.Resolve<IMaterialRestService>();
+            //_medicamentoRestService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
+            //_materialUtilizadoRestService = FreshIOC.Container.Resolve<IMaterialUtilizadoRestService>();
+            //_medicamentoAdministradoRestService = FreshIOC.Container.Resolve<IMedicamentoAdministradoRestService>();
         }
         public override async void Init(object initData)
         {
             base.Init(initData);
             Afazer = initData as Afazer;
-            Materiais = new ObservableCollection<Material>(await _materialRestService.RefreshDataExistenteAsync());
-            Medicamentos= new ObservableCollection<Medicamento>(await _medicamentoRestService.RefreshDataAsync());
-            MateriaisUtilizados = new ObservableCollection<MaterialUtilizado>(await _materialUtilizadoRestService.RefreshDataAsync(Afazer?.Id));
+            Materiais = new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
+            Medicamentos= new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync());
+            MateriaisUtilizados = new ObservableCollection<MaterialUtilizado>(await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
             if (Afazer == null)
             {
                 Afazer = new Afazer();
@@ -100,7 +101,7 @@ namespace HandyCareCuidador.PageModel
                         Afazer.Id = Guid.NewGuid().ToString();
                     }
                     Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
-                    await _restService.SaveAfazerAsync(Afazer, true);
+                    await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
                     if (oMaterial != null)
                     {
                         oMaterialUtilizado = new MaterialUtilizado
@@ -112,8 +113,8 @@ namespace HandyCareCuidador.PageModel
                         };
                         oMaterial.MatQuantidade -= oMaterialUtilizado.MatQuantidadeUtilizada;
                         oMaterial.MaterialUtilizado.Add(oMaterialUtilizado);
-                        await _materialRestService.SaveMaterialAsync(oMaterial, false);
-                        await _materialUtilizadoRestService.SaveMaterialUtilizadoAsync(oMaterialUtilizado, true);
+                        await CuidadorRestService.DefaultManager.SaveMaterialAsync(oMaterial, false);
+                        await CuidadorRestService.DefaultManager.SaveMaterialUtilizadoAsync(oMaterialUtilizado, true);
                     }
                     if (oMedicamento != null)
                     {
@@ -125,8 +126,8 @@ namespace HandyCareCuidador.PageModel
                             Id=Guid.NewGuid().ToString()
                         };
                         oMedicamento.MedQuantidade -= oMedicamentoAdministrado.MemQuantidadeAdministrada;
-                        await _medicamentoRestService.SaveMedicamentoAsync(oMedicamento, false);
-                        await _medicamentoAdministradoRestService.SaveMedicamentoAdministradoAsync(oMedicamentoAdministrado, true);
+                        await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(oMedicamento, false);
+                        await CuidadorRestService.DefaultManager.SaveMedicamentoAdministradoAsync(oMedicamentoAdministrado, true);
                     }
                     await CoreMethods.PopPageModel(Afazer);
                 });
@@ -141,7 +142,7 @@ namespace HandyCareCuidador.PageModel
                     AfazerConcluido.ConConcluido = false;
                     AfazerConcluido.ConHorarioConcluido = DateTime.Now;
                     AfazerConcluido.ConAfazer = Afazer.Id;
-                    await _concluirRestService.SaveConclusaoAfazerAsync(AfazerConcluido, true);
+                    await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
                     await CoreMethods.PopPageModel(Afazer);
                 });
             }
@@ -153,7 +154,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    await _restService.DeleteAfazerAsync(Afazer);
+                    await CuidadorRestService.DefaultManager.DeleteAfazerAsync(Afazer);
                     await CoreMethods.PopPageModel(Afazer);
                 });
             }

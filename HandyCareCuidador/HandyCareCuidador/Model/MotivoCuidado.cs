@@ -1,3 +1,5 @@
+using PropertyChanged;
+
 namespace HandyCareCuidador.Model
 {
     using System;
@@ -6,6 +8,7 @@ namespace HandyCareCuidador.Model
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("MotivoCuidado")]
+    [ImplementPropertyChanged]
     public partial class MotivoCuidado
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -14,7 +17,7 @@ namespace HandyCareCuidador.Model
             Paciente = new HashSet<Paciente>();
             TipoTratamento = new HashSet<TipoTratamento>();
         }
-
+        public string Id { get; set; }
         public string MotDescricao { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

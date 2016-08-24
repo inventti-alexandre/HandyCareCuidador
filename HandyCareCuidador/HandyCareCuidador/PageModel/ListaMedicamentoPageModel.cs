@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HandyCareCuidador.Data;
+using HandyCareCuidador.Helper;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador.PageModel
@@ -16,17 +18,23 @@ namespace HandyCareCuidador.PageModel
 
     public class ListaMedicamentoPageModel: FreshBasePageModel
     {
-            IMedicamentoRestService _restService;
+            //private readonly IMedicamentoRestService _restService;
+            //private readonly ICuidadorPacienteRestService _cuidadorPacienteRestService;
             public bool deleteVisible;
-            public ListaMedicamentoPageModel(IMedicamentoRestService restService)
+            public Paciente oPaciente { get; set; }
+            public HorarioViewModel oHorario { get; set; }
+            public ListaMedicamentoPageModel()
             {
-                _restService = restService;
+                //_restService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
+                //_cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
             }
             public ObservableCollection<Medicamento> Medicamentos { get; set; }
 
             public override async void Init(object initData)
             {
                 base.Init(initData);
+                oPaciente = initData as Paciente;
+                oHorario = new HorarioViewModel { ActivityRunning = true, Visualizar = false };
                 await GetMedicamentos();
             }
             public async Task GetMedicamentos()
@@ -34,10 +42,19 @@ namespace HandyCareCuidador.PageModel
                 try
                 {
                     await Task.Run(async () => {
-                        Medicamentos = new ObservableCollection<Medicamento>(await _restService.RefreshDataAsync());
-                        });
-                }
-                catch (Exception)
+                        var pacresult = new ObservableCollection<CuidadorPaciente>(await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                        .Where(e => e.PacId == oPaciente.Id)
+                        .AsEnumerable();
+                        var result = new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
+                        .Where(e=>pacresult.Select(m=>m.Id)
+                        .Contains(e.MedPacId))
+                        .AsEnumerable();
+                        Medicamentos=new ObservableCollection<Medicamento>(result);
+                    });
+                oHorario.ActivityRunning = false;
+                oHorario.Visualizar = true;
+            }
+            catch (Exception)
                 {
                     throw;
                 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FreshMvvm;
+using HandyCareCuidador.Data;
 using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
 using PropertyChanged;
@@ -14,12 +15,12 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class ListaPacientePageModel:FreshBasePageModel
     {
-        IPacienteRestService _restService;
-        private ICuidadorPacienteRestService _cuidadorPacienteRestService;
+        //IPacienteRestService _restService;
+        //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
         public ListaPacientePageModel()
         {
-            _restService = FreshIOC.Container.Resolve<IPacienteRestService>();
-            _cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
+            //_restService = FreshIOC.Container.Resolve<IPacienteRestService>();
+            //_cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
         }
 
         public ObservableCollection<Paciente> Pacientes { get; set; }
@@ -33,8 +34,8 @@ namespace HandyCareCuidador.PageModel
         {
             try
             {
-                CuidadoresPacientes = new ObservableCollection<CuidadorPaciente>(await _cuidadorPacienteRestService.RefreshDataAsync());
-                var selection = new ObservableCollection<Paciente>(await _restService.RefreshDataAsync());
+                CuidadoresPacientes = new ObservableCollection<CuidadorPaciente>(await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync());
+                var selection = new ObservableCollection<Paciente>(await CuidadorRestService.DefaultManager.RefreshPacienteAsync());
                 var result = selection.Where(e => CuidadoresPacientes.Select(m => m.PacId)
                     .Contains(e.Id)).AsEnumerable();
                 Pacientes = new ObservableCollection<Paciente>(result);

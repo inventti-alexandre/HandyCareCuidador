@@ -17,7 +17,7 @@
       <Switch IsToggled="{Binding oHorario.HabilitarMaterial, Mode=TwoWay}"/>
       <local:BindablePicker DisplayMemberPath="MatDescricao" Title="Selecione um material" ItemsSource="{Binding Materiais}" SelectedItem="{Binding oMaterial, Mode=TwoWay}" IsVisible="{Binding oHorario.HabilitarMaterial}"/>
       <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}"></Label>
-      <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}}" Keyboard="Numeric"  IsVisible="{Binding oHorario.HabilitarMaterial}"></Entry>
+      <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}" Keyboard="Numeric"  IsVisible="{Binding oHorario.HabilitarMaterial}"></Entry>
       <Label Text="Medicamento" ></Label>
       <Switch IsToggled="{Binding oHorario.HabilitarMedicamento, Mode=TwoWay}"/>
       <local:BindablePicker DisplayMemberPath="MedDescricao" Title="Selecione um medicamento" ItemsSource="{Binding Medicamentos}" SelectedItem="{Binding oMedicamento, Mode=TwoWay}" IsVisible="{Binding oHorario.HabilitarMedicamento}"/>

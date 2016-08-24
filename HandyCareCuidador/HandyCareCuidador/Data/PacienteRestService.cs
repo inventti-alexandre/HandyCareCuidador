@@ -44,6 +44,22 @@ namespace HandyCareCuidador.Data
         {
             await PacienteTable.DeleteAsync(paciente);
         }
+        public MobileServiceClient CurrentClient
+        {
+            get { return client; }
+        }
+
+        public static PacienteRestService DefaultManager
+        {
+            get
+            {
+                return defaultInstance;
+            }
+            private set
+            {
+                defaultInstance = value;
+            }
+        }
 
         public async Task<ObservableCollection<Paciente>> RefreshDataAsync(bool syncItems = false)
         {
