@@ -4,5 +4,5 @@
     {
         void ShowMainPage();
         void Logout();
-        }
+    }
 }

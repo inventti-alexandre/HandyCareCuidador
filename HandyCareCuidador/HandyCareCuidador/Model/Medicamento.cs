@@ -1,20 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
+
 namespace HandyCareCuidador.Model
 {
-    using PropertyChanged;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("Medicamento")]
     [ImplementPropertyChanged]
-    public partial class Medicamento
+    public class Medicamento
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Medicamento()
         {
             MedicamentoAdministrado = new HashSet<MedicamentoAdministrado>();
         }
+
         public string Id { get; set; }
         public float MedQuantidade { get; set; }
 
@@ -29,13 +31,14 @@ namespace HandyCareCuidador.Model
 
         public virtual ViaAdministracaoMedicamento ViaAdministracaoMedicamento { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MedicamentoAdministrado> MedicamentoAdministrado { get; set; }
+
         [Timestamp]
         public byte[] Version { get; set; }
+
         public DateTimeOffset? CreatedAt { get; set; }
         public bool Deleted { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
-
     }
 }

@@ -1,22 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HandyCareCuidador.Page.MedicamentoPage"
-  xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador" >
-  <ContentPage.Content>
-    <StackLayout Padding="15">
-      <Label Text="Material" ></Label>
-      <Entry Text="{Binding Medicamento.MedDescricao}"></Entry>
-      <Label Text="Quantidade" ></Label>
-      <Entry Text="{Binding Medicamento.MedQuantidade}"></Entry>
-      <!--<Label Text="Forma de apresentação" ></Label>
+             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador">
+    <ContentPage.Content>
+        <StackLayout Padding="15">
+            <Label Text="Material" />
+            <Entry Text="{Binding Medicamento.MedDescricao}" />
+            <Label Text="Quantidade" />
+            <Entry Text="{Binding Medicamento.MedQuantidade}" />
+            <!--<Label Text="Forma de apresentação" ></Label>
       <Entry Text="{Binding Medicamento.MedApresentacao}"></Entry>
       <Label Text="Via de administração" ></Label>
       <Entry Text="{Binding Medicamento.MedViaAdministracao}"></Entry>-->
-      <Button Text="Save" Command="{Binding SaveCommand}"></Button>
-      <Button  Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}"></Button>
-      <BoxView HeightRequest="30"></BoxView>
-      <!--<Button Text="Test Modal" Command="{Binding TestModal}"></Button>-->
-    </StackLayout>
-  </ContentPage.Content>
+            <Button Text="Save" Command="{Binding SaveCommand}" />
+            <Button Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}" />
+            <BoxView HeightRequest="30" />
+            <!--<Button Text="Test Modal" Command="{Binding TestModal}"></Button>-->
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

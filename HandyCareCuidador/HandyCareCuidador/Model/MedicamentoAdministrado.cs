@@ -1,15 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("MedicamentoAdministrado")]
     [ImplementPropertyChanged]
-    public partial class MedicamentoAdministrado
+    public class MedicamentoAdministrado
     {
         [Column(Order = 0)]
         public string MedAfazer { get; set; }

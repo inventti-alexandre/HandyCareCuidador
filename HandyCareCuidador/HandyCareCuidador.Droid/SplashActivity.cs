@@ -17,7 +17,9 @@ using System.Timers;
 
 namespace HandyCareCuidador.Droid
 {
-    [Activity(Label = "Handy Care", Theme = "@style/Theme.Splash" /*"@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"*/, MainLauncher = true, NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    //, ScreenOrientation = ScreenOrientation.Portrait
+    [Activity(Label = "Handy Care", Theme = "@style/Theme.Splash" /*"@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"*/, MainLauncher = true, NoHistory = true,ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    //[Activity(Label = "Handy Care", Theme = "@style/Theme.Splash" /*"@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"*/, MainLauncher = true, NoHistory = true)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

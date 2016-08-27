@@ -1,12 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("Avaliacao")]
-    public partial class Avaliacao
+    public class Avaliacao
     {
         public string Id { get; set; }
         public string AvaCuidador { get; set; }

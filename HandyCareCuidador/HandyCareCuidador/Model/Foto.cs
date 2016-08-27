@@ -1,18 +1,18 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("Foto")]
-    public partial class Foto
+    public class Foto
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Foto()
         {
             Familiar = new HashSet<Familiar>();
         }
+
         public string Id { get; set; }
 
         [Column(TypeName = "image")]
@@ -24,7 +24,7 @@ namespace HandyCareCuidador.Model
 
         public virtual Cuidador Cuidador { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Familiar> Familiar { get; set; }
     }
 }

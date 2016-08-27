@@ -1,32 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              x:Class="HandyCareCuidador.Page.PacientePage">
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <handyCareCuidador:NullableValueConverter x:Key="NullableValueConverter" />
-    </ResourceDictionary>
-  </ContentPage.Resources>
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Name="Novo paciente" Order="Primary" Priority="0" />
-  </ContentPage.ToolbarItems>
-  <ContentPage.Content>
-    <StackLayout Padding="15" >
-      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
-      <Label Text="Paciente" IsVisible="{Binding oHorario.Visualizar}" ></Label>
-      <Entry Text="{Binding Paciente.PacNomeCompleto}" IsEnabled="False" IsVisible="{Binding oHorario.Visualizar}"></Entry>
-      <Label Text="Data de nascimento" IsVisible="{Binding oHorario.Visualizar}"></Label>
-      <DatePicker Date="{Binding Paciente.PacIdade, Mode=TwoWay}" IsEnabled="False" IsVisible="{Binding oHorario.Visualizar}"></DatePicker>
-      <Label Text="Motivo de cuidado" IsVisible="{Binding oHorario.Visualizar}"></Label>
-      <Entry Text="{Binding MotivoCuidado.MotDescricao}" IsEnabled="False" IsVisible="{Binding oHorario.Visualizar}"></Entry>
-      <Label Text="Início do tratamento"  IsVisible="{Binding oHorario.Visualizar}"></Label>
-      <DatePicker Date="{Binding PeriodoTratamento.PerInicio, Mode=TwoWay}" IsEnabled="False"  IsVisible="{Binding oHorario.Visualizar}"></DatePicker>
-      <Label Text="Término do tratamento"  IsVisible="{Binding oHorario.VisualizarTermino}"></Label>
-      <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}"  IsVisible="{Binding oHorario.VisualizarTermino}"></DatePicker>
-      <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}"></Button>
-      <!--<Button  Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}"></Button>-->
-      <BoxView HeightRequest="30"></BoxView>
-    </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <handyCareCuidador:NullableValueConverter x:Key="NullableValueConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Novo paciente" Order="Primary" Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout Padding="15">
+            <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                               IsVisible="{Binding oHorario.ActivityRunning}" />
+            <Label Text="Paciente" IsVisible="{Binding oHorario.Visualizar}" />
+            <Entry Text="{Binding Paciente.PacNomeCompleto}" IsEnabled="False"
+                   IsVisible="{Binding oHorario.Visualizar}" />
+            <Label Text="Data de nascimento" IsVisible="{Binding oHorario.Visualizar}" />
+            <DatePicker Date="{Binding Paciente.PacIdade, Mode=TwoWay}" IsEnabled="False"
+                        IsVisible="{Binding oHorario.Visualizar}" />
+            <Label Text="Motivo de cuidado" IsVisible="{Binding oHorario.Visualizar}" />
+            <Entry Text="{Binding MotivoCuidado.MotDescricao}" IsEnabled="False"
+                   IsVisible="{Binding oHorario.Visualizar}" />
+            <Label Text="Início do tratamento" IsVisible="{Binding oHorario.Visualizar}" />
+            <DatePicker Date="{Binding PeriodoTratamento.PerInicio, Mode=TwoWay}" IsEnabled="False"
+                        IsVisible="{Binding oHorario.Visualizar}" />
+            <Label Text="Término do tratamento" IsVisible="{Binding oHorario.VisualizarTermino}" />
+            <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" IsVisible="{Binding oHorario.VisualizarTermino}" />
+            <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+            <!--<Button  Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}"></Button>-->
+            <BoxView HeightRequest="30" />
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

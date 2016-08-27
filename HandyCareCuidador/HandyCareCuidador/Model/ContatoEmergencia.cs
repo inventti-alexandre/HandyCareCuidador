@@ -1,12 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("ContatoEmergencia")]
-    public partial class ContatoEmergencia
+    public class ContatoEmergencia
     {
         [Column(Order = 0)]
         public string Id { get; set; }

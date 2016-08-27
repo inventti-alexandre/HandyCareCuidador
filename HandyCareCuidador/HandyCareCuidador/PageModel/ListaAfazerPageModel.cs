@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
-using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
 using PropertyChanged;
 using Xamarin.Forms;
@@ -23,18 +22,11 @@ namespace HandyCareCuidador.PageModel
         //private readonly ICuidadorPacienteRestService _cuidadorPacienteRestService;
 
         private Afazer _selectedAfazer;
+        private Paciente _selectedPaciente;
         //private Afazer _selectedAfazerConcluido;
         public bool AfazerConcluido;
         public Task check;
         public bool deleteVisible;
-        private Paciente _selectedPaciente;
-
-        public ListaAfazerPageModel()
-        {
-            //_restService = FreshIOC.Container.Resolve<IAfazerRestService>();
-            //_conclusaoRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
-            //_cuidadorPacienteRestService = FreshIOC.Container.Resolve<ICuidadorPacienteRestService>();
-        }
 
         public HorarioViewModel oHorario { get; set; }
         //public Paciente oPaciente { get; set; }
@@ -110,28 +102,9 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-            oPaciente=new Paciente();
-            oPaciente= initData as Paciente;
-        }
-
-        protected override async void ViewIsAppearing(object sender, EventArgs e)
-        {
-            AfazerSelecionado = new Afazer();
-            oHorario = new HorarioViewModel { ActivityRunning = true, Visualizar = false };
-            await GetAfazeresConcluidos();
-            await GetAfazeres();
-            oHorario.ActivityRunning = false;
-
-        }
         public Paciente oPaciente
         {
-            get
-            {
-                return _selectedPaciente;
-            }
+            get { return _selectedPaciente; }
             set
             {
                 _selectedPaciente = value;
@@ -147,10 +120,26 @@ namespace HandyCareCuidador.PageModel
         {
             get
             {
-                return new Command(async () => {
-                 await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente);
-                });
+                return
+                    new Command(
+                        async () => { await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente); });
             }
+        }
+
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+            oPaciente = new Paciente();
+            oPaciente = initData as Paciente;
+        }
+
+        protected override async void ViewIsAppearing(object sender, EventArgs e)
+        {
+            AfazerSelecionado = new Afazer();
+            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
+            await GetAfazeresConcluidos();
+            await GetAfazeres();
+            oHorario.ActivityRunning = false;
         }
 
         public async Task GetAfazeresConcluidos()
@@ -160,7 +149,8 @@ namespace HandyCareCuidador.PageModel
                 await Task.Run(async () =>
                 {
                     AfazeresConcluidos =
-                        new ObservableCollection<ConclusaoAfazer>(await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync());
+                        new ObservableCollection<ConclusaoAfazer>(
+                            await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync());
                 });
             }
             catch (Exception)
@@ -170,7 +160,7 @@ namespace HandyCareCuidador.PageModel
         }
 
         public async Task GetAfazeres()
-        {      
+        {
             //INSERIR PACID EM MATERIAL E MEDICAMENTO
             try
             {
@@ -178,15 +168,21 @@ namespace HandyCareCuidador.PageModel
                 {
                     oHorario.ActivityRunning = true;
                     oHorario.FinalizarAfazer = false;
-                    var selection = new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync());
-                    if (selection.Count > 0 && AfazeresConcluidos.Count>0)
+                    var selection =
+                        new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync());
+                    if (selection.Count > 0 && AfazeresConcluidos.Count > 0)
                     {
-                        var pacresult = new ObservableCollection<CuidadorPaciente>(await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
-                        .Where(e => e.PacId == oPaciente.Id)
-                        .AsEnumerable();
+                        var pacresult =
+                            new ObservableCollection<CuidadorPaciente>(
+                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                                .Where(e => e.PacId == oPaciente.Id)
+                                .AsEnumerable();
                         var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
-                            .Contains(e.Id)).Where(e=>pacresult.Select(m=>m.Id).Contains(e.AfaPaciente)).AsEnumerable();
+                            .Contains(e.Id))
+                            .Where(e => pacresult.Select(m => m.Id).Contains(e.AfaPaciente))
+                            .AsEnumerable();
                         Afazeres = new ObservableCollection<Afazer>(result);
+                        App.Afazeres = new ObservableCollection<Afazer>(result);
                     }
                     else
                     {
@@ -194,7 +190,6 @@ namespace HandyCareCuidador.PageModel
                     }
                     oHorario.ActivityRunning = false;
                     oHorario.Visualizar = true;
-
                 });
             }
             catch (ArgumentNullException e)
@@ -219,7 +214,7 @@ namespace HandyCareCuidador.PageModel
             }
             else
             {
-                await GetAfazeresConcluidos();
+                //await GetAfazeresConcluidos();
                 //await GetAfazeres();
             }
             //if (AfazerConcluido)

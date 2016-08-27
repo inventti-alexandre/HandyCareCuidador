@@ -1,54 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandyCareCuidador.Model;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using Microsoft.WindowsAzure.MobileServices;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using HandyCareCuidador.Interface;
-using HandyCareCuidador;
+using HandyCareCuidador.Model;
+using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
 
 namespace HandyCareCuidador.Data
 {
     public class FamiliarRestService : IFamiliarRestService
     {
-        static FamiliarRestService defaultInstance = new FamiliarRestService();
-        MobileServiceClient client;
 #if OFFLINE_SYNC_ENABLED
         IMobileServiceSyncTable<Familiar> FamiliarTable;
 #else
-        IMobileServiceTable<Familiar> FamiliarTable;
+        private readonly IMobileServiceTable<Familiar> FamiliarTable;
 #endif
+
         public FamiliarRestService()
         {
-            client = new MobileServiceClient(Constants.ApplicationURL);
-            FamiliarTable = client.GetTable<Familiar>();
+            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
+            FamiliarTable = CurrentClient.GetTable<Familiar>();
         }
 
-        public static FamiliarRestService DefaultManager
-        {
-            get
-            {
-                return defaultInstance;
-            }
-            private set
-            {
-                defaultInstance = value;
-            }
-        }
+        public static FamiliarRestService DefaultManager { get; private set; } = new FamiliarRestService();
 
-        public MobileServiceClient CurrentClient
-        {
-            get { return client; }
-        }
+        public MobileServiceClient CurrentClient { get; }
+
         public bool IsOfflineEnabled
         {
-            get { return FamiliarTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<Familiar>; }
+            get { return FamiliarTable is IMobileServiceSyncTable<Familiar>; }
         }
 
         public async Task DeleteFamiliarAsync(Familiar Familiar)
@@ -67,7 +48,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Familiar> items = await FamiliarTable
+                var items = await FamiliarTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<Familiar>(items);
             }
@@ -94,6 +75,7 @@ namespace HandyCareCuidador.Data
             }
         }
     }
+
 #if OFFLINE_SYNC_ENABLED
         public async Task SyncAsync()
         {

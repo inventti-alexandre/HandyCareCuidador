@@ -1,15 +1,12 @@
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("CuidadorPaciente")]
     [ImplementPropertyChanged]
-    public partial class CuidadorPaciente
+    public class CuidadorPaciente
     {
         public string Id { get; set; }
 
@@ -30,7 +27,7 @@ namespace HandyCareCuidador.Model
         public virtual Cuidador Cuidador { get; set; }
 
         public virtual Paciente Paciente { get; set; }
-   
+
         public virtual PeriodoTratamento PeriodoTratamento { get; set; }
     }
 }

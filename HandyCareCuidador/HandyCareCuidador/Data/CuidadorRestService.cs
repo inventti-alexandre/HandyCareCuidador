@@ -1,102 +1,124 @@
-﻿//#define OFFLINE_SYNC_ENABLED
+﻿// To add offline sync support: add the NuGet package Microsoft.Azure.Mobile.Client.SQLiteStore
+// to all projects in the solution and uncomment the symbol definition OFFLINE_SYNC_ENABLED
+// For Xamarin.iOS, also edit AppDelegate.cs and uncomment the call to SQLitePCL.CurrentPlatform.Init()
+// For more information, see: http://go.microsoft.com/fwlink/?LinkId=620342 
+
+#define OFFLINE_SYNC_ENABLED
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandyCareCuidador.Model;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using Microsoft.WindowsAzure.MobileServices;
-using HandyCareCuidador.Interface;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.System.Threading;
+using HandyCareCuidador.Interface;
+using HandyCareCuidador.Model;
+using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+
 #if OFFLINE_SYNC_ENABLED
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
-using Microsoft.WindowsAzure.MobileServices.Sync;
+
 #endif
 
 namespace HandyCareCuidador.Data
 {
     public class CuidadorRestService : ICuidadorRestService
     {
-        static CuidadorRestService defaultInstance = new CuidadorRestService();
-        MobileServiceClient client;
-#if OFFLINE_SYNC_ENABLED
-        IMobileServiceSyncTable<Cuidador> CuidadorTable;
-        IMobileServiceSyncTable<Paciente> PacienteTable;
-        IMobileServiceSyncTable<CuidadorPaciente> CuidadorPacienteTable;
+        public static CuidadorRestService DefaultManager { get; private set; } = new CuidadorRestService();
+        public MobileServiceClient CurrentClient { get; }
+
+#if OFFLINE_SYNC_ENABLED //165 em diante
+        private readonly IMobileServiceSyncTable<Cuidador> CuidadorTable;
+        private readonly IMobileServiceSyncTable<Paciente> PacienteTable;
+        private readonly IMobileServiceSyncTable<CuidadorPaciente> CuidadorPacienteTable;
+        private readonly IMobileServiceSyncTable<Afazer> AfazerTable;
+        private readonly IMobileServiceSyncTable<ConclusaoAfazer> ConclusaoAfazerTable;
+        private readonly IMobileServiceSyncTable<Material> MaterialTable;
+        private readonly IMobileServiceSyncTable<MaterialUtilizado> MaterialUtilizadoTable;
+        private readonly IMobileServiceSyncTable<MedicamentoAdministrado> MedicamentoAdministradoTable;
+        private readonly IMobileServiceSyncTable<Medicamento> MedicamentoTable;
+        private readonly IMobileServiceSyncTable<MotivoCuidado> MotivoCuidadoTable;
+        private readonly IMobileServiceSyncTable<PeriodoTratamento> PeriodoTratamentoTable;
+        private readonly IMobileServiceSyncTable<TipoCuidador> TipoCuidadorTable;
+        private readonly IMobileServiceSyncTable<ValidacaoCuidador> ValidacaoCuidadorTable;
+
 #else
-        IMobileServiceTable<Cuidador> CuidadorTable;
-        IMobileServiceTable<Paciente> PacienteTable;
-        IMobileServiceTable<CuidadorPaciente> CuidadorPacienteTable;
-        IMobileServiceTable<Afazer> AfazerTable;
-        IMobileServiceTable<ConclusaoAfazer> ConclusaoAfazerTable;
-        IMobileServiceTable<Material> MaterialTable;
-        IMobileServiceTable<MaterialUtilizado> MaterialUtilizadoTable;
-        IMobileServiceTable<MedicamentoAdministrado> MedicamentoAdministradoTable;
-        IMobileServiceTable<Medicamento> MedicamentoTable;
-        IMobileServiceTable<MotivoCuidado> MotivoCuidadoTable;
-        IMobileServiceTable<PeriodoTratamento> PeriodoTratamentoTable;
+        private readonly IMobileServiceTable<Cuidador> CuidadorTable;
+        private readonly IMobileServiceTable<Paciente> PacienteTable;
+        private readonly IMobileServiceTable<CuidadorPaciente> CuidadorPacienteTable;
+        private readonly IMobileServiceTable<Afazer> AfazerTable;
+        private readonly IMobileServiceTable<ConclusaoAfazer> ConclusaoAfazerTable;
+        private readonly IMobileServiceTable<Material> MaterialTable;
+        private readonly IMobileServiceTable<MaterialUtilizado> MaterialUtilizadoTable;
+        private readonly IMobileServiceTable<MedicamentoAdministrado> MedicamentoAdministradoTable;
+        private readonly IMobileServiceTable<Medicamento> MedicamentoTable;
+        private readonly IMobileServiceTable<MotivoCuidado> MotivoCuidadoTable;
+        private readonly IMobileServiceTable<PeriodoTratamento> PeriodoTratamentoTable;
 
 #endif
+
         public CuidadorRestService()
         {
-            client = new MobileServiceClient(Constants.ApplicationURL);
+            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
-
+            store.DefineTable<Paciente>();
+            store.DefineTable<CuidadorPaciente>();
+            store.DefineTable<Afazer>();
+            store.DefineTable<ConclusaoAfazer>();
+            store.DefineTable<Material>();
+            store.DefineTable<MaterialUtilizado>();
+            store.DefineTable<MedicamentoAdministrado>();
+            store.DefineTable<Medicamento>();
+            store.DefineTable<MotivoCuidado>();
+            store.DefineTable<PeriodoTratamento>();
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            this.client.SyncContext.InitializeAsync(store);
+            CurrentClient.SyncContext.InitializeAsync(store);
 
-            CuidadorTable = client.GetSyncTable<Cuidador>();
-            PacienteTable = client.GetSyncTable<Paciente>();
-            CuidadorPacienteTable = client.GetSyncTable<CuidadorPaciente>();
-
+            CuidadorTable = CurrentClient.GetSyncTable<Cuidador>();
+            PacienteTable = CurrentClient.GetSyncTable<Paciente>();
+            CuidadorPacienteTable = CurrentClient.GetSyncTable<CuidadorPaciente>();
+            AfazerTable = CurrentClient.GetSyncTable<Afazer>();
+            ConclusaoAfazerTable = CurrentClient.GetSyncTable<ConclusaoAfazer>();
+            MaterialTable = CurrentClient.GetSyncTable<Material>();
+            MaterialUtilizadoTable = CurrentClient.GetSyncTable<MaterialUtilizado>();
+            MedicamentoAdministradoTable = CurrentClient.GetSyncTable<MedicamentoAdministrado>();
+            MedicamentoTable = CurrentClient.GetSyncTable<Medicamento>();
+            MotivoCuidadoTable = CurrentClient.GetSyncTable<MotivoCuidado>();
+            PeriodoTratamentoTable = CurrentClient.GetSyncTable<PeriodoTratamento>();
 #else
-            CuidadorTable = client.GetTable<Cuidador>();
-            PacienteTable = client.GetTable<Paciente>();
-            CuidadorPacienteTable = client.GetTable<CuidadorPaciente>();
-            AfazerTable = client.GetTable<Afazer>();
-            ConclusaoAfazerTable = client.GetTable<ConclusaoAfazer>();
-            MaterialTable = client.GetTable<Material>();
-            MaterialUtilizadoTable = client.GetTable<MaterialUtilizado>();
-            MedicamentoAdministradoTable = client.GetTable<MedicamentoAdministrado>();
-            MedicamentoTable = client.GetTable<Medicamento>();
-            MotivoCuidadoTable = client.GetTable<MotivoCuidado>();
-            PeriodoTratamentoTable = client.GetTable<PeriodoTratamento>();
+            CuidadorTable = CurrentClient.GetTable<Cuidador>();
+            PacienteTable = CurrentClient.GetTable<Paciente>();
+            CuidadorPacienteTable = CurrentClient.GetTable<CuidadorPaciente>();
+            AfazerTable = CurrentClient.GetTable<Afazer>();
+            ConclusaoAfazerTable = CurrentClient.GetTable<ConclusaoAfazer>();
+            MaterialTable = CurrentClient.GetTable<Material>();
+            MaterialUtilizadoTable = CurrentClient.GetTable<MaterialUtilizado>();
+            MedicamentoAdministradoTable = CurrentClient.GetTable<MedicamentoAdministrado>();
+            MedicamentoTable = CurrentClient.GetTable<Medicamento>();
+            MotivoCuidadoTable = CurrentClient.GetTable<MotivoCuidado>();
+            PeriodoTratamentoTable = CurrentClient.GetTable<PeriodoTratamento>();
 
 #endif
         }
 
-        public static CuidadorRestService DefaultManager
-        {
-            get
-            {
-                return defaultInstance;
-            }
-            private set
-            {
-                defaultInstance = value;
-            }
-        }
 
-        public MobileServiceClient CurrentClient => client;
 
-        public bool IsOfflineEnabled => CuidadorTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<Cuidador>;
+        public bool IsOfflineEnabled
+            => CuidadorTable is IMobileServiceSyncTable<Cuidador>;
 
         public async Task DeleteCuidadorAsync(Cuidador cuidador)
         {
             await CuidadorTable.DeleteAsync(cuidador);
-
         }
+
         public async Task DeletePacienteAsync(Paciente paciente)
         {
             await PacienteTable.DeleteAsync(paciente);
         }
-        public async Task<Cuidador> ProcurarCuidadorAsync(string id, MobileServiceAuthenticationProvider provider)
+
+        public async Task<Cuidador> ProcurarCuidadorAsync(string id, MobileServiceAuthenticationProvider provider, bool syncItems = false)
         {
             try
             {
@@ -107,7 +129,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
                 var item = new Cuidador();
-                IEnumerable<Cuidador> items = await CuidadorTable
+                var items = await CuidadorTable
                     .ToEnumerableAsync();
                 switch (provider)
                 {
@@ -129,13 +151,18 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
             }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Nulou {0}", e.Message);
+            }
+
             catch (Exception e)
             {
                 Debug.WriteLine(@"Sync error: {0}", e.Message);
             }
             return null;
-
         }
+
         public async Task<ObservableCollection<Cuidador>> RefreshCuidadorAsync(bool syncItems = false)
         {
             try
@@ -147,7 +174,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Cuidador> items = await CuidadorTable
+                var items = await CuidadorTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<Cuidador>(items);
             }
@@ -174,7 +201,8 @@ namespace HandyCareCuidador.Data
             }
         }
 
-        /***********************////////////
+        /***********************/ ///////////
+
         public async Task<ObservableCollection<Paciente>> RefreshPacienteAsync(bool syncItems = false)
         {
             try
@@ -185,11 +213,10 @@ namespace HandyCareCuidador.Data
                     await SyncAsync();
                 }
 #endif
-                var x = client.CurrentUser.MobileServiceAuthenticationToken;
-                IEnumerable<Paciente> items = await PacienteTable
+                var x = CurrentClient.CurrentUser.MobileServiceAuthenticationToken;
+                var items = await PacienteTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<Paciente>(items);
-                
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -213,7 +240,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Paciente> items = await PacienteTable.Where(item => item.Id == ID)
+                var items = await PacienteTable.Where(item => item.Id == ID)
                     .ToEnumerableAsync();
                 return new ObservableCollection<Paciente>(items);
             }
@@ -226,14 +253,33 @@ namespace HandyCareCuidador.Data
                 Debug.WriteLine(@"Sync error: {0}", e.Message);
             }
             return null;
-
         }
-        public Task SavePacienteAsync(Paciente paciente, bool isNewItem)
+
+        public async Task SavePacienteAsync(Paciente paciente, bool isNewItem)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (paciente.Id == null)
+                {
+                    await PacienteTable.InsertAsync(paciente);
+                }
+                else
+                {
+                    await PacienteTable.UpdateAsync(paciente);
+                }
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         /***************************************************************/
+
         public async Task<ObservableCollection<CuidadorPaciente>> RefreshCuidadorPacienteAsync(bool syncItems = false)
         {
             try
@@ -245,7 +291,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<CuidadorPaciente> items = await CuidadorPacienteTable
+                var items = await CuidadorPacienteTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<CuidadorPaciente>(items);
             }
@@ -281,8 +327,8 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(e.Message);
             }
-
         }
+
         public async Task DeleteCuidadorPacienteAsync(CuidadorPaciente cuidadorPaciente)
         {
             await CuidadorPacienteTable.DeleteAsync(cuidadorPaciente);
@@ -290,6 +336,7 @@ namespace HandyCareCuidador.Data
 
 
         /***************************************/
+
         public async Task DeleteAfazerAsync(Afazer Afazer)
         {
             await AfazerTable.DeleteAsync(Afazer);
@@ -305,7 +352,7 @@ namespace HandyCareCuidador.Data
                     await SyncAsync();
                 }
 #endif
-                IEnumerable<Afazer> items = await AfazerTable
+                var items = await AfazerTable
                     .ToEnumerableAsync();
                 var a = items.Count();
                 return new ObservableCollection<Afazer>(items);
@@ -342,8 +389,8 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(e.Message);
             }
-
         }
+
         public async Task DeleteConclusaoAfazerAsync(ConclusaoAfazer conclusaoAfazer)
         {
             await ConclusaoAfazerTable.DeleteAsync(conclusaoAfazer);
@@ -360,7 +407,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<ConclusaoAfazer> items = await ConclusaoAfazerTable
+                var items = await ConclusaoAfazerTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<ConclusaoAfazer>(items);
             }
@@ -396,10 +443,10 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(e.Message);
             }
-
         }
 
         /***********************/
+
         public async Task DeleteMaterialAsync(Material material)
         {
             try
@@ -427,7 +474,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Material> items = await MaterialTable
+                var items = await MaterialTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<Material>(items);
             }
@@ -440,8 +487,8 @@ namespace HandyCareCuidador.Data
                 Debug.WriteLine(@"Sync error: {0}", e.Message);
             }
             return null;
-
         }
+
         public async Task<ObservableCollection<Material>> RefreshMaterialExistenteAsync(bool syncItems = false)
         {
             try
@@ -453,7 +500,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Material> items = await MaterialTable
+                var items = await MaterialTable
                     .Where(m => m.MatQuantidade > 0)
                     .ToEnumerableAsync();
                 return new ObservableCollection<Material>(items);
@@ -468,6 +515,7 @@ namespace HandyCareCuidador.Data
             }
             return null;
         }
+
         public async Task SaveMaterialAsync(Material item, bool isNewItem)
         {
             try
@@ -497,18 +545,19 @@ namespace HandyCareCuidador.Data
             await MaterialUtilizadoTable.DeleteAsync(MaterialUtilizado);
         }
 
-        public async Task<ObservableCollection<MaterialUtilizado>> RefreshMaterialUtilizadoAsync(string Id, bool syncItems = false)
+        public async Task<ObservableCollection<MaterialUtilizado>> RefreshMaterialUtilizadoAsync(string Id,
+            bool syncItems = false)
         {
             try
             {
 #if OFFLINE_SYNC_ENABLED
                 if (syncItems)
                 {
-                    await this.SyncAsync();
+                    await SyncAsync();
                 }
 #endif
 
-                IEnumerable<MaterialUtilizado> items = await MaterialUtilizadoTable
+                var items = await MaterialUtilizadoTable
                     .Where(m => m.MatAfazer == Id)
                     .ToEnumerableAsync();
                 return new ObservableCollection<MaterialUtilizado>(items);
@@ -536,7 +585,6 @@ namespace HandyCareCuidador.Data
                 {
                     await MaterialUtilizadoTable.UpdateAsync(item);
                 }
-
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -553,18 +601,19 @@ namespace HandyCareCuidador.Data
             await MedicamentoAdministradoTable.DeleteAsync(medicamentoAdministrado);
         }
 
-        public async Task<ObservableCollection<MedicamentoAdministrado>> RefreshMedicamentoAdministradoAsync(string Id, bool syncItems = false)
+        public async Task<ObservableCollection<MedicamentoAdministrado>> RefreshMedicamentoAdministradoAsync(string Id,
+            bool syncItems = false)
         {
             try
             {
 #if OFFLINE_SYNC_ENABLED
                 if (syncItems)
                 {
-                    await this.SyncAsync();
+                    await SyncAsync();
                 }
 #endif
 
-                IEnumerable<MedicamentoAdministrado> items = await MedicamentoAdministradoTable
+                var items = await MedicamentoAdministradoTable
                     .Where(m => m.MedAfazer == Id)
                     .ToEnumerableAsync();
                 return new ObservableCollection<MedicamentoAdministrado>(items);
@@ -592,7 +641,6 @@ namespace HandyCareCuidador.Data
                 {
                     await MedicamentoAdministradoTable.UpdateAsync(item);
                 }
-
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -633,7 +681,7 @@ namespace HandyCareCuidador.Data
                 }
 #endif
 
-                IEnumerable<Medicamento> items = await MedicamentoTable
+                var items = await MedicamentoTable
                     .ToEnumerableAsync();
                 return new ObservableCollection<Medicamento>(items);
             }
@@ -646,7 +694,6 @@ namespace HandyCareCuidador.Data
                 Debug.WriteLine(@"Sync error: {0}", e.Message);
             }
             return null;
-
         }
 
         public async Task SaveMedicamentoAsync(Medicamento item, bool isNewItem)
@@ -676,7 +723,7 @@ namespace HandyCareCuidador.Data
                     await SyncAsync();
                 }
 #endif
-                IEnumerable<MotivoCuidado> items = await MotivoCuidadoTable
+                var items = await MotivoCuidadoTable
                     .ToEnumerableAsync();
                 var a = items.Count();
                 return new ObservableCollection<MotivoCuidado>(items);
@@ -713,12 +760,119 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(e.Message);
             }
-
         }
 
         public async Task DeletePeriodoTratamentoAsync(PeriodoTratamento periodoTratamento)
         {
             await PeriodoTratamentoTable.DeleteAsync(periodoTratamento);
+        }
+
+        public async Task<ObservableCollection<TipoCuidador>> RefreshTipoCuidadorAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+                var items = await TipoCuidadorTable
+                    .ToEnumerableAsync();
+                var a = items.Count();
+                return new ObservableCollection<TipoCuidador>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation: {0}", msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.Message);
+            }
+            return null;
+        }
+
+        public async Task SaveTipoCuidadorAsync(TipoCuidador tipoCuidador, bool isNewItem)
+        {
+            try
+            {
+                if (tipoCuidador.Id == null)
+                {
+                    await TipoCuidadorTable.InsertAsync(tipoCuidador);
+                }
+                else
+                {
+                    await TipoCuidadorTable.UpdateAsync(tipoCuidador);
+                }
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public async Task DeleteTipoCuidadorAsync(TipoCuidador tipoCuidador)
+        {
+            await TipoCuidadorTable.DeleteAsync(tipoCuidador);
+        }
+
+        public async Task<ObservableCollection<ValidacaoCuidador>> RefreshValidacaoCuidadorAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+                var items = await ValidacaoCuidadorTable
+                    .ToEnumerableAsync();
+                var a = items.Count();
+                return new ObservableCollection<ValidacaoCuidador>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation: {0}", msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.Message);
+            }
+            return null;
+        }
+
+        public async Task SaveValidacaoCuidadorAsync(ValidacaoCuidador validacaoCuidador, bool isNewItem)
+        {
+            try
+            {
+                if (validacaoCuidador.Id == null)
+                {
+                    await ValidacaoCuidadorTable.InsertAsync(validacaoCuidador);
+                }
+                else
+                {
+                    await ValidacaoCuidadorTable.UpdateAsync(validacaoCuidador);
+                }
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public async Task DeleteValidacaoCuidadorAsync(ValidacaoCuidador validacaoCuidador)
+        {
+            await ValidacaoCuidadorTable.DeleteAsync(validacaoCuidador);
         }
 
         public async Task<ObservableCollection<PeriodoTratamento>> RefreshPeriodoTratamentoAsync(bool syncItems = false)
@@ -731,7 +885,7 @@ namespace HandyCareCuidador.Data
                     await SyncAsync();
                 }
 #endif
-                IEnumerable<PeriodoTratamento> items = await PeriodoTratamentoTable
+                var items = await PeriodoTratamentoTable
                     .ToEnumerableAsync();
                 var a = items.Count();
                 return new ObservableCollection<PeriodoTratamento>(items);
@@ -768,10 +922,8 @@ namespace HandyCareCuidador.Data
             {
                 Debug.WriteLine(e.Message);
             }
-
         }
 
-    }
 #if OFFLINE_SYNC_ENABLED
         public async Task SyncAsync()
         {
@@ -779,13 +931,31 @@ namespace HandyCareCuidador.Data
 
             try
             {
-                await this.client.SyncContext.PushAsync();
+                await Task.Run(async () =>
+                {
+                    await CurrentClient.SyncContext.PushAsync();
 
-                await this.CuidadorTable.PullAsync(
-                    //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
-                    //Use a different query name for each unique query in your program
-                    "allCuidador",
-                    this.CuidadorTable.CreateQuery());
+                    await CuidadorTable.PullAsync(
+                        //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
+                        //Use a different query name for each unique query in your program
+                        "allCuidador",
+                        CuidadorTable.CreateQuery());
+
+                    await PacienteTable.PullAsync(
+                        "allPaciente",
+                        PacienteTable.CreateQuery());
+
+                    await CuidadorPacienteTable.PullAsync(
+                        "allCuidadorPaciente",
+                        CuidadorPacienteTable.CreateQuery());
+                    await ConclusaoAfazerTable.PullAsync(
+                        "allConclusaoAfazer",
+                        ConclusaoAfazerTable.CreateQuery());
+                    await AfazerTable.PullAsync(
+                        "allAfazer",
+                        AfazerTable.CreateQuery());
+
+                });
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -793,6 +963,10 @@ namespace HandyCareCuidador.Data
                 {
                     syncErrors = exc.PushResult.Errors;
                 }
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine(e.Message);
             }
 
             // Simple error/conflict handling. A real application would handle the various errors like network conditions,
@@ -812,9 +986,11 @@ namespace HandyCareCuidador.Data
                         await error.CancelAndDiscardItemAsync();
                     }
 
-                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.",
+                        error.TableName, error.Item["id"]);
                 }
             }
         }
 #endif
+    }
 }

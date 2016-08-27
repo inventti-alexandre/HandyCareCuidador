@@ -1,25 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HandyCareCuidador.Page.ListaAfazerConcluidoPage">
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Name="Nova Tarefa" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
-  </ContentPage.ToolbarItems>
-  <ContentPage.Content>
-    <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
-    <StackLayout>
-      <ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding Afazeres, Mode=TwoWay}" SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell>
-              <StackLayout Orientation="Vertical" Padding="10">
-                <Label Text="{Binding AfaHorarioPrevisto}" TextColor="Black" HorizontalOptions="StartAndExpand" FontAttributes="Bold"/>
-                <Label Text="{Binding AfaObservacao}" HorizontalOptions="StartAndExpand" TextColor="Green" FontSize="15"/>
-              </StackLayout>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-    </StackLayout>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Nova Tarefa" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                           IsVisible="{Binding oHorario.ActivityRunning}" />
+        <StackLayout>
+            <ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding Afazeres, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Vertical" Padding="10">
+                                <Label Text="{Binding AfaHorarioPrevisto}" TextColor="Black"
+                                       HorizontalOptions="StartAndExpand" FontAttributes="Bold" />
+                                <Label Text="{Binding AfaObservacao}" HorizontalOptions="StartAndExpand"
+                                       TextColor="Green" FontSize="15" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,23 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="HandyCareCuidador.Page.ListaMaterialPage"
-	xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador" >
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Name="Novo Material" Command="{Binding AddMaterial}" Order="Primary" Priority="0" />
-  </ContentPage.ToolbarItems>
-  <ContentPage.Content>
-    <StackLayout>
-      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning}"/>
-      <Label Text="Nenhum material cadastrado" IsVisible="{Binding oHorario.Visualizar}"/>
-      <ListView x:Name="lstMaterial" ItemsSource="{Binding Materiais}" SelectedItem="{Binding SelectedMaterial}">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <TextCell Text="{Binding MatDescricao}"></TextCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-    </StackLayout>
-  </ContentPage.Content>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HandyCareCuidador.Page.ListaMaterialPage"
+             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Novo Material" Command="{Binding AddMaterial}" Order="Primary" Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                               IsVisible="{Binding oHorario.ActivityRunning}" />
+            <Label Text="Nenhum material cadastrado" IsVisible="{Binding oHorario.Visualizar}" />
+            <ListView x:Name="lstMaterial" ItemsSource="{Binding Materiais}" SelectedItem="{Binding SelectedMaterial}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding MatDescricao}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
 
 

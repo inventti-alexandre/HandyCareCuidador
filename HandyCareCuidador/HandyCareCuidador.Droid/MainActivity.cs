@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -7,60 +7,84 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.Threading.Tasks;
+using Android.Content;
+using Android.Support.V4.OS;
 using HandyCareCuidador.Data;
+using HandyCareCuidador.Droid.Services;
+using HandyCareCuidador.Message;
+using HandyCareCuidador.Model;
+using HandyCareCuidador.Services;
 using Microsoft.WindowsAzure.MobileServices;
+using Xamarin.Forms;
 
 namespace HandyCareCuidador.Droid
 {
-    public class ThemeSelector:Activity
-    {
-        public  string ThemeVersion()
-        {
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Lollipop)
-            {
-                return "@android:style/Theme.Material.Light";
-            }
-            else
-            {
-                return "@android:style/Theme.Holo.Light";
-            }
-        }
-    }
     //Microsoft.WindowsAzure.Mobile;Microsoft.WindowsAzure.Mobile.Ext
     [Activity(Label = "Handy Care - Cuidador", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light",/* MainLauncher = true,*/ ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity, App.IAuthenticate
     {
+        public event EventHandler<ServiceConnectedEventArgs> AfazerServiceConnected = delegate { };
+
+        // declarations
+        protected readonly string logTag = "App";
+        protected static AfazerServiceConnection afazerServiceConnection;
         private MobileServiceUser user;
+
+        public AfazerService AfazerService
+        {
+            get
+            {
+                if (afazerServiceConnection.Binder == null)
+                {
+                    throw new Java.Lang.Exception("Fodeu");
+                }
+                return afazerServiceConnection.Binder.Service;
+            }
+        }
         public async Task<bool> Authenticate(MobileServiceAuthenticationProvider provider)
         {
             var success = false;
             var message = string.Empty;
             try
             {
-                // Sign in with Facebook logcin using a server-managed flow.
                 user = await CuidadorRestService.DefaultManager.CurrentClient.LoginAsync(this,
                     provider);
                 if (user != null)
-                {/*SALVAR userid no banco. Quando o usuário autenticar-se, deverá realizar uma pesquisa no banco para verificar se esse Id já consta lá.
-                    Se sim, exibir a página principal. Caso contrário, exibir a tela de cadastro de cuidador*/
+                {
                     message = $"you are now signed-in as {user.UserId}.";
                     success = true;
+                    var a = new Thread(() =>
+                    {
+                        ThreadPool.QueueUserWorkItem(async o => await StartAfazerService());
+                    });
+                    a.Start();
                 }
             }
             catch (Exception ex)
             {
                 message = ex.Message;
             }
-
-            // Display the success or failure message.
             var builder = new AlertDialog.Builder(this);
             builder.SetMessage(message);
             builder.SetTitle("Sign-in result");
             builder.Create().Show();
-
             return success;
         }
 
+        public async Task StartAfazerService()
+        {
+            afazerServiceConnection=new AfazerServiceConnection(null);
+            afazerServiceConnection.ServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
+            {
+                this.AfazerServiceConnected(this, e);
+            };
+            await Task.Run(() =>
+            {
+                StartService(new Intent(this, typeof(AfazerService)));
+                var afazerServiceIntent = new Intent(this, typeof(AfazerService));
+                BindService(afazerServiceIntent, afazerServiceConnection, Bind.AutoCreate);
+            });
+        }
         protected override void OnCreate(Bundle bundle)
         {
 

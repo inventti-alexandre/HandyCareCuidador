@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -18,9 +15,141 @@ namespace HandyCareCuidador.PageModel
     public class LoginPageModel : FreshBasePageModel
     {
         private App app;
-        private bool authenticated = false;
+        private bool authenticated;
         public Cuidador Cuidador { get; set; }
-        private HorarioViewModel HorarioViewModel { get; set; }
+        public HorarioViewModel oHorarioViewModel { get; set; }
+
+        public Command GoogleLoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                        {
+                            authenticated =
+                                await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Google);
+                        }
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google, true);
+                            if (Cuidador != null)
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+                            }
+                            else
+                            {
+                                app.NewCuidador();
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
+
+        public Command FacebookLoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                            authenticated =
+                                await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Facebook);
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Facebook, true);
+                            if (Cuidador != null)
+                                app.AbrirMainMenu(Cuidador);
+                            else
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
+
+        public Command MicrosoftLoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                            authenticated =
+                                await
+                                    App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.MicrosoftAccount);
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.MicrosoftAccount, true);
+                            if (Cuidador != null)
+                                app.AbrirMainMenu(Cuidador);
+                            else
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
+
         public override void Init(object initData)
         {
             base.Init(initData);
@@ -31,120 +160,12 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            Cuidador=new Cuidador();
-            HorarioViewModel = new HorarioViewModel {Visualizar = true};
-            if (authenticated == true)
+            Cuidador = new Cuidador();
+            oHorarioViewModel = new HorarioViewModel {Visualizar = true, ActivityRunning = false};
+            if (authenticated)
             {
                 // Hide the Sign-in button.
-                HorarioViewModel.Visualizar = false;
-            }
-        }
-        public Command GoogleLoginCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    try
-                    {
-                        if (App.Authenticator != null)
-                            authenticated = await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Google);
-
-                        // Set syncItems to true to synchronize the data on startup when offline is enabled.
-                        if (authenticated)
-                        {
-                            Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
-                                    CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google);
-                            if(Cuidador!=null)
-                            app.AbrirMainMenu(Cuidador.Id);
-                            else
-                            {
-                                app.NewCuidador();
-                            }
-                            //await CoreMethods.PushPageModel<MainMenuPageModel>();
-
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                         Debug.WriteLine(e.Message);
-                        throw;
-                    }
-
-                });
-            }
-        }
-        public Command FacebookLoginCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    try
-                    {
-                        if (App.Authenticator != null)
-                            authenticated = await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Facebook);
-
-                        // Set syncItems to true to synchronize the data on startup when offline is enabled.
-                        if (authenticated)
-                        {
-                            Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
-                                    CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Facebook);
-                            if (Cuidador != null)
-                                app.AbrirMainMenu(Cuidador.Id);
-                            else
-                            {
-                                app.NewCuidador();
-                            }
-                            //await CoreMethods.PushPageModel<MainMenuPageModel>();
-
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                        Debug.WriteLine(e.Message);
-                        throw;
-                    }
-
-                });
-            }
-        }
-        public Command MicrosoftLoginCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    try
-                    {
-                        if (App.Authenticator != null)
-                            authenticated = await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.MicrosoftAccount);
-
-                        // Set syncItems to true to synchronize the data on startup when offline is enabled.
-                        if (authenticated)
-                        {
-                            Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
-                                    CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.MicrosoftAccount);
-                            if (Cuidador != null)
-                                app.AbrirMainMenu(Cuidador.Id);
-                            else
-                            {
-                                app.NewCuidador();
-                            }
-                            //await CoreMethods.PushPageModel<MainMenuPageModel>();
-
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                        Debug.WriteLine(e.Message);
-                        throw;
-                    }
-
-                });
+                oHorarioViewModel.Visualizar = false;
             }
         }
     }

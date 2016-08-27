@@ -1,14 +1,15 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
+
 namespace HandyCareCuidador.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("ValidacaoCuidador")]
-    public partial class ValidacaoCuidador
+    [ImplementPropertyChanged]
+    public class ValidacaoCuidador
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ValidacaoCuidador()
         {
             Cuidador = new HashSet<Cuidador>();
@@ -24,7 +25,7 @@ namespace HandyCareCuidador.Model
 
         public virtual CorenEnfermeiro CorenEnfermeiro1 { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cuidador> Cuidador { get; set; }
     }
 }

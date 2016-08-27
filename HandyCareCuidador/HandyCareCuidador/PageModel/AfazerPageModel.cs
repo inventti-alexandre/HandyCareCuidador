@@ -1,20 +1,11 @@
-﻿using FreshMvvm;
-using GalaSoft.MvvmLight;
+﻿using System;
+using System.Collections.ObjectModel;
+using FreshMvvm;
+using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
-using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
 using PropertyChanged;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandyCareCuidador.Data;
 using Xamarin.Forms;
-
 
 namespace HandyCareCuidador.PageModel
 {
@@ -34,69 +25,19 @@ namespace HandyCareCuidador.PageModel
         public HorarioViewModel oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
-        public ConclusaoAfazer AfazerConcluido{get;set;}
+        public ConclusaoAfazer AfazerConcluido { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
         public ObservableCollection<Material> MateriaisEscolhidos { get; set; }
         public ObservableCollection<Medicamento> Medicamentos { get; set; }
-        public ObservableCollection<MaterialUtilizado> MateriaisUtilizados {get;set;}
+        public ObservableCollection<MaterialUtilizado> MateriaisUtilizados { get; set; }
 
-
-        public AfazerPageModel()
-        {
-            //_restService = FreshIOC.Container.Resolve<IAfazerRestService>();
-            //_concluirRestService = FreshIOC.Container.Resolve<IConclusaoAfazerRestService>();
-            //_materialRestService = FreshIOC.Container.Resolve<IMaterialRestService>();
-            //_medicamentoRestService = FreshIOC.Container.Resolve<IMedicamentoRestService>();
-            //_materialUtilizadoRestService = FreshIOC.Container.Resolve<IMaterialUtilizadoRestService>();
-            //_medicamentoAdministradoRestService = FreshIOC.Container.Resolve<IMedicamentoAdministradoRestService>();
-        }
-        public override async void Init(object initData)
-        {
-            base.Init(initData);
-            Afazer = initData as Afazer;
-            Materiais = new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
-            Medicamentos= new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync());
-            MateriaisUtilizados = new ObservableCollection<MaterialUtilizado>(await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
-            if (Afazer == null)
-            {
-                Afazer = new Afazer();
-                NewItem = true;
-            }
-            else
-            {
-                NewItem = false;
-                AfazerConcluido = new ConclusaoAfazer();
-            }
-        }
-        protected override void ViewIsAppearing(object sender, EventArgs e)
-        {
-            base.ViewIsAppearing(sender, e);
-            oHorario = new HorarioViewModel
-            {
-                HabilitarMaterial = false,
-                HabilitarMedicamento = false
-            };
-            if (Afazer == null)
-            {
-                Afazer = new Afazer();
-                oHorario.deleteVisible = false;
-                oHorario.Data = DateTime.Now;
-                oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-            }
-            else
-            {
-                oHorario.Data = Afazer.AfaHorarioPrevisto;
-                oHorario.Horario = Afazer.AfaHorarioPrevisto.TimeOfDay;
-                oHorario.deleteVisible = true;
-            }
-        }
         public Command SaveCommand
         {
             get
             {
                 return new Command(async () =>
                 {
-                    if(NewItem)
+                    if (NewItem)
                     {
                         Afazer.Id = Guid.NewGuid().ToString();
                     }
@@ -123,16 +64,19 @@ namespace HandyCareCuidador.PageModel
                             MedAfazer = Afazer.Id,
                             MedAdministrado = oMedicamento.Id,
                             MemQuantidadeAdministrada = Convert.ToInt32(oHorario.Quantidade),
-                            Id=Guid.NewGuid().ToString()
+                            Id = Guid.NewGuid().ToString()
                         };
                         oMedicamento.MedQuantidade -= oMedicamentoAdministrado.MemQuantidadeAdministrada;
                         await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(oMedicamento, false);
-                        await CuidadorRestService.DefaultManager.SaveMedicamentoAdministradoAsync(oMedicamentoAdministrado, true);
+                        await
+                            CuidadorRestService.DefaultManager.SaveMedicamentoAdministradoAsync(
+                                oMedicamentoAdministrado, true);
                     }
                     await CoreMethods.PopPageModel(Afazer);
                 });
             }
         }
+
         public Command ConcluirCommand
         {
             get
@@ -157,6 +101,52 @@ namespace HandyCareCuidador.PageModel
                     await CuidadorRestService.DefaultManager.DeleteAfazerAsync(Afazer);
                     await CoreMethods.PopPageModel(Afazer);
                 });
+            }
+        }
+
+        public override async void Init(object initData)
+        {
+            base.Init(initData);
+            Afazer = initData as Afazer;
+            Materiais =
+                new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
+            Medicamentos =
+                new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync());
+            MateriaisUtilizados =
+                new ObservableCollection<MaterialUtilizado>(
+                    await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
+            if (Afazer == null)
+            {
+                Afazer = new Afazer();
+                NewItem = true;
+            }
+            else
+            {
+                NewItem = false;
+                AfazerConcluido = new ConclusaoAfazer();
+            }
+        }
+
+        protected override void ViewIsAppearing(object sender, EventArgs e)
+        {
+            base.ViewIsAppearing(sender, e);
+            oHorario = new HorarioViewModel
+            {
+                HabilitarMaterial = false,
+                HabilitarMedicamento = false
+            };
+            if (Afazer == null)
+            {
+                Afazer = new Afazer();
+                oHorario.deleteVisible = false;
+                oHorario.Data = DateTime.Now;
+                oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            }
+            else
+            {
+                oHorario.Data = Afazer.AfaHorarioPrevisto;
+                oHorario.Horario = Afazer.AfaHorarioPrevisto.TimeOfDay;
+                oHorario.deleteVisible = true;
             }
         }
     }

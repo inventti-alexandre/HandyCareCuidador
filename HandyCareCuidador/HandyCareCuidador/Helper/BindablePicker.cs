@@ -1,28 +1,40 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador
 {
-    class BindablePicker : Picker
+    internal class BindablePicker : Picker
     {
+        public static readonly BindableProperty ItemsSourceProperty =
+            BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(BindablePicker),
+                null, propertyChanged: OnItemsSourceChanged);
 
-        Boolean _disableNestedCalls;
+        public static readonly BindableProperty SelectedItemProperty =
+            BindableProperty.Create("SelectedItem", typeof(object), typeof(BindablePicker),
+                null, BindingMode.TwoWay, propertyChanged: OnSelectedItemChanged);
 
-        public String DisplayMemberPath { get; set; }
+        public static readonly BindableProperty SelectedValueProperty =
+            BindableProperty.Create("SelectedValue", typeof(object), typeof(BindablePicker),
+                null, BindingMode.TwoWay, propertyChanged: OnSelectedValueChanged);
+
+        private bool _disableNestedCalls;
+
+        public BindablePicker()
+        {
+            SelectedIndexChanged += OnSelectedIndexChanged;
+        }
+
+        public string DisplayMemberPath { get; set; }
 
         public IEnumerable ItemsSource
         {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            get { return (IEnumerable) GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
 
-        public Object SelectedItem
+        public object SelectedItem
         {
             get { return GetValue(SelectedItemProperty); }
             set
@@ -35,7 +47,7 @@ namespace HandyCareCuidador
             }
         }
 
-        public Object SelectedValue
+        public object SelectedValue
         {
             get { return GetValue(SelectedValueProperty); }
             set
@@ -45,28 +57,11 @@ namespace HandyCareCuidador
             }
         }
 
-        public String SelectedValuePath { get; set; }
-
-        public BindablePicker()
-        {
-            this.SelectedIndexChanged += OnSelectedIndexChanged;
-        }
+        public string SelectedValuePath { get; set; }
 
         public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
 
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(BindablePicker),
-                null, propertyChanged: OnItemsSourceChanged);
-
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem", typeof(Object), typeof(BindablePicker),
-                null, BindingMode.TwoWay, propertyChanged: OnSelectedItemChanged);
-
-        public static readonly BindableProperty SelectedValueProperty =
-            BindableProperty.Create("SelectedValue", typeof(Object), typeof(BindablePicker),
-                null, BindingMode.TwoWay, propertyChanged: OnSelectedValueChanged);
-
-        void InternalSelectedItemChanged()
+        private void InternalSelectedItemChanged()
         {
             if (_disableNestedCalls)
             {
@@ -74,11 +69,11 @@ namespace HandyCareCuidador
             }
 
             var selectedIndex = -1;
-            Object selectedValue = null;
+            object selectedValue = null;
             if (ItemsSource != null)
             {
                 var index = 0;
-                var hasSelectedValuePath = !String.IsNullOrWhiteSpace(SelectedValuePath);
+                var hasSelectedValuePath = !string.IsNullOrWhiteSpace(SelectedValuePath);
                 foreach (var item in ItemsSource)
                 {
                     if (item != null && item.Equals(SelectedItem))
@@ -101,20 +96,20 @@ namespace HandyCareCuidador
             _disableNestedCalls = false;
         }
 
-        void InternalSelectedValueChanged()
+        private void InternalSelectedValueChanged()
         {
             if (_disableNestedCalls)
             {
                 return;
             }
 
-            if (String.IsNullOrWhiteSpace(SelectedValuePath))
+            if (string.IsNullOrWhiteSpace(SelectedValuePath))
             {
                 return;
             }
             var selectedIndex = -1;
-            Object selectedItem = null;
-            var hasSelectedValuePath = !String.IsNullOrWhiteSpace(SelectedValuePath);
+            object selectedItem = null;
+            var hasSelectedValuePath = !string.IsNullOrWhiteSpace(SelectedValuePath);
             if (ItemsSource != null && hasSelectedValuePath)
             {
                 var index = 0;
@@ -141,21 +136,21 @@ namespace HandyCareCuidador
             _disableNestedCalls = false;
         }
 
-        static void OnItemsSourceChanged(BindableObject bindable, Object oldValue, Object newValue)
+        private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (Equals(newValue, null) && Equals(oldValue, null))
             {
                 return;
             }
 
-            var picker = (BindablePicker)bindable;
+            var picker = (BindablePicker) bindable;
             picker.Items.Clear();
 
             if (!Equals(newValue, null))
             {
-                var hasDisplayMemberPath = !String.IsNullOrWhiteSpace(picker.DisplayMemberPath);
+                var hasDisplayMemberPath = !string.IsNullOrWhiteSpace(picker.DisplayMemberPath);
 
-                foreach (var item in (IEnumerable)newValue)
+                foreach (var item in (IEnumerable) newValue)
                 {
                     if (hasDisplayMemberPath)
                     {
@@ -192,7 +187,7 @@ namespace HandyCareCuidador
             }
         }
 
-        void OnSelectedIndexChanged(Object sender, EventArgs e)
+        private void OnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (_disableNestedCalls)
             {
@@ -215,7 +210,7 @@ namespace HandyCareCuidador
             _disableNestedCalls = true;
 
             var index = 0;
-            var hasSelectedValuePath = !String.IsNullOrWhiteSpace(SelectedValuePath);
+            var hasSelectedValuePath = !string.IsNullOrWhiteSpace(SelectedValuePath);
             foreach (var item in ItemsSource)
             {
                 if (index == SelectedIndex)
@@ -236,18 +231,17 @@ namespace HandyCareCuidador
             _disableNestedCalls = false;
         }
 
-        static void OnSelectedItemChanged(BindableObject bindable, Object oldValue, Object newValue)
+        private static void OnSelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var boundPicker = (BindablePicker)bindable;
+            var boundPicker = (BindablePicker) bindable;
             boundPicker.ItemSelected?.Invoke(boundPicker, new SelectedItemChangedEventArgs(newValue));
             boundPicker.InternalSelectedItemChanged();
         }
 
-        static void OnSelectedValueChanged(BindableObject bindable, Object oldValue, Object newValue)
+        private static void OnSelectedValueChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var boundPicker = (BindablePicker)bindable;
+            var boundPicker = (BindablePicker) bindable;
             boundPicker.InternalSelectedValueChanged();
         }
-
     }
 }

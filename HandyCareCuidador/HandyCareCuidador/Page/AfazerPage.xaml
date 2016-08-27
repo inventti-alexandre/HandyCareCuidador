@@ -1,32 +1,44 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="HandyCareCuidador.Page.AfazerPage"
-	xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador" >
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <local:NullableValueConverter x:Key="NullableValueConverter" />
-    </ResourceDictionary>
-  </ContentPage.Resources>
-  <ContentPage.Content>
-    <StackLayout Padding="15">
-      <Label Text="Horário Previsto" ></Label>
-      <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}"></DatePicker>
-      <TimePicker Time="{Binding oHorario.Horario, Mode=TwoWay}" ></TimePicker>
-      <Label Text="Observação" ></Label>
-      <Entry Text="{Binding Afazer.AfaObservacao}" Placeholder="Descreva o que deverá ser feito"></Entry>
-      <Label Text="Material" ></Label>
-      <Switch IsToggled="{Binding oHorario.HabilitarMaterial, Mode=TwoWay}"/>
-      <local:BindablePicker DisplayMemberPath="MatDescricao" Title="Selecione um material" ItemsSource="{Binding Materiais}" SelectedItem="{Binding oMaterial, Mode=TwoWay}" IsVisible="{Binding oHorario.HabilitarMaterial}"/>
-      <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}"></Label>
-      <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}" Keyboard="Numeric"  IsVisible="{Binding oHorario.HabilitarMaterial}"></Entry>
-      <Label Text="Medicamento" ></Label>
-      <Switch IsToggled="{Binding oHorario.HabilitarMedicamento, Mode=TwoWay}"/>
-      <local:BindablePicker DisplayMemberPath="MedDescricao" Title="Selecione um medicamento" ItemsSource="{Binding Medicamentos}" SelectedItem="{Binding oMedicamento, Mode=TwoWay}" IsVisible="{Binding oHorario.HabilitarMedicamento}"/>
-      <Label Text="Quantidade de medicamento" IsVisible="{Binding oHorario.HabilitarMedicamento}"></Label>
-      <Entry Text="{Binding oHorario.QuantidadeF, Mode=TwoWay}" Keyboard="Numeric" IsVisible="{Binding oHorario.HabilitarMedicamento}"></Entry>
-      <Button Text="Concluir Afazer"  IsEnabled="True" Command="{Binding ConcluirCommand}" IsVisible="{Binding oHorario.deleteVisible}" BackgroundColor="Green" FontAttributes="Bold" BorderWidth="10" FontSize="20"></Button>
-      <Button Text="Salvar" Command="{Binding SaveCommand}"></Button>
-      <Button Text="Excluir" Command="{Binding DeleteCommand}" IsVisible="{Binding oHorario.deleteVisible}" IsEnabled="{Binding oHorario.deleteVisible}"></Button>
-      <!--<BoxView HeightRequest="30"></BoxView>-->
-    </StackLayout>
-  </ContentPage.Content>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HandyCareCuidador.Page.AfazerPage"
+             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:NullableValueConverter x:Key="NullableValueConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Padding="15">
+            <Label Text="Horário Previsto" />
+            <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" />
+            <TimePicker Time="{Binding oHorario.Horario, Mode=TwoWay}" />
+            <Label Text="Observação" />
+            <Entry Text="{Binding Afazer.AfaObservacao}" Placeholder="Descreva o que deverá ser feito" />
+            <Label Text="Material" />
+            <Switch IsToggled="{Binding oHorario.HabilitarMaterial, Mode=TwoWay}" />
+            <local:BindablePicker DisplayMemberPath="MatDescricao" Title="Selecione um material"
+                                  ItemsSource="{Binding Materiais}" SelectedItem="{Binding oMaterial, Mode=TwoWay}"
+                                  IsVisible="{Binding oHorario.HabilitarMaterial}" />
+            <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}" />
+            <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
+                   Keyboard="Numeric" IsVisible="{Binding oHorario.HabilitarMaterial}" />
+            <Label Text="Medicamento" />
+            <Switch IsToggled="{Binding oHorario.HabilitarMedicamento, Mode=TwoWay}" />
+            <local:BindablePicker DisplayMemberPath="MedDescricao" Title="Selecione um medicamento"
+                                  ItemsSource="{Binding Medicamentos}"
+                                  SelectedItem="{Binding oMedicamento, Mode=TwoWay}"
+                                  IsVisible="{Binding oHorario.HabilitarMedicamento}" />
+            <Label Text="Quantidade de medicamento" IsVisible="{Binding oHorario.HabilitarMedicamento}" />
+            <Entry Text="{Binding oHorario.QuantidadeF, Mode=TwoWay}" Keyboard="Numeric"
+                   IsVisible="{Binding oHorario.HabilitarMedicamento}" />
+            <Button Text="Concluir Afazer" IsEnabled="True" Command="{Binding ConcluirCommand}"
+                    IsVisible="{Binding oHorario.deleteVisible}" BackgroundColor="Green" FontAttributes="Bold"
+                    BorderWidth="10" FontSize="20" />
+            <Button Text="Salvar" Command="{Binding SaveCommand}" />
+            <Button Text="Excluir" Command="{Binding DeleteCommand}" IsVisible="{Binding oHorario.deleteVisible}"
+                    IsEnabled="{Binding oHorario.deleteVisible}" />
+            <!--<BoxView HeightRequest="30"></BoxView>-->
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

@@ -1,15 +1,13 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+
 namespace HandyCareCuidador.Model
 {
-
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("ValidacaoAfazer")]
-    public partial class ValidacaoAfazer
+    public class ValidacaoAfazer
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ValidacaoAfazer()
         {
             MotivoNaoValidacaoConclusaoAfazer = new HashSet<MotivoNaoValidacaoConclusaoAfazer>();
@@ -25,7 +23,7 @@ namespace HandyCareCuidador.Model
 
         public virtual Familiar Familiar { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MotivoNaoValidacaoConclusaoAfazer> MotivoNaoValidacaoConclusaoAfazer { get; set; }
     }
 }

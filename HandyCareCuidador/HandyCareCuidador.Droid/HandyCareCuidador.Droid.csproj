@@ -157,6 +157,12 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AfazerService.cs" />
+    <Compile Include="Services\AfazerServiceConnection.cs" />
+    <Compile Include="Services\AndroidLocalNotification.cs" />
+    <Compile Include="Services\HorarioAfazerBinder.cs" />
+    <Compile Include="Services\NotificationPublisher.cs" />
+    <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>

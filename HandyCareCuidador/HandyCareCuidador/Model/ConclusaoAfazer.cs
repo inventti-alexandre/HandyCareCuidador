@@ -1,16 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
+
 namespace HandyCareCuidador.Model
 {
-    using PropertyChanged;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     [Table("ConclusaoAfazer")]
     [ImplementPropertyChanged]
-    public partial class ConclusaoAfazer
+    public class ConclusaoAfazer
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ConclusaoAfazer()
         {
             MotivoNaoConclusaoTarefa = new HashSet<MotivoNaoConclusaoTarefa>();
@@ -25,10 +25,10 @@ namespace HandyCareCuidador.Model
 
         public virtual Afazer Afazer { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MotivoNaoConclusaoTarefa> MotivoNaoConclusaoTarefa { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValidacaoAfazer> ValidacaoAfazer { get; set; }
     }
 }
