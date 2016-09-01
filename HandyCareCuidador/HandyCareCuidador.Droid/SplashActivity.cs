@@ -35,9 +35,6 @@ namespace HandyCareCuidador.Droid
             {
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 RunOnUiThread(()=> {
-                    var progressBar = FindViewById<ProgressBar>(Resource.Id.progressBarSplash);
-                    progressBar.Indeterminate = true;
-                    progressBar.Visibility = ViewStates.Visible;
                     StartActivity(new Intent(this, typeof(MainActivity)));
                     });
                 watch.Stop();

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HandyCareCuidador.Page.FotoPage">
+    <StackLayout>
+        <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                               IsVisible="{Binding oHorario.ActivityRunning}" />
+        <ListView x:Name="lstAfazer" ItemsSource="{Binding Familiares, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedFamiliar}" IsVisible="True" RowHeight="60">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical" Padding="10">
+                            <Label Text="{Binding FamNomeCompleto}" TextColor="Black"
+                                       HorizontalOptions="StartAndExpand" FontAttributes="Bold" FontSize="20" />
+                            <Label Text="{Binding ParDescricao}" TextColor="Black"
+                                       HorizontalOptions="StartAndExpand" FontSize="15" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

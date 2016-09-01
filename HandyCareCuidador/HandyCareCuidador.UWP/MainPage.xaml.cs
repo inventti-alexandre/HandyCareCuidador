@@ -26,7 +26,7 @@ namespace HandyCareCuidador.UWP
         public MainPage()
         {
             this.InitializeComponent();
-           // Xamarin.FormsMaps.Init("tXakENkxNjW1qFQiJRLW~yQ_ShKb5OpjWdZgk71L9Vw~An7iTGagwyp_wS_UaGiToWHo55PM90MaAVUKrceSfmxHHmKb4ZYZm8i88jeTh-hs");
+            Xamarin.FormsMaps.Init("tXakENkxNjW1qFQiJRLW~yQ_ShKb5OpjWdZgk71L9Vw~An7iTGagwyp_wS_UaGiToWHo55PM90MaAVUKrceSfmxHHmKb4ZYZm8i88jeTh-hs");
             HandyCareCuidador.App.Init(this);
             LoadApplication(new HandyCareCuidador.App());
         }

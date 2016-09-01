@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
     [Table("Familiar")]
+    [ImplementPropertyChanged]
     public class Familiar
     {
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,6 +27,8 @@ namespace HandyCareCuidador.Model
         public string FamNome { get; set; }
 
         public string FamSobrenome { get; set; }
+        public string FamNomeCompleto => FamNome + " " + FamSobrenome;
+
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Avaliacao> Avaliacao { get; set; }

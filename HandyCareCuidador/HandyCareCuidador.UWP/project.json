@@ -5,8 +5,13 @@
     "Microsoft.Bcl": "1.1.10",
     "Microsoft.Bcl.Build": "1.0.21",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "Newtonsoft.Json": "9.0.1",
     "SQLitePCL": "3.8.7.2",
-    "Xamarin.Forms": "2.0.0.6482"
+    "TK.CustomMap": "1.5.0",
+    "Xam.Plugin.Geolocator": "3.0.4",
+    "Xam.Plugin.Media": "2.5.1-beta40",
+    "Xamarin.Forms": "2.2.0.45",
+    "Xamarin.Forms.Maps": "2.2.0.31"
   },
   "frameworks": {
     "uap10.0": {}

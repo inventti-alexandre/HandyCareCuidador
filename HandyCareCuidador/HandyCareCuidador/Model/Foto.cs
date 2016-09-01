@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
     [Table("Foto")]
+    [ImplementPropertyChanged]
     public class Foto
     {
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

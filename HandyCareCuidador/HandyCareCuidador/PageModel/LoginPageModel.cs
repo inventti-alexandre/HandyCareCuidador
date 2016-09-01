@@ -43,7 +43,7 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google, true);
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();

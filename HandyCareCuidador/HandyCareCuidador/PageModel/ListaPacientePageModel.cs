@@ -30,9 +30,9 @@ namespace HandyCareCuidador.PageModel
             {
                 CuidadoresPacientes =
                     new ObservableCollection<CuidadorPaciente>(
-                        await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync());
+                        await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true));
                 var selection =
-                    new ObservableCollection<Paciente>(await CuidadorRestService.DefaultManager.RefreshPacienteAsync());
+                    new ObservableCollection<Paciente>(await CuidadorRestService.DefaultManager.RefreshPacienteAsync(true));
                 var result = selection.Where(e => CuidadoresPacientes.Select(m => m.PacId)
                     .Contains(e.Id)).AsEnumerable();
                 Pacientes = new ObservableCollection<Paciente>(result);

@@ -150,7 +150,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     AfazeresConcluidos =
                         new ObservableCollection<ConclusaoAfazer>(
-                            await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync());
+                            await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync(true));
                 });
             }
             catch (Exception)
@@ -169,12 +169,12 @@ namespace HandyCareCuidador.PageModel
                     oHorario.ActivityRunning = true;
                     oHorario.FinalizarAfazer = false;
                     var selection =
-                        new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync());
+                        new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync(true));
                     if (selection.Count > 0 && AfazeresConcluidos.Count > 0)
                     {
                         var pacresult =
                             new ObservableCollection<CuidadorPaciente>(
-                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
                                 .Where(e => e.PacId == oPaciente.Id)
                                 .AsEnumerable();
                         var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)

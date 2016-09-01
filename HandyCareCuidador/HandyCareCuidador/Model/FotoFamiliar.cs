@@ -6,6 +6,7 @@ namespace HandyCareCuidador.Model
     [Table("FotoFamiliar")]
     public class FotoFamiliar
     {
+        public string Id { get; set; }
         [Column(Order = 0)]
         public string FamId { get; set; }
 

@@ -10,6 +10,7 @@ using HandyCareCuidador.Model;
 using HandyCareCuidador.Page;
 using HandyCareCuidador.PageModel;
 using Microsoft.WindowsAzure.MobileServices;
+using TK.CustomMap.Api.Google;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador
@@ -18,10 +19,35 @@ namespace HandyCareCuidador
     {
         //static ILoginManager loginManager;
         public static bool authenticated;
+        public event Action TakePicture = () => { };
+        public event Action RecordVideo = () => { };
+        readonly Image image = new Image();
+
+        public void PictureEventHandler()
+        {
+            TakePictureMethod();
+        }
+
+        private void TakePictureMethod()
+        {
+            var handler = TakePicture;
+            handler?.Invoke();
+        }
+        public void VideoEventHandler()
+        {
+            RecordVideoMethod();
+        }
+
+        private void RecordVideoMethod()
+        {
+            var handler = RecordVideo;
+            handler?.Invoke();
+        }
 
         public App()
         {
             Register();
+            GmsDirection.Init("AIzaSyASYVBniofTez5ZkWBEc1-3EEby_bZeRJk");
             /*var page = FreshPageModelResolver.ResolvePageModel<MainMenuPageModel>();
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;*/
@@ -29,7 +55,10 @@ namespace HandyCareCuidador
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;
         }
-
+        public void ShowImage(string filepath)
+        {
+            image.Source = ImageSource.FromFile(filepath);
+        }
         public static IAuthenticate Authenticator { get; private set; }
         public static ObservableCollection<Afazer> Afazeres { get; set; }
         public static ObservableCollection<ConclusaoAfazer> AfazeresConcluidos { get; set; }

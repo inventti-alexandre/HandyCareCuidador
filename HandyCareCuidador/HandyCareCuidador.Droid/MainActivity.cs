@@ -8,13 +8,16 @@ using Android.Widget;
 using Android.OS;
 using System.Threading.Tasks;
 using Android.Content;
+using Android.Provider;
 using Android.Support.V4.OS;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Droid.Services;
 using HandyCareCuidador.Message;
 using HandyCareCuidador.Model;
 using HandyCareCuidador.Services;
+using Java.IO;
 using Microsoft.WindowsAzure.MobileServices;
+using Plugin.Permissions;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador.Droid
@@ -24,6 +27,11 @@ namespace HandyCareCuidador.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity, App.IAuthenticate
     {
         public event EventHandler<ServiceConnectedEventArgs> AfazerServiceConnected = delegate { };
+
+        private static readonly File FotoFile = new File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                                Android.OS.Environment.DirectoryPictures), DateTime.Now.ToString() + "handycare.jpg");
+        private static readonly File VideoFile = new File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                        Android.OS.Environment.DirectoryMovies), DateTime.Now.ToString() + "handycare.mp4");
 
         // declarations
         protected readonly string logTag = "App";
@@ -85,6 +93,11 @@ namespace HandyCareCuidador.Droid
                 BindService(afazerServiceIntent, afazerServiceConnection, Bind.AutoCreate);
             });
         }
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -94,6 +107,31 @@ namespace HandyCareCuidador.Droid
             CurrentPlatform.Init();
             App.Init((App.IAuthenticate)this);
             LoadApplication(new App());
+            var app = Xamarin.Forms.Application.Current as App;
+            if (app != null)
+            {
+                app.TakePicture += () => {
+                    var intent = new Intent(MediaStore.ActionImageCapture);
+                    intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(FotoFile));
+                    StartActivityForResult(intent, 0);
+                };
+                app.RecordVideo += () =>
+                {
+                    var intent = new Intent(MediaStore.ActionVideoCapture);
+                    intent.PutExtra(MediaStore.ExtraDurationLimit, 10);
+                    intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(VideoFile));
+                    StartActivityForResult(intent, 0);
+
+                };
+
+            }
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            var app = Xamarin.Forms.Application.Current as App;
+            app?.ShowImage(FotoFile.Path);
         }
     }
 }

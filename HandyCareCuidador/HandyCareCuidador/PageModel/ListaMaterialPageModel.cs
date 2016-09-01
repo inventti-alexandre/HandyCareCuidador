@@ -81,12 +81,12 @@ namespace HandyCareCuidador.PageModel
                 {
                     var pacresult =
                         new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
                             .Where(e => e.PacId == oPaciente.Id)
                             .AsEnumerable();
                     var result =
                         new ObservableCollection<Material>(
-                            await CuidadorRestService.DefaultManager.RefreshMaterialAsync())
+                            await CuidadorRestService.DefaultManager.RefreshMaterialAsync(true))
                             .Where(e => pacresult.Select(m => m.Id)
                                 .Contains(e.MatPacId))
                             .AsEnumerable();

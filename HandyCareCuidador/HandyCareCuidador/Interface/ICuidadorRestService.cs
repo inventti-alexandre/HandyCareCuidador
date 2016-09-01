@@ -7,6 +7,22 @@ namespace HandyCareCuidador.Interface
 {
     public interface ICuidadorRestService
     {
+        Task<ObservableCollection<FotoFamiliar>> RefreshFotoFamiliarAsync(bool syncItems = false);
+        Task SaveFotoFamiliarAsync(FotoFamiliar fotoFamiliar, bool isNewItem);
+        Task DeleteFotoFamiliarAsync(FotoFamiliar fotoFamiliar);
+
+        Task<ObservableCollection<Parentesco>> RefreshParentescoAsync(bool syncItems = false);
+        Task SaveParentescoAsync(Parentesco parentesco, bool isNewItem);
+        Task DeleteParentescoAsync(Parentesco parentesco);
+
+        Task<ObservableCollection<PacienteFamiliar>> RefreshPacienteFamiliarAsync(bool syncItems = false);
+        Task SavePacienteFamiliarAsync(PacienteFamiliar pacienteFamiliar, bool isNewItem);
+        Task DeletePacienteFamiliarAsync(PacienteFamiliar pacienteFamiliar);
+
+        Task<ObservableCollection<Familiar>> RefreshFamiliarAsync(bool syncItems = false);
+        Task SaveFamiliarAsync(Familiar familiar, bool isNewItem);
+        Task DeleteFamiliarAsync(Familiar familiar);
+
         /// <summary>
         ///     Manager de Cuidador
         /// </summary>
@@ -18,6 +34,12 @@ namespace HandyCareCuidador.Interface
             bool syncItems = false);
         Task SaveCuidadorAsync(Cuidador cuidador, bool isNewItem);
         Task DeleteCuidadorAsync(Cuidador cuidador);
+
+
+        Task<ObservableCollection<Foto>> RefreshFotoAsync(bool syncItems = false);
+        Task<Foto> ProcurarFotoAsync(string id, bool syncItems = false);
+        Task SaveFotoAsync(Foto foto, bool isNewItem);
+        Task DeleteFotoAsync(Foto foto);
 
         /// <summary>
         ///     Manager de CuidadorPaciente

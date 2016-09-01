@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FreshMvvm;
+using HandyCareCuidador;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using Xamarin.Forms;
 
 namespace HandyCareCuidador.PageModel
@@ -14,16 +18,110 @@ namespace HandyCareCuidador.PageModel
     public class MainMenuPageModel : FreshBasePageModel
     {
         private Paciente _selectedPaciente;
+        //public event Action TakePicture = () => { };
 
         //private IPacienteRestService _pacienteRestService;
         //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
         //private ICuidadorRestService _cuidadorRestService;
         private Cuidador Cuidador { get; set; }
+        private Foto Foto { get; set; }
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public Paciente oPaciente { get; set; }
         public ObservableCollection<CuidadorPaciente> CuidadorPacientes { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
+        //public void ShowImage(string filepath)
+        //{
+        //    image.Source = ImageSource.FromFile(filepath);
+        //}
+        public Command TirarFoto
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    var image = new Image();
+                    await CrossMedia.Current.Initialize();
+
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                    {
+                        await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
+                        return;
+                    }
+
+                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                    {
+                        Directory = "Handy Care",
+                        Name = DateTime.Now.ToString()+"HandyCareFoto.jpg",
+                        CompressionQuality = 70,
+                        PhotoSize = PhotoSize.Small,
+                        SaveToAlbum = true
+                    });
+    
+                    if (file == null)
+                        return;
+
+                    await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                    image.Source = ImageSource.FromStream(() =>
+                    {
+                        var stream = file.GetStream();
+                        //file.Dispose();
+                        return stream;
+                    });
+                    if (await CoreMethods.DisplayActionSheet("Deseja enviar a foto para um familiar", "Não", null, "Ok") == "Ok")
+                    {
+                        Foto=new Foto();
+                        Foto.FotoDados = ReadFully(file.GetStream());
+                        //Foto.FotoDados
+                    }
+                    //var app = Xamarin.Forms.Application.Current as App;
+                    //app?.PictureEventHandler();
+                });
+            }
+        }
+        public Command GravarVideo
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
+                    {
+                        await CoreMethods.DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
+                        return;
+                    }
+
+                    var file = await CrossMedia.Current.TakeVideoAsync(new Plugin.Media.Abstractions.StoreVideoOptions
+                    {
+                        Name = DateTime.Now.ToString()+"HandyCareVideo.mp4",
+                        Directory = "Handy Care",
+                        DesiredLength = new TimeSpan(0,0,0,10),
+                        Quality = VideoQuality.Medium
+                    });
+
+                    if (file == null)
+                        return;
+
+                    await CoreMethods.DisplayAlert("Video Recorded", "Location: " + file.Path, "OK");
+
+                    file.Dispose();
+                    //var app = Xamarin.Forms.Application.Current as App;
+                    //app?.VideoEventHandler();
+                });
+            }
+        }
+        public Command ShowFoto
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    var tupla = new Tuple<Cuidador,Paciente>(Cuidador,SelectedPaciente);
+                    await CoreMethods.PushPageModel<FotoPageModel>(tupla);
+                });
+            }
+        }
+
 
         public Command ShowCuidador
         {
@@ -190,10 +288,10 @@ namespace HandyCareCuidador.PageModel
                     CuidadorPaciente = new CuidadorPaciente();
                     var result =
                         new ObservableCollection<Paciente>(
-                            await CuidadorRestService.DefaultManager.RefreshPacienteAsync(true));
+                            await CuidadorRestService.DefaultManager.RefreshPacienteAsync());
                     CuidadorPaciente =
                         new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true)).FirstOrDefault(
+                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
                                 e => e.CuiId == Cuidador.Id);
                     if (result.Count > 0)
                     {

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using FreshMvvm;
@@ -15,6 +17,7 @@ namespace HandyCareCuidador.PageModel
     {
         public Cuidador Cuidador { get; set; }
         public TipoCuidador TipoCuidador { get; set; }
+        public ObservableCollection<TipoCuidador> TiposCuidadores { get; set; }
         public ValidacaoCuidador ValidacaoCuidador { get; set; }
         public HorarioViewModel oHorario { get; set; }
         private bool novoItem;
@@ -26,9 +29,10 @@ namespace HandyCareCuidador.PageModel
             ValidacaoCuidador = new ValidacaoCuidador();
             oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false, VisualizarTermino = false};
             Cuidador = initData as Cuidador;
+            oHorario.NovoCuidador = Cuidador?.Id == null;
             await GetData();
             //await GetInfo();
-            novoItem = Cuidador == null;
+            //novoItem = Cuidador == null;
             oHorario.ActivityRunning = false;
             oHorario.Visualizar = true;
         }
@@ -48,10 +52,24 @@ namespace HandyCareCuidador.PageModel
 
         private async Task GetData()
         {
-            TipoCuidador = new ObservableCollection<TipoCuidador>(await CuidadorRestService.DefaultManager.RefreshTipoCuidadorAsync())
-                .FirstOrDefault(e => e.Id == Cuidador.CuiTipoCuidador);
-            ValidacaoCuidador= new ObservableCollection<ValidacaoCuidador>(await CuidadorRestService.DefaultManager.RefreshValidacaoCuidadorAsync())
-                .FirstOrDefault(e => e.Id == Cuidador.CuiValidacaoCuidador);
+            try
+            {
+                await Task.Run(async () =>
+                {
+                    TiposCuidadores = new ObservableCollection<TipoCuidador>(await CuidadorRestService.DefaultManager.RefreshTipoCuidadorAsync());
+                    //var x =
+                    //    new ObservableCollection<TipoCuidador>(
+                    //        await CuidadorRestService.DefaultManager.RefreshTipoCuidadorAsync());
+                    TipoCuidador = TiposCuidadores.FirstOrDefault(e => e.Id == Cuidador.CuiTipoCuidador);
+                    ValidacaoCuidador = new ObservableCollection<ValidacaoCuidador>(await CuidadorRestService.DefaultManager.RefreshValidacaoCuidadorAsync())
+                        .FirstOrDefault(e => e.Id == Cuidador.CuiValidacaoCuidador);
+                });
+            }
+            catch (NullReferenceException e)
+            {
+                    
+                Debug.WriteLine(e.Message);
+            }
         }
     }
 }

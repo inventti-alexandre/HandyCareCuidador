@@ -82,6 +82,7 @@ namespace HandyCareCuidador.PageModel
                             await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
                             .Where(e => e.PacId == oPaciente.Id)
                             .AsEnumerable();
+                    var x = pacresult.Count();
                     var result =
                         new ObservableCollection<Medicamento>(
                             await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())

@@ -5,22 +5,26 @@
              xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              x:Class="HandyCareCuidador.Page.MainMenuPage">
     <ContentPage.Content>
+      <ScrollView>
         <StackLayout Orientation="Vertical" Padding="10">
-            <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
-                                              IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente"
-                                              ItemsSource="{Binding Pacientes}"
-                                              SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}" />
-            <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
-                               IsVisible="{Binding oHorario.ActivityRunning}" />
-            <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Chamar contatos" Command="{Binding AlertarContatos}"
-                    IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Vídeo/foto" IsVisible="{Binding oHorario.Visualizar}" />
+          <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
+                                            IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente"
+                                            ItemsSource="{Binding Pacientes}"
+                                            SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}" />
+          <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                             IsVisible="{Binding oHorario.ActivityRunning}" />
+          <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Chamar contatos" Command="{Binding AlertarContatos}"
+                  IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Foto" Command="{Binding TirarFoto}" IsVisible="{Binding oHorario.Visualizar}" />
+          <Button Text="Vídeo" Command="{Binding GravarVideo}" IsVisible="{Binding oHorario.Visualizar}" />
           <Button Text="Suas informações" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" />
         </StackLayout>
+
+      </ScrollView>
     </ContentPage.Content>
 </ContentPage>

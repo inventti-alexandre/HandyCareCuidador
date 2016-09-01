@@ -15,6 +15,7 @@ namespace HandyCareCuidador.Helper
         public float? QuantidadeF { get; set; }
         public bool HabilitarMaterial { get; set; }
         public bool HabilitarMedicamento { get; set; }
+        public bool NovoCuidador { get; set; }
         public bool FinalizarAfazer { get; set; }
         public bool VisualizarTermino { get; set; }
     }
