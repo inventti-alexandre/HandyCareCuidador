@@ -7,10 +7,8 @@ namespace HandyCareCuidador.Model
     public class FotoFamiliar
     {
         public string Id { get; set; }
-        [Column(Order = 0)]
         public string FamId { get; set; }
 
-        [Column(Order = 1)]
         public string FotId { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }

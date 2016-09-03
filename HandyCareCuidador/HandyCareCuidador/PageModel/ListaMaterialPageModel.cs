@@ -31,7 +31,9 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    await CoreMethods.PushPageModel<MaterialPageModel>();
+                    var material = new Material();
+                    var x = new Tuple<Material, Paciente>(material, oPaciente);
+                    await CoreMethods.PushPageModel<MaterialPageModel>(x);
                 });
             }
         }
@@ -58,7 +60,8 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = true;
                     RaisePropertyChanged("IsVisible");
-                    await CoreMethods.PushPageModel<MaterialPageModel>(material);
+                    var x = new Tuple<Material,Paciente>(material,oPaciente);
+                    await CoreMethods.PushPageModel<MaterialPageModel>(x);
                     material = null;
                 });
             }

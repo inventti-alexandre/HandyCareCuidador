@@ -67,6 +67,14 @@ namespace HandyCareCuidador.Data
         public CuidadorRestService()
         {
             CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
+//#if DEBUG
+//            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
+//            {
+//                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
+//            };
+//            //#else
+//            //   MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
+//#endif
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
@@ -144,20 +152,29 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
 
         public async Task SaveFotoAsync(Foto item, bool isNewItem)
         {
-            if (item.Id == null)
+            try
             {
-                await FotoTable.InsertAsync(item);
+                if (isNewItem)
+                {
+                    await FotoTable.InsertAsync(item);
+                }
+                else
+                {
+                    await FotoTable.UpdateAsync(item);
+                }
+
             }
-            else
+            catch (MobileServiceInvalidOperationException msioe)
             {
-                await FotoTable.UpdateAsync(item);
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
             }
         }
         public async Task DeleteFotoAsync(Foto foto)
@@ -205,7 +222,7 @@ namespace HandyCareCuidador.Data
 
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -252,7 +269,7 @@ namespace HandyCareCuidador.Data
 
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -278,20 +295,28 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
 
         public async Task SaveFotoFamiliarAsync(FotoFamiliar fotoFamiliar, bool isNewItem)
         {
-            if (fotoFamiliar.Id == null)
+            try
             {
-                await FotoFamiliarTable.InsertAsync(fotoFamiliar);
+                if (isNewItem)
+                {
+                    await FotoFamiliarTable.InsertAsync(fotoFamiliar);
+                }
+                else
+                {
+                    await FotoFamiliarTable.UpdateAsync(fotoFamiliar);
+                }
+
             }
-            else
+            catch (MobileServiceInvalidOperationException msioe)
             {
-                await FotoFamiliarTable.UpdateAsync(fotoFamiliar);
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoFamiliarTable.TableName, msioe.Message);
             }
         }
 
@@ -321,7 +346,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -364,7 +389,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -407,7 +432,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -450,7 +475,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -489,7 +514,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -515,7 +540,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -566,7 +591,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -628,7 +653,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -682,7 +707,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -724,7 +749,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
         }
 
@@ -749,7 +774,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -776,7 +801,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -800,7 +825,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
         }
 
@@ -833,7 +858,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -857,7 +882,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
         }
 
@@ -889,7 +914,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -913,7 +938,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
         }
 
@@ -956,7 +981,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -999,7 +1024,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -1059,7 +1084,7 @@ namespace HandyCareCuidador.Data
 
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
 
             return null;
@@ -1114,7 +1139,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -1168,7 +1193,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }

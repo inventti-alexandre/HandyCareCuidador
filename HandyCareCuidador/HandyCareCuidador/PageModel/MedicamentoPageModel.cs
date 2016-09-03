@@ -16,6 +16,7 @@ namespace HandyCareCuidador.PageModel
         public bool deleteVisible = true;
 
         public Medicamento Medicamento { get; set; }
+        public Paciente Paciente { get; set; }
         public HorarioViewModel oHorario { get; set; }
 
         public Command SaveCommand
@@ -25,6 +26,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
+                    Medicamento.MedPacId = Paciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
                     await CoreMethods.PopPageModel(Medicamento);
                 });
@@ -46,7 +48,14 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            Medicamento = initData as Medicamento;
+            var x = initData as Tuple<Medicamento, Paciente>;
+            Medicamento = new Medicamento();
+            Paciente = new Paciente();
+            if (x != null)
+            {
+                Medicamento = x.Item1;
+                Paciente = x.Item2;
+            }
             oHorario = new HorarioViewModel();
             if (Medicamento == null)
             {

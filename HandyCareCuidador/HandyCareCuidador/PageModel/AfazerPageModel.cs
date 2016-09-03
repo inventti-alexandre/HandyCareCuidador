@@ -12,16 +12,11 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class AfazerPageModel : FreshBasePageModel
     {
-        //readonly IAfazerRestService _restService;
-        //readonly IMaterialRestService _materialRestService;
-        //readonly IConclusaoAfazerRestService _concluirRestService;
-        //readonly IMaterialUtilizadoRestService _materialUtilizadoRestService;
-        //readonly IMedicamentoRestService _medicamentoRestService;
-        //private readonly IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
         public Afazer Afazer { get; set; }
         public bool NewItem { get; set; }
         public Material oMaterial { get; set; }
         public Medicamento oMedicamento { get; set; }
+        public Paciente Paciente { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
@@ -41,6 +36,7 @@ namespace HandyCareCuidador.PageModel
                     {
                         Afazer.Id = Guid.NewGuid().ToString();
                     }
+                    Afazer.AfaPaciente = Paciente.Id;
                     Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
                     await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
                     if (oMaterial != null)
@@ -107,7 +103,14 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
-            Afazer = initData as Afazer;
+            var x = initData as Tuple<Afazer, Paciente>;
+            Afazer = new Afazer();
+            Paciente=new Paciente();
+            if (x != null)
+            {
+                Afazer = x.Item1;
+                Paciente = x.Item2;
+            }
             Materiais =
                 new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
             Medicamentos =

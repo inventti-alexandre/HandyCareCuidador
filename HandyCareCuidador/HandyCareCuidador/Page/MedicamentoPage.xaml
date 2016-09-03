@@ -9,11 +9,8 @@
             <Label Text="Material" />
             <Entry Text="{Binding Medicamento.MedDescricao}" />
             <Label Text="Quantidade" />
-            <Entry Text="{Binding Medicamento.MedQuantidade}" />
-            <!--<Label Text="Forma de apresentação" ></Label>
-      <Entry Text="{Binding Medicamento.MedApresentacao}"></Entry>
-      <Label Text="Via de administração" ></Label>
-      <Entry Text="{Binding Medicamento.MedViaAdministracao}"></Entry>-->
+            <Entry Text="{Binding Medicamento.MedQuantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
+                   Keyboard="Numeric"/>
             <Button Text="Save" Command="{Binding SaveCommand}" />
             <Button Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}" />
             <BoxView HeightRequest="30" />

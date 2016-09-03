@@ -30,10 +30,11 @@ namespace HandyCareCuidador.PageModel
         public Paciente oPaciente { get; set; }
         public ObservableCollection<CuidadorPaciente> CuidadorPacientes { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
-        //public void ShowImage(string filepath)
-        //{
-        //    image.Source = ImageSource.FromFile(filepath);
-        //}
+        public Image image;
+        public void ShowImage(string filepath)
+        {
+            image.Source = ImageSource.FromFile(filepath);
+        }
         public Command TirarFoto
         {
             get
@@ -52,12 +53,12 @@ namespace HandyCareCuidador.PageModel
                     var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
                         Directory = "Handy Care",
-                        Name = DateTime.Now.ToString()+"HandyCareFoto.jpg",
+                        Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
                         CompressionQuality = 70,
                         PhotoSize = PhotoSize.Small,
                         SaveToAlbum = true
                     });
-    
+
                     if (file == null)
                         return;
 
@@ -70,8 +71,8 @@ namespace HandyCareCuidador.PageModel
                     });
                     if (await CoreMethods.DisplayActionSheet("Deseja enviar a foto para um familiar", "Não", null, "Ok") == "Ok")
                     {
-                        Foto=new Foto();
-                        Foto.FotoDados = ReadFully(file.GetStream());
+                        Foto = new Foto();
+                        Foto.FotoDados = Helper.HelperClass.ReadFully(file.GetStream());
                         //Foto.FotoDados
                     }
                     //var app = Xamarin.Forms.Application.Current as App;
@@ -116,8 +117,17 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    var tupla = new Tuple<Cuidador,Paciente>(Cuidador,SelectedPaciente);
-                    await CoreMethods.PushPageModel<FotoPageModel>(tupla);
+                    if (SelectedPaciente != null)
+                    {
+                        var tupla = new Tuple<Cuidador, Paciente>(Cuidador, SelectedPaciente);
+                        await CoreMethods.PushPageModel<FotoPageModel>(tupla);
+                    }
+                    else
+                    {
+                        await CoreMethods.DisplayAlert("Informação",
+                            "Selecione um paciente", "OK");
+                    }
+
                 });
             }
         }

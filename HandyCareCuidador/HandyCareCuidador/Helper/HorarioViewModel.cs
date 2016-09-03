@@ -11,7 +11,7 @@ namespace HandyCareCuidador.Helper
         public bool deleteVisible { get; set; }
         public bool ActivityRunning { get; set; }
         public bool Visualizar { get; set; }
-        public int? Quantidade { get; set; }
+        public float? Quantidade { get; set; }
         public float? QuantidadeF { get; set; }
         public bool HabilitarMaterial { get; set; }
         public bool HabilitarMedicamento { get; set; }

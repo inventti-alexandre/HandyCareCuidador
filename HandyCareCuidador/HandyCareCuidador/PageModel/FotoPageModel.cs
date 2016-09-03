@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.Data;
+using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -20,11 +21,14 @@ namespace HandyCareCuidador.PageModel
         public Foto Foto { get; set; }
         public Cuidador Cuidador { get; set; }
         public Paciente Paciente { get; set; }
-        private Foto _selectedFamiliar;
+        public HorarioViewModel oHorario { get; set; }
+        public ObservableCollection<Parentesco> Parentescos { get; set; }
+        private Familiar _selectedFamiliar;
         public ObservableCollection<Familiar> Familiares { get; set; }
         public override void Init(object initData)
         {
             base.Init(initData);
+            oHorario = new HorarioViewModel {ActivityRunning = true};
             Cuidador=new Cuidador();
             Paciente=new Paciente();
             var tupla = initData as Tuple<Cuidador,Paciente>;
@@ -45,11 +49,16 @@ namespace HandyCareCuidador.PageModel
                 var selection = new ObservableCollection<Familiar>(await CuidadorRestService.DefaultManager.RefreshFamiliarAsync(true))
                 .Where(e=> oi.Select(a=>a.FamId)
                 .Contains(e.Id)).AsEnumerable();
+                var x = new ObservableCollection<Parentesco>(await CuidadorRestService.DefaultManager.RefreshParentescoAsync(true))
+                .Where(e=>selection.Select(a=>a.FamParentesco)
+                .Contains(e.Id)).AsEnumerable();
+                Parentescos = new ObservableCollection<Parentesco>(x);
                 Familiares = new ObservableCollection<Familiar>(selection);
+                oHorario.ActivityRunning = false;
             });
         }
 
-        public Foto SelectedFamiliar
+        public Familiar SelectedFamiliar
         {
             get { return _selectedFamiliar; }
             set
@@ -80,34 +89,28 @@ namespace HandyCareCuidador.PageModel
 
                     var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
-                        Directory = "Handy Care",
+                        Directory = "Handy Care Fotos",
                         Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                        CompressionQuality = 70,
-                        PhotoSize = PhotoSize.Small,
+                        CompressionQuality = 10,
+                        PhotoSize = PhotoSize.Medium,
                         SaveToAlbum = true
                     });
-
                     if (file == null)
                         return;
-
-                    //await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                    await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                    Foto = new Foto
+                    {
+                        FotoDados = Helper.HelperClass.ReadFully(file.GetStream()),
+                        FotCuidador = Cuidador.Id,
+                    };
                     image.Source = ImageSource.FromStream(() =>
                     {
-                        Foto = new Foto
-                        {
-                            FotoDados = Helper.HelperClass.ReadFully(file.GetStream()),
-                            FotCuidador = Cuidador.Id
-                        };
                         var stream = file.GetStream();
                         file.Dispose();
-                        Task.Run(async () =>
-                        {
-                            var tupla = new Tuple<Foto,Familiar>(Foto,familiar);
-                            await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
-                            //await CuidadorRestService.DefaultManager.SaveFotoAsync(Foto,true);
-                        });
                         return stream;
                     });
+                    var tupla = new Tuple<Foto, Familiar,Image>(Foto, familiar,image);
+                    await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
                 });
             }
         }

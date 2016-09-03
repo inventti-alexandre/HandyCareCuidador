@@ -108,23 +108,23 @@ namespace HandyCareCuidador.Droid
             App.Init((App.IAuthenticate)this);
             LoadApplication(new App());
             var app = Xamarin.Forms.Application.Current as App;
-            if (app != null)
-            {
-                app.TakePicture += () => {
-                    var intent = new Intent(MediaStore.ActionImageCapture);
-                    intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(FotoFile));
-                    StartActivityForResult(intent, 0);
-                };
-                app.RecordVideo += () =>
-                {
-                    var intent = new Intent(MediaStore.ActionVideoCapture);
-                    intent.PutExtra(MediaStore.ExtraDurationLimit, 10);
-                    intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(VideoFile));
-                    StartActivityForResult(intent, 0);
+            //if (app != null)
+            //{
+            //    app.TakePicture += () => {
+            //        var intent = new Intent(MediaStore.ActionImageCapture);
+            //        intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(FotoFile));
+            //        StartActivityForResult(intent, 0);
+            //    };
+            //    app.RecordVideo += () =>
+            //    {
+            //        var intent = new Intent(MediaStore.ActionVideoCapture);
+            //        intent.PutExtra(MediaStore.ExtraDurationLimit, 10);
+            //        intent.PutExtra(MediaStore.ExtraOutput, Android.Net.Uri.FromFile(VideoFile));
+            //        StartActivityForResult(intent, 0);
 
-                };
+            //    };
 
-            }
+            //}
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

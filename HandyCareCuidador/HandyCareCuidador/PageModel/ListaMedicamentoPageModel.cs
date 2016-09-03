@@ -30,7 +30,9 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    await CoreMethods.PushPageModel<MedicamentoPageModel>();
+                    var medicamento = new Medicamento();
+                    var x = new Tuple<Medicamento, Paciente>(medicamento, oPaciente);
+                    await CoreMethods.PushPageModel<MedicamentoPageModel>(x);
                 });
             }
         }
@@ -57,7 +59,8 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = true;
                     RaisePropertyChanged("IsVisible");
-                    await CoreMethods.PushPageModel<MedicamentoPageModel>(medicamento);
+                    var x = new Tuple<Medicamento, Paciente>(medicamento, oPaciente);
+                    await CoreMethods.PushPageModel<MedicamentoPageModel>(x);
                     medicamento = null;
                 });
             }
@@ -90,9 +93,11 @@ namespace HandyCareCuidador.PageModel
                                 .Contains(e.MedPacId))
                             .AsEnumerable();
                     Medicamentos = new ObservableCollection<Medicamento>(result);
+                    if (Medicamentos.Count == 0)
+                        oHorario.Visualizar = true;
+
                 });
                 oHorario.ActivityRunning = false;
-                oHorario.Visualizar = true;
             }
             catch (Exception)
             {

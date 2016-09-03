@@ -20,7 +20,9 @@
           <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
           <Button Text="Chamar contatos" Command="{Binding AlertarContatos}"
                   IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Foto" Command="{Binding TirarFoto}" IsVisible="{Binding oHorario.Visualizar}" />
+            <Button Text="Foto" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" />
+
+            <!--<Button Text="Foto" Command="{Binding TirarFoto}" IsVisible="{Binding oHorario.Visualizar}" />-->
           <Button Text="Vídeo" Command="{Binding GravarVideo}" IsVisible="{Binding oHorario.Visualizar}" />
           <Button Text="Suas informações" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" />
         </StackLayout>

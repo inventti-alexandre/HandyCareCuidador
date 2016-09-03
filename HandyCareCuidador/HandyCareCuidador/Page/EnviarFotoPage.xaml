@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              x:Class="HandyCareCuidador.Page.EnviarFotoPage">
-    <StackLayout Padding="15">
-        <Label Text="Descreva a foto" />
-        <Image Source="{Binding FotoPaciente}"/>
-        <Entry Text="{Binding Foto.FotoDescricao}" Placeholder="Descreva a foto" />
-        <Button Text="Enviar" Command="{Binding SaveCommand}" />
-    </StackLayout>
+    <ScrollView>
+        <StackLayout Padding="15">
+            <Label Text="Descreva a foto" />
+            <Image Source="{Binding FotoPaciente}"/>
+            <Entry Text="{Binding Foto.FotoDescricao}" Placeholder="Descreva a foto" />
+            <Button Text="Enviar" Command="{Binding EnviarCommand}" />
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

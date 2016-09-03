@@ -11,6 +11,7 @@
         <StackLayout>
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
+            <Label Text="Nenhum material cadastrado" IsVisible="{Binding oHorario.Visualizar}" />
             <ListView x:Name="lstMedicamento" ItemsSource="{Binding Medicamentos}"
                       SelectedItem="{Binding SelectedMedicamento}">
                 <ListView.ItemTemplate>

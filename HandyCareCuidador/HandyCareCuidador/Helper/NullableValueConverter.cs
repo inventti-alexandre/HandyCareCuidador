@@ -15,13 +15,10 @@ namespace HandyCareCuidador
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int result;
-            if (int.TryParse(value.ToString(), out result))
-            {
-                int? resulto = result;
-                return resulto;
-            }
-            return null;
+            float result;
+            if (!float.TryParse(value.ToString(), out result)) return null;
+            float? resulto = result;
+            return resulto;
         }
 
         #endregion

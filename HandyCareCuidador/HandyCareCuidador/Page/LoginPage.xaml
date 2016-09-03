@@ -14,6 +14,8 @@
                     IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
             <Button Text="Entrar por Outlook/Hotmail" Command="{Binding MicrosoftLoginCommand}"
                     IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
+            <Button Text="Local Debug" Command="{Binding LoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

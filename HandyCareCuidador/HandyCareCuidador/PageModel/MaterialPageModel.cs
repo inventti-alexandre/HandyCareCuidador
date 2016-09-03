@@ -16,6 +16,7 @@ namespace HandyCareCuidador.PageModel
         public bool novoItem = true;
 
         public Material Material { get; set; }
+        public Paciente Paciente { get; set; }
         public HorarioViewModel oHorario { get; set; }
 
         public Command SaveCommand
@@ -24,7 +25,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    Material.MatQuantidade = Convert.ToInt32(oHorario.Quantidade);
+                    Material.MatQuantidade = Convert.ToSingle(oHorario.Quantidade);
+                    Material.MatPacId = Paciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMaterialAsync(Material, novoItem);
                     await CoreMethods.PopPageModel(Material);
                 });
@@ -46,7 +48,14 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            Material = initData as Material;
+            var x = initData as Tuple<Material, Paciente>;
+            Material=new Material();
+            Paciente=new Paciente();
+            if (x != null)
+            {
+                Material = x.Item1;
+                Paciente = x.Item2;
+            }
             oHorario = new HorarioViewModel {Quantidade = null};
             if (Material == null)
             {

@@ -1,6 +1,6 @@
 ﻿//@"http://localhost:58199";
 
-//@"http://handycareapp.azurewebsites.net";
+//@"https://handycareapp.azurewebsites.net";
 
 namespace HandyCareCuidador
 {

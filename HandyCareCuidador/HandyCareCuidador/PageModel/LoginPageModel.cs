@@ -64,7 +64,51 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
-
+        public Command LoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                        {
+                            authenticated =
+                                await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Google);
+                        }
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google);
+                            if (Cuidador != null)
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+                            }
+                            else
+                            {
+                                app.NewCuidador();
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
         public Command FacebookLoginCommand
         {
             get

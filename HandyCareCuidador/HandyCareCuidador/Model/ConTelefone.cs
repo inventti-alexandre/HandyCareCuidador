@@ -12,9 +12,9 @@ namespace HandyCareCuidador.Model
         {
             ContatoEmergencia = new HashSet<ContatoEmergencia>();
         }
-
-        [Column("ConTelefone")]
-        public string ConTelefone1 { get; set; }
+        public string Id { get; set; }
+        [Column("ConNumTelefone")]
+        public string ConNumTelefone { get; set; }
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContatoEmergencia> ContatoEmergencia { get; set; }

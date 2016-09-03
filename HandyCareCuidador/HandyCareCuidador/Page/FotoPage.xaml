@@ -5,7 +5,7 @@
     <StackLayout>
         <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
-        <ListView x:Name="lstAfazer" ItemsSource="{Binding Familiares, Mode=TwoWay}"
+        <ListView x:Name="lstFamiliares" ItemsSource="{Binding Familiares, Mode=TwoWay}"
                       SelectedItem="{Binding SelectedFamiliar}" IsVisible="True" RowHeight="60">
             <ListView.ItemTemplate>
                 <DataTemplate>

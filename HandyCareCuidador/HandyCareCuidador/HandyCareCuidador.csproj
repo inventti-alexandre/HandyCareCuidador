@@ -45,6 +45,7 @@
     <Compile Include="Helper\HelperClass.cs" />
     <Compile Include="Helper\HorarioViewModel.cs" />
     <Compile Include="Helper\ILoginManager.cs" />
+    <Compile Include="Helper\ImageResizer.cs" />
     <Compile Include="Helper\ListSwitch.cs" />
     <Compile Include="Helper\NullableValueConverter.cs" />
     <Compile Include="Message\HorarioAfazerMessage.cs" />
