@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
     [Table("FormaApresentacaoMedicamento")]
+    [ImplementPropertyChanged]
     public class FormaApresentacaoMedicamento
     {
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -12,7 +14,7 @@ namespace HandyCareCuidador.Model
         {
             Medicamento = new HashSet<Medicamento>();
         }
-
+        public string Id { get; set; }
         public string ForSubtipo { get; set; }
 
         public string FormaApresentacao { get; set; }

@@ -7,6 +7,21 @@ namespace HandyCareCuidador.Interface
 {
     public interface ICuidadorRestService
     {
+        Task<ObservableCollection<ContatoEmergencia>> RefreshContatoEmergenciaAsync(bool syncItems = false);
+        Task<ObservableCollection<ConTelefone>> RefreshConTelefoneAsync(bool syncItems = false);
+        Task<ObservableCollection<ConCelular>> RefreshConCelularAsync(bool syncItems = false);
+
+        Task<ObservableCollection<Video>> RefreshVideoAsync(bool syncItems = false);
+        Task SaveVideoAsync(Video video, bool isNewItem);
+        Task DeleteVideoAsync(Video video);
+
+        Task<ObservableCollection<VideoFamiliar>> RefreshVideoFamiliarAsync(bool syncItems = false);
+        Task SaveVideoFamiliarAsync(VideoFamiliar videoFamiliar, bool isNewItem);
+        Task DeleteVideoFamiliarAsync(VideoFamiliar fotoFamiliar);
+
+
+        Task<ObservableCollection<ViaAdministracaoMedicamento>> RefreshViaAdministracaoMedicamentoAsync(bool syncItems = false);
+        Task<ObservableCollection<FormaApresentacaoMedicamento>> RefreshFormaApresentacaoMedicamentoAsync(bool syncItems = false);
         Task<ObservableCollection<FotoFamiliar>> RefreshFotoFamiliarAsync(bool syncItems = false);
         Task SaveFotoFamiliarAsync(FotoFamiliar fotoFamiliar, bool isNewItem);
         Task DeleteFotoFamiliarAsync(FotoFamiliar fotoFamiliar);

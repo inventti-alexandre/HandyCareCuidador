@@ -5,28 +5,86 @@
              xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              x:Class="HandyCareCuidador.Page.MainMenuPage">
     <ContentPage.Content>
-      <ScrollView>
-        <StackLayout Orientation="Vertical" Padding="10">
-          <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
+        <ScrollView>
+            <StackLayout Orientation="Vertical" Padding="10">
+                <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
                                             IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente"
                                             ItemsSource="{Binding Pacientes}"
                                             SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}" />
-          <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                              IsVisible="{Binding oHorario.ActivityRunning}" />
-          <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Chamar contatos" Command="{Binding AlertarContatos}"
-                  IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Foto" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" />
-
-            <!--<Button Text="Foto" Command="{Binding TirarFoto}" IsVisible="{Binding oHorario.Visualizar}" />-->
-          <Button Text="Vídeo" Command="{Binding GravarVideo}" IsVisible="{Binding oHorario.Visualizar}" />
-          <Button Text="Suas informações" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="100" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ContentView Grid.Column="0" Grid.Row="0">
+                <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="1" Grid.Row="0">
+                <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="2" Grid.Row="0">
+                <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" Image="{Binding MedImage}" />
+            </ContentView>
+            <ContentView Grid.Column="0" Grid.Row="1">
+                <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="1" Grid.Row="1">
+                <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="2" Grid.Row="1">
+                <Button Text="Chamar contatos" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="0" Grid.Row="2">
+                <Button Text="Foto" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="1" Grid.Row="2">
+                <Button Text="Vídeo" Command="{Binding ShowVideo}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+            <ContentView Grid.Column="2" Grid.Row="2">
+                <Button Text="Suas informações" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" />
+            </ContentView>
+        </Grid>
         </StackLayout>
-
       </ScrollView>
     </ContentPage.Content>
 </ContentPage>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
+             x:Class="HandyCareCuidador.Page.MainMenuPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" Padding="10">
+                <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
+                                            IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente"
+                                            ItemsSource="{Binding Pacientes}"
+                                            SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}" />
+                <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+                             IsVisible="{Binding oHorario.ActivityRunning}" />
+                <Button Text="Afazeres" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Materiais" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Medicamentos" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Paciente" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Mapa" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Chamar contatos" Command="{Binding AlertarContatos}"
+                  IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Foto" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Vídeo" Command="{Binding ShowVideo}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Suas informações" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>-->
+
+    

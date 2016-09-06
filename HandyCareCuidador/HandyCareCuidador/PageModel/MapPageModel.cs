@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -382,7 +383,7 @@ namespace HandyCareCuidador.PageModel
                         var pin = new TKCustomMapPin
                         {
                             Position = position,
-                            Title = string.Format("Pin {0}, {1}", position.Latitude, position.Longitude),
+                            Title = $"Pin {position.Latitude}, {position.Longitude}",
                             ShowCallout = true,
                             IsDraggable = true
                         };
@@ -568,19 +569,21 @@ namespace HandyCareCuidador.PageModel
         /// <summary>
         /// Navigate to a new page to get route source/destination
         /// </summary>
-        //public Command AddRouteCommand
-        //{
-        //    get
-        //    {
-        //        return new Command(() =>
-        //        {
-        //            if (this.Routes == null) this.Routes = new ObservableCollection<TKRoute>();
+        public Command AddRouteCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    if (this.Routes == null) this.Routes = new ObservableCollection<TKRoute>();
 
-        //            var addRoutePage = new AddRoutePage(this.Routes, this.Pins, this.MapRegion);
-        //            Application.Current.MainPage.Navigation.PushAsync(addRoutePage);
-        //        });
-        //    }
-        //}
+                    //var addRoutePage = new AddRoutePage(this.Routes, this.Pins, this.MapRegion);
+                    var x = new Tuple<ObservableCollection<TKRoute>, ObservableCollection<TKCustomMapPin>,MapSpan>(Routes,Pins,MapRegion);
+                    await CoreMethods.PushPageModel<AddRoutePageModel>(x);
+                    //Application.Current.MainPage.Navigation.PushAsync(addRoutePage);
+                });
+            }
+        }
         ///// <summary>
         ///// Command when a route calculation finished
         ///// </summary>

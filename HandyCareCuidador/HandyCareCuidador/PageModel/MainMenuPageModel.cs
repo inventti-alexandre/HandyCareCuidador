@@ -131,6 +131,26 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+        public Command ShowVideo
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    if (SelectedPaciente != null)
+                    {
+                        var tupla = new Tuple<Cuidador, Paciente>(Cuidador, SelectedPaciente);
+                        await CoreMethods.PushPageModel<VideoPageModel>(tupla);
+                    }
+                    else
+                    {
+                        await CoreMethods.DisplayAlert("Informação",
+                            "Selecione um paciente", "OK");
+                    }
+
+                });
+            }
+        }
 
 
         public Command ShowCuidador
@@ -189,8 +209,8 @@ namespace HandyCareCuidador.PageModel
                 {
                     if (SelectedPaciente != null)
                     {
-                        //ENVIAR PUSH NOTIFICATION PARA OS FAMILIARES
-                        Device.OpenUri(new Uri("tel:0"));
+                        var tupla = new Tuple<Cuidador, Paciente>(Cuidador, SelectedPaciente);
+                        await CoreMethods.PushPageModel<AcionarContatoEmergencia>(tupla);
                     }
                     else
                     {
@@ -200,6 +220,25 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+        //public Command AlertarContatos
+        //{
+        //    get
+        //    {
+        //        return new Command(async () =>
+        //        {
+        //            if (SelectedPaciente != null)
+        //            {
+        //                //ENVIAR PUSH NOTIFICATION PARA OS FAMILIARES
+        //                Device.OpenUri(new Uri("tel:0"));
+        //            }
+        //            else
+        //            {
+        //                await CoreMethods.DisplayAlert("Informação",
+        //                    "Selecione um paciente", "OK");
+        //            }
+        //        });
+        //    }
+        //}
 
         public Command ShowMateriais
         {

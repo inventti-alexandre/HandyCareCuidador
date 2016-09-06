@@ -16,9 +16,9 @@ using Xamarin.Forms;
 namespace HandyCareCuidador.PageModel
 {
     [ImplementPropertyChanged]
-    public class FotoPageModel:FreshBasePageModel
+    public class VideoPageModel : FreshBasePageModel
     {
-        public Foto Foto { get; set; }
+        public Video Video { get; set; }
         public Cuidador Cuidador { get; set; }
         public Paciente Paciente { get; set; }
         public HorarioViewModel oHorario { get; set; }
@@ -28,10 +28,10 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            oHorario = new HorarioViewModel {ActivityRunning = true};
-            Cuidador=new Cuidador();
-            Paciente=new Paciente();
-            var tupla = initData as Tuple<Cuidador,Paciente>;
+            oHorario = new HorarioViewModel { ActivityRunning = true };
+            Cuidador = new Cuidador();
+            Paciente = new Paciente();
+            var tupla = initData as Tuple<Cuidador, Paciente>;
             if (tupla != null)
             {
                 Cuidador = tupla.Item1;
@@ -45,12 +45,12 @@ namespace HandyCareCuidador.PageModel
             Task.Run(async () =>
             {
                 var oi = new ObservableCollection<PacienteFamiliar>(await CuidadorRestService.DefaultManager.RefreshPacienteFamiliarAsync(true))
-                .Where(e=>e.PacId==Paciente.Id);
+                .Where(e => e.PacId == Paciente.Id);
                 var selection = new ObservableCollection<Familiar>(await CuidadorRestService.DefaultManager.RefreshFamiliarAsync(true))
-                .Where(e=> oi.Select(a=>a.FamId)
+                .Where(e => oi.Select(a => a.FamId)
                 .Contains(e.Id)).AsEnumerable();
                 var x = new ObservableCollection<Parentesco>(await CuidadorRestService.DefaultManager.RefreshParentescoAsync(true))
-                .Where(e=>selection.Select(a=>a.FamParentesco)
+                .Where(e => selection.Select(a => a.FamParentesco)
                 .Contains(e.Id)).AsEnumerable();
                 foreach (var z in selection)
                 {
@@ -60,7 +60,6 @@ namespace HandyCareCuidador.PageModel
                             z.FamDescriParentesco = b.ParDescricao;
                     }
                 }
-
                 Parentescos = new ObservableCollection<Parentesco>(x);
                 Familiares = new ObservableCollection<Familiar>(selection);
                 oHorario.ActivityRunning = false;
@@ -88,11 +87,10 @@ namespace HandyCareCuidador.PageModel
                 {
                     var x = familiar;
                     familiar = null;
-                    var result = await CoreMethods.DisplayActionSheet("Forma de fotografia", "Cancelar", null, "Galeria",
-                        "Tirar foto");
+                    var result = await CoreMethods.DisplayActionSheet("Forma de Videografia", "Cancelar", null, "Galeria",
+                        "Gravar vídeo");
 
-
-                    if ( result== "Tirar foto")
+                    if (result == "Gravar vídeo")
                     {
                         var image = new Image();
                         await CrossMedia.Current.Initialize();
@@ -103,21 +101,21 @@ namespace HandyCareCuidador.PageModel
                             return;
                         }
 
-                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                        var file = await CrossMedia.Current.TakeVideoAsync(new StoreVideoOptions
                         {
-                            Directory = "Handy Care Fotos",
-                            Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium,
+                            Quality = VideoQuality.Low,
+                            DesiredLength = new TimeSpan(0,0,10),
+                            Name = DateTime.Now + "HandyCare.mp4",
+                            Directory = "Handy Care Videos",
                             SaveToAlbum = true
                         });
                         if (file == null)
                             return;
                         await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Foto = new Foto
+                        Video = new Video
                         {
-                            FotoDados = Helper.HelperClass.ReadFully(file.GetStream()),
-                            FotCuidador = Cuidador.Id,
+                            VidDados = Helper.HelperClass.ReadFully(file.GetStream()),
+                            VidCuidador = Cuidador.Id,
                         };
                         image.Source = ImageSource.FromStream(() =>
                         {
@@ -125,25 +123,21 @@ namespace HandyCareCuidador.PageModel
                             file.Dispose();
                             return stream;
                         });
-                        var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
-                        await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
+                        var tupla = new Tuple<Video, Familiar, Image>(Video, x, image);
+                        await CoreMethods.PushPageModel<EnviarVideoPageModel>(tupla);
                     }
                     else if (result == "Galeria")
                     {
                         var image = new Image();
 
-                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-                        {
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium
-                        });
+                        var file = await CrossMedia.Current.PickVideoAsync();
                         if (file == null)
                             return;
                         await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Foto = new Foto
+                        Video = new Video
                         {
-                            FotoDados = Helper.HelperClass.ReadFully(file.GetStream()),
-                            FotCuidador = Cuidador.Id,
+                            VidDados = Helper.HelperClass.ReadFully(file.GetStream()),
+                            VidCuidador = Cuidador.Id,
                         };
                         image.Source = ImageSource.FromStream(() =>
                         {
@@ -151,8 +145,8 @@ namespace HandyCareCuidador.PageModel
                             file.Dispose();
                             return stream;
                         });
-                        var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
-                        await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
+                        var tupla = new Tuple<Video, Familiar, Image>(Video, x, image);
+                        await CoreMethods.PushPageModel<EnviarVideoPageModel>(tupla);
                     }
                 });
             }

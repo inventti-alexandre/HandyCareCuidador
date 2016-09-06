@@ -8,9 +8,9 @@ using Xamarin.Forms;
 
 namespace HandyCareCuidador.Page
 {
-    public partial class FotoPage : ContentPage
+    public partial class VideoPage : ContentPage
     {
-        public FotoPage()
+        public VideoPage()
         {
             InitializeComponent();
         }

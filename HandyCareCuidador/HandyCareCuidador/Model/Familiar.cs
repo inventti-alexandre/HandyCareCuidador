@@ -25,7 +25,7 @@ namespace HandyCareCuidador.Model
         public string FamContatoEmergencia { get; set; }
 
         public string FamNome { get; set; }
-
+        public string FamDescriParentesco { get; set; }
         public string FamSobrenome { get; set; }
         public string FamNomeCompleto => FamNome + " " + FamSobrenome;
 

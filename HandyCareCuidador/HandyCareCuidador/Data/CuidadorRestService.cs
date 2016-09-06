@@ -59,8 +59,15 @@ namespace HandyCareCuidador.Data
         private readonly IMobileServiceTable<ValidacaoCuidador> ValidacaoCuidadorTable;
         private readonly IMobileServiceTable<Foto> FotoTable;
         private readonly IMobileServiceTable<FotoFamiliar> FotoFamiliarTable;
+        private readonly IMobileServiceTable<Video> VideoTable;
+        private readonly IMobileServiceTable<VideoFamiliar> VideoFamiliarTable;
         private readonly IMobileServiceTable<Parentesco> ParentescoTable;
         private readonly IMobileServiceTable<PacienteFamiliar> PacienteFamiliarTable;
+        private readonly IMobileServiceTable<ViaAdministracaoMedicamento> ViaAdministracaoMedicamentoTable;
+        private readonly IMobileServiceTable<FormaApresentacaoMedicamento> FormaApresentacaoMedicamentoTable;
+        private readonly IMobileServiceTable<ContatoEmergencia> ContatoEmergenciaTable;
+        private readonly IMobileServiceTable<ConTelefone> ConTelefoneTable;
+        private readonly IMobileServiceTable<ConCelular> ConCelularTable;
 
 #endif
 
@@ -126,12 +133,19 @@ namespace HandyCareCuidador.Data
             FotoFamiliarTable = CurrentClient.GetTable<FotoFamiliar>();
             ParentescoTable = CurrentClient.GetTable<Parentesco>();
             PacienteFamiliarTable = CurrentClient.GetTable<PacienteFamiliar>();
+            ViaAdministracaoMedicamentoTable = CurrentClient.GetTable<ViaAdministracaoMedicamento>();
+            FormaApresentacaoMedicamentoTable = CurrentClient.GetTable<FormaApresentacaoMedicamento>();
+            VideoTable = CurrentClient.GetTable<Video>();
+            VideoFamiliarTable = CurrentClient.GetTable<VideoFamiliar>();
+            ContatoEmergenciaTable = CurrentClient.GetTable<ContatoEmergencia>();
+            ConCelularTable = CurrentClient.GetTable<ConCelular>();
+            ConTelefoneTable = CurrentClient.GetTable<ConTelefone>();
 
 
 #endif
-    }
+        }
 
-    public async Task<ObservableCollection<Foto>> RefreshFotoAsync(bool syncItems = false)
+        public async Task<ObservableCollection<Foto>> RefreshFotoAsync(bool syncItems = false)
         {
             try
             {
@@ -267,6 +281,253 @@ namespace HandyCareCuidador.Data
                 Debug.WriteLine("Nulou {0}", e.Message);
             }
 
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<ContatoEmergencia>> RefreshContatoEmergenciaAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+                var items = await ContatoEmergenciaTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<ContatoEmergencia>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Nulou {0}", e.Message);
+            }
+
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<ConTelefone>> RefreshConTelefoneAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+                var items = await ConTelefoneTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<ConTelefone>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Nulou {0}", e.Message);
+            }
+
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<ConCelular>> RefreshConCelularAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+                var items = await ConCelularTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<ConCelular>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Nulou {0}", e.Message);
+            }
+
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<Video>> RefreshVideoAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await VideoTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<Video>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task SaveVideoAsync(Video video, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                {
+                    await VideoTable.InsertAsync(video);
+                }
+                else
+                {
+                    await VideoTable.UpdateAsync(video);
+                }
+
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoFamiliarTable.TableName, msioe.Message);
+            }
+        }
+
+        public async Task DeleteVideoAsync(Video video)
+        {
+            await VideoTable.DeleteAsync(video);
+        }
+
+        public async Task<ObservableCollection<VideoFamiliar>> RefreshVideoFamiliarAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await VideoFamiliarTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<VideoFamiliar>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task SaveVideoFamiliarAsync(VideoFamiliar videoFamiliar, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                {
+                    await VideoFamiliarTable.InsertAsync(videoFamiliar);
+                }
+                else
+                {
+                    await VideoFamiliarTable.UpdateAsync(videoFamiliar);
+                }
+
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoFamiliarTable.TableName, msioe.Message);
+            }
+        }
+
+        public async Task DeleteVideoFamiliarAsync(VideoFamiliar fotoFamiliar)
+        {
+            await VideoFamiliarTable.DeleteAsync(fotoFamiliar);
+        }
+
+        public async Task<ObservableCollection<ViaAdministracaoMedicamento>> RefreshViaAdministracaoMedicamentoAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await ViaAdministracaoMedicamentoTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<ViaAdministracaoMedicamento>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<FormaApresentacaoMedicamento>> RefreshFormaApresentacaoMedicamentoAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await FormaApresentacaoMedicamentoTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<FormaApresentacaoMedicamento>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", CuidadorTable.TableName, msioe.Message);
+            }
             catch (Exception e)
             {
                 Debug.WriteLine(@"Sync error: {0}", e.ToString());

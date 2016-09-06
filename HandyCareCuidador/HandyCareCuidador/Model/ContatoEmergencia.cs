@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using PropertyChanged;
 
 namespace HandyCareCuidador.Model
 {
     [Table("ContatoEmergencia")]
+    [ImplementPropertyChanged]
     public class ContatoEmergencia
     {
         [Column(Order = 0)]
@@ -14,7 +16,7 @@ namespace HandyCareCuidador.Model
 
         public string ConEmail { get; set; }
 
-        public int ConDescricao { get; set; }
+        public string ConDescricao { get; set; }
 
         [Column(Order = 1)]
         public string ConTipo { get; set; }
