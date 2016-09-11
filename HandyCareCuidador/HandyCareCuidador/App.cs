@@ -114,11 +114,12 @@ namespace HandyCareCuidador
             MainPage = mainPage;
         }
 
-        public void NewCuidador()
+        public void NewCuidador(Cuidador cuidador, App app)
         {
-            //var page = FreshPageModelResolver.ResolvePageModel<CuidadorPageModel>();
-            //var mainPage = new FreshNavigationContainer(page);
-            //MainPage = mainPage;
+            var x =new Tuple<Cuidador,App>(cuidador,app);
+            var page = FreshPageModelResolver.ResolvePageModel<CuidadorPageModel>(x);
+            var mainPage = new FreshNavigationContainer(page);
+            MainPage = mainPage;
         }
 
         private void Register()

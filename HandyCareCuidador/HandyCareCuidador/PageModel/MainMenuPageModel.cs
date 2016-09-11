@@ -28,6 +28,7 @@ namespace HandyCareCuidador.PageModel
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public Paciente oPaciente { get; set; }
+        public Image MedImage { get; set; }
         public ObservableCollection<CuidadorPaciente> CuidadorPacientes { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public Image image;
@@ -190,13 +191,25 @@ namespace HandyCareCuidador.PageModel
                 {
                     if (SelectedPaciente != null)
                     {
-                        await CoreMethods.PushPageModel<PacientePageModel>(SelectedPaciente);
+                        var x = new Tuple<Paciente,bool>(SelectedPaciente,false);
+                        await CoreMethods.PushPageModel<PacientePageModel>(x);
                     }
                     else
                     {
                         await CoreMethods.DisplayAlert("Informação",
                             "Selecione um paciente", "OK");
                     }
+                });
+            }
+        }
+        public Command AddPaciente
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                        var x = new Tuple<Paciente, bool>(SelectedPaciente, true);
+                        await CoreMethods.PushPageModel<PacientePageModel>(x);
                 });
             }
         }
@@ -298,7 +311,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                        await CoreMethods.PushPageModel<MapPageModel>();
+                    await CoreMethods.PushPageModel<MapPageModel>();
                 });
             }
         }
@@ -323,8 +336,9 @@ namespace HandyCareCuidador.PageModel
         {
             base.ViewIsAppearing(sender, e);
             oPaciente = new Paciente();
-            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
+            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false,BoasVindas = "Olá, "+Cuidador.CuiNomeCompleto};
             await GetPacientes();
+            //MedImage = new Image {Source = ImageSource.FromFile("pills.png")};
         }
 
         private async Task GetPacientes()
@@ -342,7 +356,7 @@ namespace HandyCareCuidador.PageModel
                         new ObservableCollection<CuidadorPaciente>(
                             await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
                                 e => e.CuiId == Cuidador.Id);
-                    if (result.Count > 0)
+                    if (CuidadorPaciente!=null)
                     {
                         var pacientes =
                             result.Where(e => CuidadorPaciente.PacId.Contains(e.Id)).AsEnumerable();

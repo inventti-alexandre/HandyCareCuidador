@@ -16,7 +16,11 @@ namespace HandyCareCuidador.Helper
         public bool HabilitarMaterial { get; set; }
         public bool HabilitarMedicamento { get; set; }
         public bool NovoCuidador { get; set; }
+        public bool NovoPaciente { get; set; }
         public bool FinalizarAfazer { get; set; }
         public bool VisualizarTermino { get; set; }
+        public string BoasVindas { get; set; }
+        public bool CuidadorExibicao { get; set; }
+        public bool NovoCadastro { get; set; }
     }
 }

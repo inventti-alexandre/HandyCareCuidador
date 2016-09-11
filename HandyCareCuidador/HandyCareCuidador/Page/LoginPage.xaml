@@ -5,17 +5,17 @@
              x:Class="HandyCareCuidador.Page.LoginPage">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Image Source="ImageSource.FromFile" />
+            <Label Text=" " />
+            <Image x:Name="Logo" />
+            <Label Text=" " />
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorarioViewModel.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorarioViewModel.ActivityRunning}" />
-            <Button x:Name="loginButton" Text="Entrar pelo Google" Command="{Binding GoogleLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
-            <Button Text="Entrar pelo Facebook" Command="{Binding FacebookLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
-            <Button Text="Entrar por Outlook/Hotmail" Command="{Binding MicrosoftLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
-            <Button Text="Local Debug" Command="{Binding LoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" />
+            <Button Text="Facebook" Command="{Binding FacebookLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#3b5998" TextColor="White" />
+            <Button Text="Google" Command="{Binding GoogleLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#dd4b39" TextColor="White" />
+            <Button Text="Microsoft" Command="{Binding MicrosoftLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00a1f1" TextColor="White" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

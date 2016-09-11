@@ -37,14 +37,9 @@ namespace HandyCareCuidador.UWP
             var message = string.Empty;
             try
             {
-                // Sign in with Facebook logcin using a server-managed flow.
                 user = await CuidadorRestService.DefaultManager.CurrentClient.LoginAsync(provider);
-                //await
-                //    CuidadorRestService.DefaultManager.CurrentClient.LoginAsync(
-                //        MobileServiceAuthenticationProvider.Google);
                 if (user != null)
-                {/*SALVAR userid no banco. Quando o usuário autenticar-se, deverá realizar uma pesquisa no banco para verificar se esse Id já consta lá.
-                    Se sim, exibir a página principal. Caso contrário, exibir a tela de cadastro de cuidador*/
+                {
                     message = $"you are now signed-in as {user.UserId}.";
                     success = true;
                 }

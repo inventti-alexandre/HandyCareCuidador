@@ -743,7 +743,7 @@ namespace HandyCareCuidador.Data
 
         public async Task SaveCuidadorAsync(Cuidador item, bool isNewItem)
         {
-            if (item.Id == null)
+            if (isNewItem)
             {
                 await CuidadorTable.InsertAsync(item);
             }
@@ -1409,7 +1409,7 @@ namespace HandyCareCuidador.Data
         {
             try
             {
-                if (validacaoCuidador.Id == null)
+                if (isNewItem)
                 {
                     await ValidacaoCuidadorTable.InsertAsync(validacaoCuidador);
                 }

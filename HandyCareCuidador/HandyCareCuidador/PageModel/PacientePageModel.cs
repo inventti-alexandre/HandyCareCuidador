@@ -33,8 +33,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    //Paciente.MatQuantidade = Convert.ToInt32(oHorario.Quantidade);
-                    await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, novoItem);
+                    await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
                     await CoreMethods.PopPageModel(Paciente);
                 });
             }
@@ -59,17 +58,22 @@ namespace HandyCareCuidador.PageModel
             PeriodoTratamento = new PeriodoTratamento();
             MotivoCuidado = new MotivoCuidado();
             oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false, VisualizarTermino = false};
-            Paciente = initData as Paciente;
-            await GetInfo();
-            if (Paciente == null)
+            var x = initData as Tuple<Paciente, bool>;
+            if (x?.Item1 != null)
             {
-                deleteVisible = false;
-                novoItem = true;
+                Paciente = x.Item1;
+                await GetInfo();
             }
-            else
-            {
-                novoItem = false;
-            }
+            oHorario.NovoPaciente = x.Item2;
+            //if (Paciente == null)
+            //{
+            //    deleteVisible = false;
+            //    oHorario.NovoPaciente = true;
+            //}
+            //else
+            //{
+            //    oHorario.NovoPaciente = false;
+            //}
             oHorario.ActivityRunning = false;
             oHorario.Visualizar = true;
         }
@@ -95,7 +99,6 @@ namespace HandyCareCuidador.PageModel
                         new ObservableCollection<MotivoCuidado>(
                             await CuidadorRestService.DefaultManager.RefreshMotivoCuidadoAsync());
                     MotivoCuidado = selection.FirstOrDefault(e => e.Id.Contains(Paciente.PacMotivoCuidado));
-                    //MotivosCuidados = new ObservableCollection<MotivoCuidado>(result);
                 });
             }
             catch (Exception e)

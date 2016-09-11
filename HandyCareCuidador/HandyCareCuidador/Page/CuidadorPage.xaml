@@ -5,32 +5,42 @@
              xmlns:handyCareCuidador="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              x:Class="HandyCareCuidador.Page.CuidadorPage">
   <ContentPage.Content>
-    <StackLayout Padding="15">
-      <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+      <ScrollView>
+            <StackLayout Padding="15">
+                <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                          IsVisible="{Binding oHorario.ActivityRunning}" />
-      <Label Text="Suas informações" IsVisible="{Binding oHorario.Visualizar}" />
-            <Entry Text="{Binding Cuidador.CuiNomeCompleto}" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <Label Text="Suas informações" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Foto do documento" IsEnabled="{Binding oHorario.NovoCuidador}"
+                    Command="{Binding FotoCui}"
              IsVisible="{Binding oHorario.Visualizar}" />
-      <Label Text="Cidade" IsVisible="{Binding oHorario.Visualizar}" />
-      <Entry Text="{Binding Cuidador.CuiCidade}" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <Image Source="{Binding CuidadorFoto}"/>
+                <Label Text="Nome"></Label>
+                <Entry Text="{Binding Cuidador.CuiNomeCompleto}" IsEnabled="{Binding oHorario.CuidadorExibicao}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Cuidador.CuiNome}" IsEnabled="{Binding oHorario.NovoCadastro}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Cuidador.CuiSobrenome}" IsEnabled="{Binding oHorario.NovoCadastro}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Cidade" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Cuidador.CuiCidade}" IsEnabled="{Binding oHorario.NovoCuidador}"
        IsVisible="{Binding oHorario.Visualizar}" />
-      <Label Text="Estado" IsVisible="{Binding oHorario.Visualizar}" />
-      <Entry Text="{Binding Cuidador.CuiEstado}" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <Label Text="Estado" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Cuidador.CuiEstado}" IsEnabled="{Binding oHorario.NovoCuidador}"
              IsVisible="{Binding oHorario.Visualizar}" />
-      <Label Text="Profissão" IsVisible="{Binding oHorario.Visualizar}" />
-        <Image></Image>
-      <handyCareCuidador:BindablePicker DisplayMemberPath="TipDescricao" Title="Selecione uma profissão"
-                      ItemsSource="{Binding TipoCuidadores}" SelectedItem="{Binding TipoCuidador, Mode=TwoWay}"
+                <Label Text="Profissão" IsVisible="{Binding oHorario.Visualizar}" />
+                <handyCareCuidador:BindablePicker DisplayMemberPath="TipDescricao" Title="Selecione uma profissão"
+                      ItemsSource="{Binding TiposCuidadores}" SelectedItem="{Binding SelectedTipoCuidador, Mode=TwoWay}"
                                         IsEnabled="{Binding oHorario.NovoCuidador}" IsVisible="{Binding oHorario.Visualizar}"/>
-
-      <!--<Entry Text="{Binding TipoCuidador.TipDescricao, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoCuidador}"
-                  IsVisible="{Binding oHorario.Visualizar}" />-->
-      <Label Text="COREN" IsVisible="{Binding oHorario.Visualizar}" />
-      <Entry Text="{Binding ValidacaoCuidador.CorenEnfermeiro}" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <Label Text="Documento" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Foto do documento" IsEnabled="{Binding oHorario.NovoCuidador}"
+                    Command="{Binding FotoDoc}"
              IsVisible="{Binding oHorario.Visualizar}" />
-      <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
-      <!--<Button  Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}"></Button>-->
-      <BoxView HeightRequest="30" />
-    </StackLayout>
+                <Image Source="{Binding Documento}"/>
+                <!--<Label Text="COREN" IsVisible="{Binding oHorario.Visualizar}" />
+      <Entry Text="{Binding ValidacaoCuidador.CorenEnfermeiro}" IsEnabled="{Binding oHorario.NovoCuidador}"
+             IsVisible="{Binding oHorario.Visualizar}" />-->
+                <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+            </StackLayout>
+        </ScrollView>
   </ContentPage.Content>
 </ContentPage>

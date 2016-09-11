@@ -52,7 +52,8 @@ namespace HandyCareCuidador.PageModel
                             }
                             else
                             {
-                                app.NewCuidador();
+                                var _cuidador = new Cuidador { CuiGoogleId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                app.NewCuidador(_cuidador, app);
                             }
                         }
                     }
@@ -97,7 +98,8 @@ namespace HandyCareCuidador.PageModel
                             }
                             else
                             {
-                                app.NewCuidador();
+                                var _cuidador = new Cuidador { CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                app.NewCuidador(_cuidador, app);
                             }
                         }
                     }
@@ -133,12 +135,16 @@ namespace HandyCareCuidador.PageModel
                             Cuidador =
                                 await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Facebook, true);
                             if (Cuidador != null)
-                                app.AbrirMainMenu(Cuidador);
-                            else
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
+
+                            }
+                            else
+                            {
+                                var _cuidador = new Cuidador { CuiFacebookId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                app.NewCuidador(_cuidador, app);
                             }
                         }
                     }
@@ -176,12 +182,16 @@ namespace HandyCareCuidador.PageModel
                             Cuidador =
                                 await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.MicrosoftAccount, true);
                             if (Cuidador != null)
-                                app.AbrirMainMenu(Cuidador);
-                            else
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
+
+                            }
+                            else
+                            {
+                                var _cuidador = new Cuidador {CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId};
+                                app.NewCuidador(_cuidador, app);
                             }
                         }
                     }
