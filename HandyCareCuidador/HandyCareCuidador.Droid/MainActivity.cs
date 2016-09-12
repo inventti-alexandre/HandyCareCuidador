@@ -107,7 +107,6 @@ namespace HandyCareCuidador.Droid
             CurrentPlatform.Init();
             App.Init((App.IAuthenticate)this);
             LoadApplication(new App());
-            var app = Xamarin.Forms.Application.Current as App;
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

@@ -110,6 +110,11 @@ namespace HandyCareCuidador.PageModel
             {
                 Afazer = x.Item1;
                 Paciente = x.Item2;
+                NewItem = false;
+            }
+            else
+            {
+                NewItem = true;
             }
             Materiais =
                 new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
@@ -121,7 +126,6 @@ namespace HandyCareCuidador.PageModel
             if (Afazer == null)
             {
                 Afazer = new Afazer();
-                NewItem = true;
             }
             else
             {
@@ -140,7 +144,6 @@ namespace HandyCareCuidador.PageModel
             };
             if (Afazer == null)
             {
-                Afazer = new Afazer();
                 oHorario.deleteVisible = false;
                 oHorario.Data = DateTime.Now;
                 oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);

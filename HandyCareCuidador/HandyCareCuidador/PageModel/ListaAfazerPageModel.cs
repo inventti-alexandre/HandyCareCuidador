@@ -123,7 +123,10 @@ namespace HandyCareCuidador.PageModel
             {
                 return
                     new Command(
-                        async () => { await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente); });
+                        async () =>
+                        {
+                            await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente);
+                        });
             }
         }
 

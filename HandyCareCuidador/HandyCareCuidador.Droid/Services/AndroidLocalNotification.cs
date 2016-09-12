@@ -17,10 +17,6 @@ using HandyCareCuidador.Services;
 
 namespace HandyCareCuidador.Droid.Services
 {
-    //[BroadcastReceiver]
-    //[IntentFilter(new[] { Intent.ActionBootCompleted })]
-    //    public class AndroidLocalNotification:BroadcastReceiver,ILocalNotifications
-
     public class AndroidLocalNotification:ILocalNotifications
     {
         //private NotificationManager notificationManager;
@@ -50,10 +46,5 @@ namespace HandyCareCuidador.Droid.Services
 
         }
         #endregion
-        //DESCOBRIR COMO RODAR AS NOTIFICAÇÕES NO PLANO DE FUNDO
-        //public override void OnReceive(Context context, Intent intent)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

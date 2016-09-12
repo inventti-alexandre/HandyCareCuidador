@@ -105,7 +105,6 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            MedImage.Source = ImageSource.FromFile("pills.png");
         }
 
         //    }

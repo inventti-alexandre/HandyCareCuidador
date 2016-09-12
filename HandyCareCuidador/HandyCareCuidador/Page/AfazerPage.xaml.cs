@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using System.Diagnostics;
+using Xamarin.Forms;
 
 namespace HandyCareCuidador.Page
 {
@@ -8,7 +10,15 @@ namespace HandyCareCuidador.Page
 
         public AfazerPage()
         {
-            InitializeComponent();
+            try
+
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+               Debug.WriteLine(ex.ToString());
+            }
         }
 
         /* protected override bool OnBackButtonPressed()
