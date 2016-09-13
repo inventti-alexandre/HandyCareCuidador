@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HandyCareCuidador.Page.ListaAfazerPage"
-             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador">
-    <!--<ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}" IsVisible="{Binding oHorario.ActivityRunning, Mode=TwoWay}"/>-->
+             x:Class="HandyCareCuidador.Page.ListaAfazerPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Name="Nova Tarefa" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
+        <ToolbarItem Name="Novo afazer" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
         <ToolbarItem Name="Visualizar afazeres concluídos" Command="{Binding VisualizarConcluidos}" Order="Primary"
                      Priority="0" />
     </ContentPage.ToolbarItems>
@@ -13,6 +11,7 @@
         <StackLayout>
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
+            <Label Text="Nenhum afazer registrado" IsVisible="{Binding oHorario.Visualizar}" />
             <ListView x:Name="lstAfazer" ItemsSource="{Binding Afazeres, Mode=TwoWay}"
                       SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
                 <ListView.ItemTemplate>

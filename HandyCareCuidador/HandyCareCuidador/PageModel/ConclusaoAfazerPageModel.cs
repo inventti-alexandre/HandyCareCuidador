@@ -34,34 +34,23 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
+            Afazer = new Afazer();
             var detalheAfazer = initData as Tuple<Afazer, ConclusaoAfazer>;
-            MateriaisUtilizados =
-                new ObservableCollection<MaterialUtilizado>(
-                    await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(detalheAfazer?.Item1.Id));
-            MedicamentosAdministrados =
-                new ObservableCollection<MedicamentoAdministrado>(
-                    await
-                        CuidadorRestService.DefaultManager.RefreshMedicamentoAdministradoAsync(detalheAfazer?.Item1.Id));
-            Materiais =
-                (ObservableCollection<Material>)
-                    new ObservableCollection<Material>(
-                        await CuidadorRestService.DefaultManager.RefreshMaterialExistenteAsync())
-                        .Where(m => MateriaisUtilizados.Select(n => n.MatUtilizado).Contains(m.Id));
-            Medicamentos =
-                (ObservableCollection<Medicamento>)
-                    new ObservableCollection<Medicamento>(
-                        await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
-                        .Where(m => MedicamentosAdministrados.Select(n => n.MedAdministrado).Contains(m.Id));
-            if (Afazer == null)
+            if (detalheAfazer != null)
             {
-                Afazer = new Afazer();
-                newItem = true;
+                Afazer = detalheAfazer.Item1;
+                MateriaisUtilizados =
+                    new ObservableCollection<MaterialUtilizado>(
+                        await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(detalheAfazer?.Item1.Id));
+                MedicamentosAdministrados =
+                    new ObservableCollection<MedicamentoAdministrado>(
+                        await
+                            CuidadorRestService.DefaultManager.RefreshMedicamentoAdministradoAsync(detalheAfazer?.Item1.Id));
             }
-            else
-            {
-                newItem = false;
-                AfazerConcluido = new ConclusaoAfazer();
-            }
+            oMaterial = new ObservableCollection<Material>(
+                        await CuidadorRestService.DefaultManager.RefreshMaterialExistenteAsync()).FirstOrDefault(m => MateriaisUtilizados.Select(n => n.MatUtilizado).Contains(m.Id));
+            oMedicamento = new ObservableCollection<Medicamento>(
+                        await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync()).FirstOrDefault(m => MedicamentosAdministrados.Select(n => n.MedAdministrado).Contains(m.Id));
         }
 
         protected override void ViewIsAppearing(object sender, EventArgs e)
@@ -74,7 +63,6 @@ namespace HandyCareCuidador.PageModel
             };
             if (Afazer == null)
             {
-                Afazer = new Afazer();
                 oHorario.deleteVisible = false;
                 oHorario.Data = DateTime.Now;
                 oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);

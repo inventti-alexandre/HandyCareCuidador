@@ -22,14 +22,16 @@
                              IsVisible="{Binding oHorario.ActivityRunning}" />
                 <Grid ColumnSpacing="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="150" />
-                        <RowDefinition Height="150" />
-                        <RowDefinition Height="150" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <!--<ColumnDefinition Width="*" />-->
                     </Grid.ColumnDefinitions>
                     <ContentView Grid.Column="0" Grid.Row="0">
                         <Button x:Name="btnAfazer" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -37,26 +39,26 @@
                     <ContentView Grid.Column="1" Grid.Row="0">
                         <Button x:Name="btnMaterial" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="2" Grid.Row="0">
+                    <ContentView Grid.Column="0" Grid.Row="1">
                         <Button x:Name="btnMedicamento" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="0" Grid.Row="1">
+                    <ContentView Grid.Column="1" Grid.Row="1">
                         <Button x:Name="btnPaciente" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="1" Grid.Row="1">
+                    <ContentView Grid.Column="0" Grid.Row="2">
                         <Button x:Name="btnMapa" BackgroundColor="White" BorderColor="Black" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="2" Grid.Row="1">
-                        <Button x:Name="btnContato" BackgroundColor="White" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
-                    </ContentView>
-                    <ContentView Grid.Column="0" Grid.Row="2">
+                    <ContentView Grid.Column="1" Grid.Row="2">
                         <Button x:Name="btnFoto" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="1" Grid.Row="2">
+                    <ContentView Grid.Column="0" Grid.Row="3">
                         <Button x:Name="btnVideo" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowVideo}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
-                    <ContentView Grid.Column="2" Grid.Row="2">
+                    <ContentView Grid.Column="1" Grid.Row="3">
                         <Button x:Name="btnInfo" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                    </ContentView>
+                    <ContentView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" VerticalOptions="FillAndExpand">
+                        <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                     </ContentView>
                 </Grid>
             </StackLayout>

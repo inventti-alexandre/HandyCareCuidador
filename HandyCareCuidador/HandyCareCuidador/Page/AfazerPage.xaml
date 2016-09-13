@@ -33,7 +33,7 @@
                 <Label Text="Quantidade de medicamento" IsVisible="{Binding oHorario.HabilitarMedicamento}" />
                 <Entry Text="{Binding oHorario.QuantidadeF, Mode=TwoWay}" Keyboard="Numeric"
                    IsVisible="{Binding oHorario.HabilitarMedicamento}" />
-                <Button Text="Concluir Afazer" IsEnabled="True" Command="{Binding ConcluirCommand}"
+                <Button Text="Concluir Afazer" IsEnabled="{Binding oHorario.deleteVisible}" Command="{Binding ConcluirCommand}"
                     IsVisible="{Binding oHorario.deleteVisible}" BackgroundColor="Green" FontAttributes="Bold"
                     BorderWidth="10" FontSize="20" />
                 <Button Text="Salvar" Command="{Binding SaveCommand}" />

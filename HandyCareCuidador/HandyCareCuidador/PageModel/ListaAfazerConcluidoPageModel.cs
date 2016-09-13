@@ -48,7 +48,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     var afazerConcluido = AfazeresConcluidos.FirstOrDefault(m => m.ConAfazer == afazer.Id);
                     var afazeres = new Tuple<Afazer, ConclusaoAfazer>(afazer, afazerConcluido);
-                    await CoreMethods.PushPageModel<ConclusaoAfazerPageModel>(afazer);
+                    await CoreMethods.PushPageModel<ConclusaoAfazerPageModel>(afazeres);
                     afazer = null;
                 });
             }

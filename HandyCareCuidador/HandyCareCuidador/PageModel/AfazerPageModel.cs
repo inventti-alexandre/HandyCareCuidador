@@ -103,6 +103,13 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
+            oHorario = new HorarioViewModel
+            {
+                HabilitarMaterial = false,
+                HabilitarMedicamento = false,
+                deleteVisible = false
+            };
+
             var x = initData as Tuple<Afazer, Paciente>;
             Afazer = new Afazer();
             Paciente=new Paciente();
@@ -123,28 +130,21 @@ namespace HandyCareCuidador.PageModel
             MateriaisUtilizados =
                 new ObservableCollection<MaterialUtilizado>(
                     await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
-            if (Afazer == null)
-            {
-                Afazer = new Afazer();
-            }
-            else
+            if (Afazer.Id != null)
             {
                 NewItem = false;
-                AfazerConcluido = new ConclusaoAfazer();
+                oHorario.deleteVisible = true;
+
             }
+                AfazerConcluido = new ConclusaoAfazer();
         }
 
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            oHorario = new HorarioViewModel
+            if (Afazer.Id == null)
             {
-                HabilitarMaterial = false,
-                HabilitarMedicamento = false
-            };
-            if (Afazer == null)
-            {
-                oHorario.deleteVisible = false;
+                //oHorario.deleteVisible = false;
                 oHorario.Data = DateTime.Now;
                 oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             }
@@ -152,7 +152,7 @@ namespace HandyCareCuidador.PageModel
             {
                 oHorario.Data = Afazer.AfaHorarioPrevisto;
                 oHorario.Horario = Afazer.AfaHorarioPrevisto.TimeOfDay;
-                oHorario.deleteVisible = true;
+                //oHorario.deleteVisible = true;
             }
         }
     }

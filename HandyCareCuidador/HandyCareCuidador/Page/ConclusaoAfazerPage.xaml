@@ -15,9 +15,9 @@
             <Label Text="Quantidade de material" />
             <Label Text="{Binding oMaterial.MatQuantidade, Mode=TwoWay}" IsEnabled="False" />
             <Label Text="Medicamento" />
-            <Label Text="MedDescricao" IsEnabled="False" />
+            <Label Text="{Binding oMedicamento.MedDescricao, Mode=TwoWay}" IsEnabled="False" />
             <Label Text="Quantidade de medicamento" />
-            <Label Text="{Binding oHorario.QuantidadeF, Mode=TwoWay}" />
+            <Label Text="{Binding oMedicamento.MedQuantidade, Mode=TwoWay}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

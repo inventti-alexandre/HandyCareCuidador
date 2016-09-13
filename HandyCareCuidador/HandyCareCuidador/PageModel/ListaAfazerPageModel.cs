@@ -193,7 +193,8 @@ namespace HandyCareCuidador.PageModel
                         Afazeres = new ObservableCollection<Afazer>(selection);
                     }
                     oHorario.ActivityRunning = false;
-                    oHorario.Visualizar = true;
+                    if(Afazeres.Count==0)
+                        oHorario.Visualizar = true;
                 });
             }
             catch (ArgumentNullException e)
