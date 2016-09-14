@@ -18,11 +18,6 @@ namespace HandyCareCuidador.PageModel
     public class MainMenuPageModel : FreshBasePageModel
     {
         private Paciente _selectedPaciente;
-        //public event Action TakePicture = () => { };
-
-        //private IPacienteRestService _pacienteRestService;
-        //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
-        //private ICuidadorRestService _cuidadorRestService;
         private Cuidador Cuidador { get; set; }
         private Foto Foto { get; set; }
         public ObservableCollection<Paciente> Pacientes { get; set; }
@@ -35,82 +30,6 @@ namespace HandyCareCuidador.PageModel
         public void ShowImage(string filepath)
         {
             image.Source = ImageSource.FromFile(filepath);
-        }
-        public Command TirarFoto
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    var image = new Image();
-                    await CrossMedia.Current.Initialize();
-
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                    {
-                        await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
-                        return;
-                    }
-
-                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                    {
-                        Directory = "Handy Care",
-                        Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                        CompressionQuality = 70,
-                        PhotoSize = PhotoSize.Small,
-                        SaveToAlbum = true
-                    });
-
-                    if (file == null)
-                        return;
-
-                    await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                    image.Source = ImageSource.FromStream(() =>
-                    {
-                        var stream = file.GetStream();
-                        //file.Dispose();
-                        return stream;
-                    });
-                    if (await CoreMethods.DisplayActionSheet("Deseja enviar a foto para um familiar", "Não", null, "Ok") == "Ok")
-                    {
-                        Foto = new Foto();
-                        Foto.FotoDados = Helper.HelperClass.ReadFully(file.GetStream());
-                        //Foto.FotoDados
-                    }
-                    //var app = Xamarin.Forms.Application.Current as App;
-                    //app?.PictureEventHandler();
-                });
-            }
-        }
-        public Command GravarVideo
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
-                    {
-                        await CoreMethods.DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
-                        return;
-                    }
-
-                    var file = await CrossMedia.Current.TakeVideoAsync(new Plugin.Media.Abstractions.StoreVideoOptions
-                    {
-                        Name = DateTime.Now.ToString()+"HandyCareVideo.mp4",
-                        Directory = "Handy Care",
-                        DesiredLength = new TimeSpan(0,0,0,10),
-                        Quality = VideoQuality.Medium
-                    });
-
-                    if (file == null)
-                        return;
-
-                    await CoreMethods.DisplayAlert("Video Recorded", "Location: " + file.Path, "OK");
-
-                    file.Dispose();
-                    //var app = Xamarin.Forms.Application.Current as App;
-                    //app?.VideoEventHandler();
-                });
-            }
         }
         public Command ShowFoto
         {
@@ -191,7 +110,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     if (SelectedPaciente != null)
                     {
-                        var x = new Tuple<Paciente,bool>(SelectedPaciente,false);
+                        var x = new Tuple<Paciente,bool,Cuidador>(SelectedPaciente,false,Cuidador);
                         await CoreMethods.PushPageModel<PacientePageModel>(x);
                     }
                     else
@@ -208,7 +127,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                        var x = new Tuple<Paciente, bool>(SelectedPaciente, true);
+                        var x = new Tuple<Paciente, bool,Cuidador>(SelectedPaciente, true,Cuidador);
                         await CoreMethods.PushPageModel<PacientePageModel>(x);
                 });
             }
@@ -233,26 +152,6 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
-        //public Command AlertarContatos
-        //{
-        //    get
-        //    {
-        //        return new Command(async () =>
-        //        {
-        //            if (SelectedPaciente != null)
-        //            {
-        //                //ENVIAR PUSH NOTIFICATION PARA OS FAMILIARES
-        //                Device.OpenUri(new Uri("tel:0"));
-        //            }
-        //            else
-        //            {
-        //                await CoreMethods.DisplayAlert("Informação",
-        //                    "Selecione um paciente", "OK");
-        //            }
-        //        });
-        //    }
-        //}
-
         public Command ShowMateriais
         {
             get
@@ -345,16 +244,16 @@ namespace HandyCareCuidador.PageModel
         {
             try
             {
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
                     //CuidadorRestService.DefaultManager.RefreshPacienteAsync();
                     CuidadorPaciente = new CuidadorPaciente();
                     var result =
                         new ObservableCollection<Paciente>(
-                            await CuidadorRestService.DefaultManager.RefreshPacienteAsync());
+                            CuidadorRestService.DefaultManager.RefreshPacienteAsync().Result);
                     CuidadorPaciente =
                         new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
+                            CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync().Result).FirstOrDefault(
                                 e => e.CuiId == Cuidador.Id);
                     if (CuidadorPaciente!=null)
                     {

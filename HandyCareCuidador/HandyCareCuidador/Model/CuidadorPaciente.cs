@@ -19,8 +19,6 @@ namespace HandyCareCuidador.Model
         public DateTimeOffset CreatedAt { get; set; }
 
         public DateTimeOffset UpdatedAt { get; set; }
-
-        [Column(TypeName = "timestamp")]
         public byte[] Version { get; set; }
 
         public bool? Deleted { get; set; }

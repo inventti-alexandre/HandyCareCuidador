@@ -23,7 +23,9 @@ namespace HandyCareCuidador.PageModel
         public bool novoItem = true;
 
         public Paciente Paciente { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         public MotivoCuidado MotivoCuidado { get; set; }
+        public Cuidador Cuidador { get; set; }
         public PeriodoTratamento PeriodoTratamento { get; set; }
         public HorarioViewModel oHorario { get; set; }
 
@@ -33,7 +35,17 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    if (!oHorario.VisualizarTermino)
+                        PeriodoTratamento.PerTermino = null;
+                    Paciente.Id = Guid.NewGuid().ToString();
+                    CuidadorPaciente.Id = Guid.NewGuid().ToString();
+                    CuidadorPaciente.PacId = Paciente.Id;
+                    CuidadorPaciente.CuiId = Cuidador.Id;
+                    PeriodoTratamento.Id= Guid.NewGuid().ToString();
+                    CuidadorPaciente.CuiPeriodoTratamento = PeriodoTratamento.Id;
                     await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
+                    await CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento, oHorario.NovoPaciente);
+                    await CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente, oHorario.NovoPaciente);
                     await CoreMethods.PopPageModel(Paciente);
                 });
             }
@@ -54,26 +66,31 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
+            Cuidador=new Cuidador();
             Paciente = new Paciente();
-            PeriodoTratamento = new PeriodoTratamento();
+            PeriodoTratamento = new PeriodoTratamento
+            {
+                PerInicio = DateTime.Now,
+                PerTermino = DateTime.Now
+            };
             MotivoCuidado = new MotivoCuidado();
             oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false, VisualizarTermino = false};
-            var x = initData as Tuple<Paciente, bool>;
-            if (x?.Item1 != null)
+            var x = initData as Tuple<Paciente, bool,Cuidador>;
+            if (x != null)
             {
-                Paciente = x.Item1;
-                await GetInfo();
+                oHorario.NovoPaciente = x.Item2;
+                oHorario.DadoPaciente = false;
+                Cuidador = x.Item3;
             }
-            oHorario.NovoPaciente = x.Item2;
-            //if (Paciente == null)
-            //{
-            //    deleteVisible = false;
-            //    oHorario.NovoPaciente = true;
-            //}
-            //else
-            //{
-            //    oHorario.NovoPaciente = false;
-            //}
+            if (!oHorario.NovoPaciente)
+            {
+                await GetInfo();
+                if (x?.Item1 != null)
+                {
+                    Paciente = x.Item1;
+                }
+                oHorario.DadoPaciente = true;
+            }
             oHorario.ActivityRunning = false;
             oHorario.Visualizar = true;
         }

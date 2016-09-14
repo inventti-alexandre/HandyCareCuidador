@@ -1463,7 +1463,7 @@ namespace HandyCareCuidador.Data
         {
             try
             {
-                if (item.Id == null)
+                if (isNewItem)
                 {
                     await PeriodoTratamentoTable.InsertAsync(item);
                 }

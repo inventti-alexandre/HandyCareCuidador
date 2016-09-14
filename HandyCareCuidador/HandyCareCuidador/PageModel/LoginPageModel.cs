@@ -203,6 +203,99 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+        public Command TwitterLoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                            authenticated =
+                                await
+                                    App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Twitter);
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Twitter, true);
+                            if (Cuidador != null)
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+
+                            }
+                            else
+                            {
+                                var _cuidador = new Cuidador { CuiTwitterId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                app.NewCuidador(_cuidador, app);
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
+
+        public Command AzureAdLoginCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    try
+                    {
+                        if (App.Authenticator != null)
+                            authenticated =
+                                await
+                                    App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory);
+                        if (authenticated)
+                        {
+                            Application.Current.Properties["UserId"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId;
+                            Application.Current.Properties["Token"] =
+                                CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
+                                    .MobileServiceAuthenticationToken;
+                            App.authenticated = true;
+                            oHorarioViewModel.Visualizar = false;
+                            oHorarioViewModel.ActivityRunning = true;
+                            Cuidador =
+                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, true);
+                            if (Cuidador != null)
+                            {
+                                App.Afazeres = new ObservableCollection<Afazer>();
+                                app.AbrirMainMenu(Cuidador);
+                                await App.GetAfazeres(true);
+
+                            }
+                            else
+                            {
+                                var _cuidador = new Cuidador { CuiMicrosoftAdId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                app.NewCuidador(_cuidador, app);
+                            }
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw;
+                    }
+                });
+            }
+        }
 
         public override void Init(object initData)
         {

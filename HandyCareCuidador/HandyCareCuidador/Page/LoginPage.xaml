@@ -16,6 +16,10 @@
                     IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#dd4b39" TextColor="White" />
             <Button Text="Microsoft" Command="{Binding MicrosoftLoginCommand}"
                     IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00a1f1" TextColor="White" />
+            <Button Text="Microsoft AD" Command="{Binding AzureAdLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00a1f1" TextColor="White" />
+            <Button Text="Twitter" Command="{Binding TwitterLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00aced" TextColor="White" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace HandyCareCuidador.Model
@@ -28,6 +29,16 @@ namespace HandyCareCuidador.Model
         public string FamDescriParentesco { get; set; }
         public string FamSobrenome { get; set; }
         public string FamNomeCompleto => FamNome + " " + FamSobrenome;
+        [JsonProperty(PropertyName = "FamGoogleId")]
+        public string FamGoogleId { get; set; }
+        [JsonProperty(PropertyName = "FamFacebookId")]
+        public string FamFacebookId { get; set; }
+        [JsonProperty(PropertyName = "FamMicrosoftId")]
+        public string FamMicrosoftId { get; set; }
+        [JsonProperty(PropertyName = "FamMicrosoftAdId")]
+        public string FamMicrosoftAdId { get; set; }
+        [JsonProperty(PropertyName = "FamTwitterId")]
+        public string FamTwitterId { get; set; }
 
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
