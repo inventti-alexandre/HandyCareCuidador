@@ -18,7 +18,7 @@ namespace HandyCareCuidador
     public class App : Application
     {
         //static ILoginManager loginManager;
-        public static bool authenticated;
+        public static bool Authenticated;
         public event Action TakePicture = () => { };
         public event Action RecordVideo = () => { };
         readonly Image image = new Image();
@@ -48,9 +48,6 @@ namespace HandyCareCuidador
         {
             Register();
             GmsDirection.Init("AIzaSyASYVBniofTez5ZkWBEc1-3EEby_bZeRJk");
-            /*var page = FreshPageModelResolver.ResolvePageModel<MainMenuPageModel>();
-            var mainPage = new FreshNavigationContainer(page);
-            MainPage = mainPage;*/
             var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>(this);
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;
@@ -71,7 +68,6 @@ namespace HandyCareCuidador
 
         public static async Task GetAfazeres(bool sync)
         {
-            //INSERIR PACID EM MATERIAL E MEDICAMENTO
             try
             {
                 await Task.Run(async () =>
@@ -132,15 +128,10 @@ namespace HandyCareCuidador
             // Handle when your app starts
         }
 
-        public void Logout()
-        {
-            Properties["IsLoggedIn"] = false; // only gets set to 'true' on the LoginPage
-            MainPage = new LoginPage();
-        }
 
         protected override async void OnSleep()
         {
-            if (authenticated)
+            if (Authenticated)
             {
                 await Task.Run(() =>
                 {
@@ -159,7 +150,7 @@ namespace HandyCareCuidador
 
         protected override async void OnResume()
         {
-            if (authenticated)
+            if (Authenticated)
             {
                 await Task.Run(() =>
                 {
@@ -172,7 +163,6 @@ namespace HandyCareCuidador
                     Debug.WriteLine("OnResuming");
                 });
             }
-            // Handle when your app resumes
         }
 
         public interface IAuthenticate

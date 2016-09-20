@@ -39,7 +39,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
@@ -85,7 +85,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
@@ -129,7 +129,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
@@ -176,7 +176,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
@@ -222,7 +222,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
@@ -269,7 +269,7 @@ namespace HandyCareCuidador.PageModel
                             Application.Current.Properties["Token"] =
                                 CuidadorRestService.DefaultManager.CurrentClient.CurrentUser
                                     .MobileServiceAuthenticationToken;
-                            App.authenticated = true;
+                            App.Authenticated = true;
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =

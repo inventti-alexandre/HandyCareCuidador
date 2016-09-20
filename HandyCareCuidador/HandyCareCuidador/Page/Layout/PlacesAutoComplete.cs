@@ -8,12 +8,13 @@ using TK.CustomMap.Api.Google;
 using TK.CustomMap.Api.OSM;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using static Xamarin.Forms.BindableProperty;
 
 namespace HandyCareCuidador.Page.Layout
 {
     public class PlacesAutoComplete : RelativeLayout
     {
-        public static readonly BindableProperty BoundsProperty = BindableProperty.Create<PlacesAutoComplete, MapSpan>(
+        public static readonly BindableProperty BoundsProperty = Create<PlacesAutoComplete, MapSpan>(
             p => p.Bounds,
             default(MapSpan));
 
@@ -38,7 +39,7 @@ namespace HandyCareCuidador.Page.Layout
         public PlacesApi ApiToUse { get; set; }
 
         public static readonly BindableProperty PlaceSelectedCommandProperty =
-            BindableProperty.Create<PlacesAutoComplete, Command<IPlaceResult>>(
+            Create<PlacesAutoComplete, Command<IPlaceResult>>(
                 p => p.PlaceSelectedCommand,
                 null);
 

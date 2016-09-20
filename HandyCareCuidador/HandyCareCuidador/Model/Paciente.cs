@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace HandyCareCuidador.Model
@@ -24,9 +25,12 @@ namespace HandyCareCuidador.Model
 
         [Column(TypeName = "date")]
         public DateTime PacIdade { get; set; }
+        public float PacPeso { get; set; }
+        public float PacAltura { get; set; }
+        public string PacTipoSanguineo { get; set; }
 
         public string PacMotivoCuidado { get; set; }
-
+        [JsonIgnore]
         public string PacNomeCompleto => PacNome + " " + PacSobrenome;
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

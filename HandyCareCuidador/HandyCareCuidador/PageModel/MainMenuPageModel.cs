@@ -19,12 +19,9 @@ namespace HandyCareCuidador.PageModel
     {
         private Paciente _selectedPaciente;
         private Cuidador Cuidador { get; set; }
-        private Foto Foto { get; set; }
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public Paciente oPaciente { get; set; }
-        public Image MedImage { get; set; }
-        public ObservableCollection<CuidadorPaciente> CuidadorPacientes { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public Image image;
         public void ShowImage(string filepath)
@@ -67,11 +64,9 @@ namespace HandyCareCuidador.PageModel
                         await CoreMethods.DisplayAlert("Informação",
                             "Selecione um paciente", "OK");
                     }
-
                 });
             }
         }
-
 
         public Command ShowCuidador
         {
@@ -244,7 +239,7 @@ namespace HandyCareCuidador.PageModel
         {
             try
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     //CuidadorRestService.DefaultManager.RefreshPacienteAsync();
                     CuidadorPaciente = new CuidadorPaciente();
@@ -253,7 +248,7 @@ namespace HandyCareCuidador.PageModel
                             CuidadorRestService.DefaultManager.RefreshPacienteAsync().Result);
                     CuidadorPaciente =
                         new ObservableCollection<CuidadorPaciente>(
-                            CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync().Result).FirstOrDefault(
+                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
                                 e => e.CuiId == Cuidador.Id);
                     if (CuidadorPaciente!=null)
                     {

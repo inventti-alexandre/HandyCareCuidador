@@ -209,7 +209,7 @@ namespace HandyCareCuidador.PageModel
             base.ViewIsDisappearing(sender, e);
         }
 
-        public override async void ReverseInit(object returndData)
+        public override void ReverseInit(object returndData)
         {
             base.ReverseInit(returndData);
             var newAfazer = returndData as Afazer;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.Data;
+using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
 using PropertyChanged;
 using Xamarin.Forms;
@@ -18,18 +19,18 @@ namespace HandyCareCuidador.PageModel
         public Familiar Familiar { get; set; }
         public FotoFamiliar FotoFamiliar { get; set; }
         public ImageSource FotoPaciente { get; set; }
+        public HorarioViewModel oHorario { get; set; }
         public override void Init(object initData)
         {
             base.Init(initData);
             var x = initData as Tuple<Foto,Familiar,Image>;
             Familiar = new Familiar();
             Foto = new Foto();
-            if (x != null)
-            {
-                Familiar = x.Item2;
-                Foto = x.Item1;
-                FotoPaciente = x.Item3.Source;
-            }
+            oHorario=new HorarioViewModel();
+            if (x == null) return;
+            Familiar = x.Item2;
+            Foto = x.Item1;
+            FotoPaciente = x.Item3.Source;
         }
 
         public Command EnviarCommand
@@ -38,6 +39,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     Foto.Id = Guid.NewGuid().ToString();
                     FotoFamiliar = new FotoFamiliar
                     {

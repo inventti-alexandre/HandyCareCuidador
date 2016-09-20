@@ -25,6 +25,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     Material.MatQuantidade = Convert.ToSingle(oHorario.Quantidade);
                     Material.MatPacId = Paciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMaterialAsync(Material, novoItem);
@@ -39,6 +41,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     await CuidadorRestService.DefaultManager.DeleteMaterialAsync(Material);
                     await CoreMethods.PopPageModel(Material);
                 });

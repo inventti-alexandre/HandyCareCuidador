@@ -36,6 +36,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
                     Medicamento.MedPacId = Paciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
@@ -50,6 +52,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     await CuidadorRestService.DefaultManager.DeleteMedicamentoAsync(Medicamento);
                     await CoreMethods.PopPageModel(Medicamento);
                 });

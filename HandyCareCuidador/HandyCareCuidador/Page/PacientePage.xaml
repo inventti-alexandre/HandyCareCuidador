@@ -15,7 +15,7 @@
                 <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
                 <Label Text="Paciente" IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Paciente.PacNomeCompleto}" IsEnabled="{Binding oHorario.DadoPaciente}"
+                <Label Text="{Binding Paciente.PacNomeCompleto}" IsEnabled="false"
                    IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Nome" IsVisible="{Binding oHorario.Visualizar}" />
                 <Entry Text="{Binding Paciente.PacNome}" IsEnabled="{Binding oHorario.NovoPaciente}"
@@ -23,18 +23,31 @@
                 <Label Text="Sobrenome" IsVisible="{Binding oHorario.Visualizar}" />
                 <Entry Text="{Binding Paciente.PacSobrenome}" IsEnabled="{Binding oHorario.NovoPaciente}"
                    IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Peso" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Paciente.PacPeso}" Keyboard="Numeric" IsEnabled="{Binding oHorario.NovoPaciente}"
+                   IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Altura" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Paciente.PacAltura}" Keyboard="Numeric" IsEnabled="{Binding oHorario.NovoPaciente}"
+                   IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Tipo sanguíneo" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding Paciente.PacTipoSanguineo}" IsEnabled="{Binding oHorario.NovoPaciente}"
+                   IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Data de nascimento" IsVisible="{Binding oHorario.Visualizar}" />
                 <DatePicker Date="{Binding Paciente.PacIdade, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoPaciente}"
                         IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Motivo de cuidado" IsVisible="{Binding oHorario.Visualizar}" />
                 <Entry Text="{Binding MotivoCuidado.MotDescricao}" IsEnabled="{Binding oHorario.NovoPaciente}"
                    IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Tipo de tratamento" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding TipoTratamento.TipDescricao}" IsEnabled="{Binding oHorario.NovoPaciente}"
+                   IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Início do tratamento" IsVisible="{Binding oHorario.Visualizar}" />
                 <DatePicker Date="{Binding PeriodoTratamento.PerInicio, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoPaciente}"
                         IsVisible="{Binding oHorario.Visualizar}" />
-                <Label Text="Término do tratamento" IsVisible="{Binding oHorario.VisualizarTermino}" />
-                <Switch IsToggled="{Binding oHorario.VisualizarTermino, Mode=TwoWay}" />
-                <DatePicker Date="{Binding PeriodoTratamento.PerTermino, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoPaciente}"
+                <Label Text="Término do tratamento" IsVisible="{Binding oHorario.Visualizar}" />
+                <Switch IsToggled="{Binding oHorario.VisualizarTermino, Mode=TwoWay}" IsEnabled="{Binding oHorario.VisualizarTermino}"
+                        IsVisible="{Binding oHorario.VisualizarTermino}" />
+                <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" IsEnabled="{Binding oHorario.VisualizarTermino}"
                         IsVisible="{Binding oHorario.VisualizarTermino}" />
                 <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
             </StackLayout>

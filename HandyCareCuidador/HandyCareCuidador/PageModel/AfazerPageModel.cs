@@ -36,6 +36,8 @@ namespace HandyCareCuidador.PageModel
                     {
                         Afazer.Id = Guid.NewGuid().ToString();
                     }
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     Afazer.AfaPaciente = Paciente.Id;
                     Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
                     await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
@@ -79,6 +81,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     AfazerConcluido.ConConcluido = false;
                     AfazerConcluido.ConHorarioConcluido = DateTime.Now;
                     AfazerConcluido.ConAfazer = Afazer.Id;
@@ -94,6 +98,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     await CuidadorRestService.DefaultManager.DeleteAfazerAsync(Afazer);
                     await CoreMethods.PopPageModel(Afazer);
                 });

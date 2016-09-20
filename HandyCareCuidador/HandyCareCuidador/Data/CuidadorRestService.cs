@@ -68,20 +68,21 @@ namespace HandyCareCuidador.Data
         private readonly IMobileServiceTable<ContatoEmergencia> ContatoEmergenciaTable;
         private readonly IMobileServiceTable<ConTelefone> ConTelefoneTable;
         private readonly IMobileServiceTable<ConCelular> ConCelularTable;
+        private readonly IMobileServiceTable<TipoTratamento> TipoTratamentoTable;
 
 #endif
 
         public CuidadorRestService()
         {
-            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
-//#if DEBUG
-//            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
-//            {
-//                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
-//            };
-//            //#else
-//            //   MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
-//#endif
+            //            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
+#if DEBUG
+            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
+            {
+                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
+            };
+            //#else
+            //   MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
+#endif
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
@@ -140,7 +141,7 @@ namespace HandyCareCuidador.Data
             ContatoEmergenciaTable = CurrentClient.GetTable<ContatoEmergencia>();
             ConCelularTable = CurrentClient.GetTable<ConCelular>();
             ConTelefoneTable = CurrentClient.GetTable<ConTelefone>();
-
+            TipoTratamentoTable = CurrentClient.GetTable<TipoTratamento>();
 
 #endif
         }
@@ -196,6 +197,56 @@ namespace HandyCareCuidador.Data
             await FotoTable.DeleteAsync(foto);
         }
 
+        public async Task<ObservableCollection<TipoTratamento>> RefreshTipoTratamentoAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await TipoTratamentoTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<TipoTratamento>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", TipoTratamentoTable.TableName, msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
+            }
+            return null;
+        }
+
+        public async Task SaveTipoTratamentoAsync(TipoTratamento item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                {
+                    await TipoTratamentoTable.InsertAsync(item);
+                }
+                else
+                {
+                    await TipoTratamentoTable.UpdateAsync(item);
+                }
+
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", TipoTratamentoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+        }
+        public async Task DeleteTipoTratamentoAsync(TipoTratamento tipoTratamento)
+        {
+            await TipoTratamentoTable.DeleteAsync(tipoTratamento);
+        }
 
         public bool IsOfflineEnabled
             => CuidadorTable is IMobileServiceSyncTable<Cuidador>;
@@ -810,7 +861,7 @@ namespace HandyCareCuidador.Data
         {
             try
             {
-                if (paciente.Id == null)
+                if (isNewItem)
                 {
                     await PacienteTable.InsertAsync(paciente);
                 }
@@ -1294,7 +1345,7 @@ namespace HandyCareCuidador.Data
         {
             try
             {
-                if (item.Id == null)
+                if (isNewItem)
                 {
                     await MotivoCuidadoTable.InsertAsync(item);
                 }

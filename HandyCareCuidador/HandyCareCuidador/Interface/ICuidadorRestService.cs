@@ -11,6 +11,10 @@ namespace HandyCareCuidador.Interface
         Task<ObservableCollection<ConTelefone>> RefreshConTelefoneAsync(bool syncItems = false);
         Task<ObservableCollection<ConCelular>> RefreshConCelularAsync(bool syncItems = false);
 
+        Task<ObservableCollection<TipoTratamento>> RefreshTipoTratamentoAsync(bool syncItems = false);
+        Task SaveTipoTratamentoAsync(TipoTratamento tipoTratamento, bool isNewItem);
+        Task DeleteTipoTratamentoAsync(TipoTratamento tipoTratamento);
+
         Task<ObservableCollection<Video>> RefreshVideoAsync(bool syncItems = false);
         Task SaveVideoAsync(Video video, bool isNewItem);
         Task DeleteVideoAsync(Video video);

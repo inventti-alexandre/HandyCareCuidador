@@ -25,7 +25,6 @@ namespace HandyCareCuidador.PageModel
         public ImageSource CuidadorFoto { get; set; }
         public ImageSource Documento { get; set; }
         private App app;
-        private bool novoItem;
         public TipoCuidador SelectedTipoCuidador
         {
             get { return _tipoCuidador; }
@@ -67,59 +66,64 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async ()=>
                 {
-
                     var result = await CoreMethods.DisplayActionSheet("Forma de fotografia", "Cancelar", null, "Galeria",
                         "Tirar foto");
 
-                    if (result == "Tirar foto")
+                    switch (result)
                     {
-                        var image = new Image();
-                        await CrossMedia.Current.Initialize();
-
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                        case "Tirar foto":
                         {
-                            await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
-                            return;
+                            var image = new Image();
+                            await CrossMedia.Current.Initialize();
+
+                            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                            {
+                                await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
+                                return;
+                            }
+
+                            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                            {
+                                Directory = "Handy Care Fotos",
+                                Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium,
+                                SaveToAlbum = true
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            ValidacaoCuidador.ValDocumento = HelperClass.ReadFully(file.GetStream());
+                            Documento = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
                         }
+                            break;
+                        case "Galeria":
+                        {
+                            var image = new Image();
 
-                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                        {
-                            Directory = "Handy Care Fotos",
-                            Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium,
-                            SaveToAlbum = true
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        ValidacaoCuidador.ValDocumento = Helper.HelperClass.ReadFully(file.GetStream());
-                        Documento = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
-                    }
-                    else if (result == "Galeria")
-                    {
-                        var image = new Image();
+                            var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                            {
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            ValidacaoCuidador.ValDocumento = Helper.HelperClass.ReadFully(file.GetStream());
+                            image.Source = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
+                        }
+                            break;
 
-                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-                        {
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        ValidacaoCuidador.ValDocumento = Helper.HelperClass.ReadFully(file.GetStream());
-                        image.Source = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
                     }
                 });
             }
@@ -130,59 +134,63 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-
                     var result = await CoreMethods.DisplayActionSheet("Forma de fotografia", "Cancelar", null, "Galeria",
                         "Tirar foto");
 
-                    if (result == "Tirar foto")
+                    switch (result)
                     {
-                        var image = new Image();
-                        await CrossMedia.Current.Initialize();
-
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                        case "Tirar foto":
                         {
-                            await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
-                            return;
+                            var image = new Image();
+                            await CrossMedia.Current.Initialize();
+
+                            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                            {
+                                await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
+                                return;
+                            }
+
+                            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                            {
+                                Directory = "Handy Care Fotos",
+                                Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium,
+                                SaveToAlbum = true
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            Cuidador.CuiFoto = Helper.HelperClass.ReadFully(file.GetStream());
+                            CuidadorFoto = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
                         }
+                            break;
+                        case "Galeria":
+                        {
+                            var image = new Image();
 
-                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                        {
-                            Directory = "Handy Care Fotos",
-                            Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium,
-                            SaveToAlbum = true
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Cuidador.CuiFoto = Helper.HelperClass.ReadFully(file.GetStream());
-                        CuidadorFoto = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
-                    }
-                    else if (result == "Galeria")
-                    {
-                        var image = new Image();
-
-                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-                        {
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Cuidador.CuiFoto = Helper.HelperClass.ReadFully(file.GetStream());
-                        CuidadorFoto = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
+                            var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                            {
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            Cuidador.CuiFoto = Helper.HelperClass.ReadFully(file.GetStream());
+                            CuidadorFoto = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
+                        }
+                            break;
                     }
                 });
             }
@@ -194,6 +202,8 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    oHorario.Visualizar = false;
+                    oHorario.ActivityRunning = true;
                     ValidacaoCuidador.Id = Guid.NewGuid().ToString();
                     ValidacaoCuidador.ValValidado = true;
                     Cuidador.CuiValidacaoCuidador = ValidacaoCuidador.Id;
