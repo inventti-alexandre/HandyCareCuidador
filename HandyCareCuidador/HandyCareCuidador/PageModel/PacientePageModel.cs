@@ -49,15 +49,22 @@ namespace HandyCareCuidador.PageModel
                         PeriodoTratamento.Id = Guid.NewGuid().ToString();
                         CuidadorPaciente.CuiPeriodoTratamento = PeriodoTratamento.Id;
                         Paciente.PacMotivoCuidado = MotivoCuidado.Id;
-                        await CuidadorRestService.DefaultManager.SaveMotivoCuidadoAsync(MotivoCuidado, oHorario.NovoPaciente);
-                        await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
-                        await CuidadorRestService.DefaultManager.SaveTipoTratamentoAsync(TipoTratamento, oHorario.NovoPaciente);
-                        await CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento, oHorario.NovoPaciente);
-                        await CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente, oHorario.NovoPaciente);
+                        await Task.Run(async () =>
+                        {
+                            await CuidadorRestService.DefaultManager.SaveMotivoCuidadoAsync(MotivoCuidado, oHorario.NovoPaciente);
+                            await CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento, oHorario.NovoPaciente);
+                            await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
+                            await CuidadorRestService.DefaultManager.SaveTipoTratamentoAsync(TipoTratamento, oHorario.NovoPaciente);
+                            await CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente, oHorario.NovoPaciente);
+                        });
                         await CoreMethods.PopPageModel(Paciente);
-
                     }
                     catch (NullReferenceException e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                        throw;
+                    }
+                    catch (Exception e)
                     {
                         Debug.WriteLine(e.ToString());
                         throw;

@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.System.Threading;
 using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
 using Microsoft.WindowsAzure.MobileServices;
@@ -74,15 +73,15 @@ namespace HandyCareCuidador.Data
 
         public CuidadorRestService()
         {
-            //            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
-#if DEBUG
-            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
-            {
-                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
-            };
+            CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
+            //#if DEBUG
+            //            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
+            //            {
+            //                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
+            //            };
             //#else
-            //   MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
-#endif
+            //               MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
+            //#endif
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
@@ -974,7 +973,7 @@ namespace HandyCareCuidador.Data
         {
             try
             {
-                if (item.Id == null)
+                if (isNewItem)
                 {
                     await AfazerTable.InsertAsync(item);
                 }
@@ -1300,7 +1299,7 @@ namespace HandyCareCuidador.Data
 
         public async Task SaveMedicamentoAsync(Medicamento item, bool isNewItem)
         {
-            if (item.Id == null)
+            if (isNewItem)
             {
                 await MedicamentoTable.InsertAsync(item);
             }

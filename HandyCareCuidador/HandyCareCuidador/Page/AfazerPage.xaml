@@ -18,18 +18,28 @@
                 <Entry Text="{Binding Afazer.AfaObservacao}" Placeholder="Descreva o que deverá ser feito" />
                 <Label Text="Material" />
                 <Switch IsToggled="{Binding oHorario.HabilitarMaterial, Mode=TwoWay}" />
-                <local:BindablePicker DisplayMemberPath="MatDescricao" Title="Selecione um material"
+                <StackLayout Orientation="Horizontal" >
+                    <local:BindablePicker DisplayMemberPath="MatDescricao" Title="Selecione um material"
                                   ItemsSource="{Binding Materiais}" SelectedItem="{Binding oMaterial, Mode=TwoWay}"
-                                  IsVisible="{Binding oHorario.HabilitarMaterial}" />
+                                  IsVisible="{Binding oHorario.HabilitarMaterial}" HorizontalOptions="FillAndExpand" />
+                    <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
+                            HorizontalOptions="End" HeightRequest="15" IsVisible="{Binding oHorario.HabilitarMaterial}"/>
+                    <!--Command="{Binding AddPaciente}"-->
+
+                </StackLayout>
                 <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}" />
                 <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
                    Keyboard="Numeric" IsVisible="{Binding oHorario.HabilitarMaterial}" />
                 <Label Text="Medicamento" />
                 <Switch IsToggled="{Binding oHorario.HabilitarMedicamento, Mode=TwoWay}" />
-                <local:BindablePicker DisplayMemberPath="MedDescricao" Title="Selecione um medicamento"
+                <StackLayout Orientation="Horizontal" >
+                    <local:BindablePicker DisplayMemberPath="MedDescricao" Title="Selecione um medicamento"
                                   ItemsSource="{Binding Medicamentos}"
                                   SelectedItem="{Binding oMedicamento, Mode=TwoWay}"
-                                  IsVisible="{Binding oHorario.HabilitarMedicamento}" />
+                                  IsVisible="{Binding oHorario.HabilitarMedicamento}" HorizontalOptions="FillAndExpand" />
+                    <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
+                            HorizontalOptions="End" HeightRequest="15" IsVisible="{Binding oHorario.HabilitarMedicamento}"/>
+                </StackLayout>
                 <Label Text="Quantidade de medicamento" IsVisible="{Binding oHorario.HabilitarMedicamento}" />
                 <Entry Text="{Binding oHorario.QuantidadeF, Mode=TwoWay}" Keyboard="Numeric"
                    IsVisible="{Binding oHorario.HabilitarMedicamento}" />

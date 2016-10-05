@@ -3,9 +3,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HandyCareCuidador.Page.ListaAfazerConcluidoPage">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="Nova Tarefa" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"

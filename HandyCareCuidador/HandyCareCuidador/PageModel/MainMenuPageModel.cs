@@ -23,6 +23,7 @@ namespace HandyCareCuidador.PageModel
         public HorarioViewModel oHorario { get; set; }
         public Paciente oPaciente { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
+        public ObservableCollection<CuidadorPaciente> CuidadoresPacientes { get; set; }
         public Image image;
         public void ShowImage(string filepath)
         {
@@ -86,7 +87,9 @@ namespace HandyCareCuidador.PageModel
                 {
                     if (SelectedPaciente != null)
                     {
-                        await CoreMethods.PushPageModel<ListaAfazerPageModel>(SelectedPaciente);
+                        CuidadorPaciente = CuidadoresPacientes.FirstOrDefault(e => e.PacId == SelectedPaciente.Id);
+                        var x = new Tuple<Paciente,CuidadorPaciente>(SelectedPaciente,CuidadorPaciente);
+                        await CoreMethods.PushPageModel<ListaAfazerPageModel>(x);
                     }
                     else
                     {
@@ -242,20 +245,20 @@ namespace HandyCareCuidador.PageModel
                 await Task.Run(async () =>
                 {
                     //CuidadorRestService.DefaultManager.RefreshPacienteAsync();
-                    CuidadorPaciente = new CuidadorPaciente();
-                    var result =
-                        new ObservableCollection<Paciente>(
-                            CuidadorRestService.DefaultManager.RefreshPacienteAsync().Result);
-                    CuidadorPaciente =
-                        new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
-                                e => e.CuiId == Cuidador.Id);
-                    if (CuidadorPaciente!=null)
+                    //CuidadorPaciente = new CuidadorPaciente();
+                    //CuidadorPaciente =
+                    //    new ObservableCollection<CuidadorPaciente>(
+                    //        await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
+                    //            e => e.CuiId == Cuidador.Id);
+                    var cuidadoresPacientes = new ObservableCollection<CuidadorPaciente>(
+                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).Where(e => e.CuiId==Cuidador.Id).AsEnumerable(); 
+                    CuidadoresPacientes = new ObservableCollection<CuidadorPaciente>(cuidadoresPacientes);
+                    if (CuidadoresPacientes.Any())
                     {
-                        var pacientes =
-                            result.Where(e => CuidadorPaciente.PacId.Contains(e.Id)).AsEnumerable();
-                        Pacientes= new ObservableCollection<Paciente>();
-                        Pacientes = new ObservableCollection<Paciente>(pacientes);
+
+                        var result =new ObservableCollection<Paciente>(CuidadorRestService.DefaultManager.RefreshPacienteAsync().Result);
+                        var resulto = result.Where(e => CuidadoresPacientes.Select(m => m.PacId).Contains(e.Id)).AsEnumerable();
+                        Pacientes = new ObservableCollection<Paciente>(resulto);
                     }
                     oHorario.ActivityRunning = false;
                     oHorario.Visualizar = true;

@@ -19,6 +19,7 @@ namespace HandyCareCuidador.PageModel
         public Paciente Paciente { get; set; }
         public HorarioViewModel oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
         public ConclusaoAfazer AfazerConcluido { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
@@ -38,7 +39,7 @@ namespace HandyCareCuidador.PageModel
                     }
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
-                    Afazer.AfaPaciente = Paciente.Id;
+                    Afazer.AfaPaciente = CuidadorPaciente.Id;
                     Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
                     await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
                     if (oMaterial != null)
@@ -116,18 +117,23 @@ namespace HandyCareCuidador.PageModel
                 deleteVisible = false
             };
 
-            var x = initData as Tuple<Afazer, Paciente>;
+            var x = initData as Tuple<Afazer, Paciente,CuidadorPaciente>;
             Afazer = new Afazer();
             Paciente=new Paciente();
+            CuidadorPaciente=new CuidadorPaciente();
             if (x != null)
             {
-                Afazer = x.Item1;
+                if (x.Item1 != null)
+                {
+                    Afazer = x.Item1;
+                    NewItem = false;
+                }
+                else
+                {
+                    NewItem = true;
+                }
                 Paciente = x.Item2;
-                NewItem = false;
-            }
-            else
-            {
-                NewItem = true;
+                CuidadorPaciente = x.Item3;
             }
             Materiais =
                 new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
@@ -136,9 +142,9 @@ namespace HandyCareCuidador.PageModel
             MateriaisUtilizados =
                 new ObservableCollection<MaterialUtilizado>(
                     await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
-            if (Afazer.Id != null)
+            if (Afazer?.Id != null)
             {
-                NewItem = false;
+                //NewItem = false;
                 oHorario.deleteVisible = true;
 
             }
@@ -148,7 +154,7 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            if (Afazer.Id == null)
+            if (Afazer?.Id == null)
             {
                 //oHorario.deleteVisible = false;
                 oHorario.Data = DateTime.Now;

@@ -115,9 +115,12 @@
     <Content Include="Assets\SplashScreen.scale-150.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
     <Content Include="calendar.png" />
+    <Content Include="facebook.png" />
     <Content Include="glove.png" />
+    <Content Include="googleplus.png" />
     <Content Include="info.png" />
     <Content Include="map.png" />
+    <Content Include="microsoft.png" />
     <Content Include="patient.png" />
     <Content Include="photo.png" />
     <Content Include="pills.png" />
@@ -131,6 +134,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="smartphone.png" />
     <Content Include="splash.png" />
+    <Content Include="twitter.png" />
     <Content Include="video.png" />
   </ItemGroup>
   <ItemGroup>

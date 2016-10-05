@@ -29,6 +29,7 @@ namespace HandyCareCuidador.PageModel
         public bool deleteVisible;
 
         public HorarioViewModel oHorario { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         //public Paciente oPaciente { get; set; }
         public ObservableCollection<Afazer> Afazeres { get; set; }
         public ObservableCollection<Afazer> ConcluidosAfazeres { get; set; }
@@ -43,7 +44,8 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    await CoreMethods.PushPageModel<AfazerPageModel>();
+                    var x = new Tuple<Afazer,Paciente,CuidadorPaciente>(null,oPaciente,CuidadorPaciente);
+                    await CoreMethods.PushPageModel<AfazerPageModel>(x);
                 });
             }
         }
@@ -134,7 +136,14 @@ namespace HandyCareCuidador.PageModel
         {
             base.Init(initData);
             oPaciente = new Paciente();
-            oPaciente = initData as Paciente;
+            CuidadorPaciente=new CuidadorPaciente();
+            var x = initData as Tuple<Paciente, CuidadorPaciente>;
+            if (x != null)
+            {
+                oPaciente = x.Item1;
+                CuidadorPaciente = x.Item2;
+
+            }
         }
 
         protected override async void ViewIsAppearing(object sender, EventArgs e)

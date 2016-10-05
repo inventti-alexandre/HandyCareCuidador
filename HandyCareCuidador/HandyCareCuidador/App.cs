@@ -60,7 +60,6 @@ namespace HandyCareCuidador
         public static ObservableCollection<Afazer> Afazeres { get; set; }
         public static ObservableCollection<ConclusaoAfazer> AfazeresConcluidos { get; set; }
 
-
         public static void Init(IAuthenticate authenticator)
         {
             Authenticator = authenticator;
