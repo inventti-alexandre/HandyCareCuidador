@@ -1,35 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using HandyCareCuidador.Services;
-using Xamarin.Forms;
-using Application = Android.App.Application;
 
 namespace HandyCareCuidador.Droid.Services
 {
     [Service]
-    public class AfazerService:Service
+    public class AfazerService : Service
     {
-        CancellationTokenSource _cts;
-        private Context _context;
-        public AfazerService()
-        {
-
-        }
-
         private IBinder _binder;
+        private Context _context;
+        private CancellationTokenSource _cts;
+
         public override IBinder OnBind(Intent intent)
         {
-            _binder=new HorarioAfazerBinder(this);
+            _binder = new HorarioAfazerBinder(this);
             return _binder;
         }
 
@@ -39,7 +26,8 @@ namespace HandyCareCuidador.Droid.Services
 
             var a = new Thread(() =>
             {
-                Task.Run(async () => {
+                Task.Run(async () =>
+                {
                     try
                     {
                         var counter = new AlertaHorario();
@@ -53,10 +41,9 @@ namespace HandyCareCuidador.Droid.Services
             });
             a.Start();
         }
+
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
- 
-
             return StartCommandResult.Sticky;
         }
     }

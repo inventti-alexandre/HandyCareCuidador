@@ -13,6 +13,5 @@ namespace HandyCareCuidador.Model
         public string VidId { get; set; }
 
         public virtual Video Video { get; set; }
-
     }
 }

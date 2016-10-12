@@ -7,7 +7,6 @@ using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
-using HandyCareCuidador.Page;
 using HandyCareCuidador.PageModel;
 using Microsoft.WindowsAzure.MobileServices;
 using TK.CustomMap.Api.Google;
@@ -19,9 +18,22 @@ namespace HandyCareCuidador
     {
         //static ILoginManager loginManager;
         public static bool Authenticated;
+        private readonly Image image = new Image();
+
+        public App()
+        {
+            Register();
+            GmsDirection.Init("AIzaSyASYVBniofTez5ZkWBEc1-3EEby_bZeRJk");
+            var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>(this);
+            var mainPage = new FreshNavigationContainer(page);
+            MainPage = mainPage;
+        }
+
+        public static IAuthenticate Authenticator { get; private set; }
+        public static ObservableCollection<Afazer> Afazeres { get; set; }
+        public static ObservableCollection<ConclusaoAfazer> AfazeresConcluidos { get; set; }
         public event Action TakePicture = () => { };
         public event Action RecordVideo = () => { };
-        readonly Image image = new Image();
 
         public void PictureEventHandler()
         {
@@ -33,6 +45,7 @@ namespace HandyCareCuidador
             var handler = TakePicture;
             handler?.Invoke();
         }
+
         public void VideoEventHandler()
         {
             RecordVideoMethod();
@@ -44,21 +57,10 @@ namespace HandyCareCuidador
             handler?.Invoke();
         }
 
-        public App()
-        {
-            Register();
-            GmsDirection.Init("AIzaSyASYVBniofTez5ZkWBEc1-3EEby_bZeRJk");
-            var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>(this);
-            var mainPage = new FreshNavigationContainer(page);
-            MainPage = mainPage;
-        }
         public void ShowImage(string filepath)
         {
             image.Source = ImageSource.FromFile(filepath);
         }
-        public static IAuthenticate Authenticator { get; private set; }
-        public static ObservableCollection<Afazer> Afazeres { get; set; }
-        public static ObservableCollection<ConclusaoAfazer> AfazeresConcluidos { get; set; }
 
         public static void Init(IAuthenticate authenticator)
         {
@@ -78,14 +80,14 @@ namespace HandyCareCuidador
                     var selection =
                         new ObservableCollection<Afazer>(
                             await CuidadorRestService.DefaultManager.RefreshAfazerAsync(sync));
-                    if (selection.Count > 0 && AfazeresConcluidos.Count > 0)
+                    if ((selection.Count > 0) && (AfazeresConcluidos.Count > 0))
                     {
                         var pacresult =
                             new ObservableCollection<CuidadorPaciente>(
-                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(sync))
+                                    await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(sync))
                                 .AsEnumerable();
                         var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
-                            .Contains(e.Id))
+                                .Contains(e.Id))
                             .Where(e => pacresult.Select(m => m.Id).Contains(e.AfaPaciente))
                             .AsEnumerable();
                         Afazeres = new ObservableCollection<Afazer>(result);
@@ -111,7 +113,7 @@ namespace HandyCareCuidador
 
         public void NewCuidador(Cuidador cuidador, App app)
         {
-            var x =new Tuple<Cuidador,App>(cuidador,app);
+            var x = new Tuple<Cuidador, App>(cuidador, app);
             var page = FreshPageModelResolver.ResolvePageModel<CuidadorPageModel>(x);
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;
@@ -131,7 +133,6 @@ namespace HandyCareCuidador
         protected override async void OnSleep()
         {
             if (Authenticated)
-            {
                 await Task.Run(() =>
                 {
                     if (CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId != null)
@@ -144,13 +145,11 @@ namespace HandyCareCuidador
                                 .MobileServiceAuthenticationToken;
                     Debug.WriteLine("OnSleeping");
                 });
-            }
         }
 
         protected override async void OnResume()
         {
             if (Authenticated)
-            {
                 await Task.Run(() =>
                 {
                     if (Properties.ContainsKey("UserID"))
@@ -161,7 +160,6 @@ namespace HandyCareCuidador
                             (string) Properties["Token"];
                     Debug.WriteLine("OnResuming");
                 });
-            }
         }
 
         public interface IAuthenticate

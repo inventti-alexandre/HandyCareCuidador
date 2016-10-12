@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout>
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
-                           IsVisible="{Binding oHorario.ActivityRunning}" />
+                               IsVisible="{Binding oHorario.ActivityRunning}" />
             <ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding Afazeres, Mode=TwoWay}"
                       SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
                 <ListView.ItemTemplate>

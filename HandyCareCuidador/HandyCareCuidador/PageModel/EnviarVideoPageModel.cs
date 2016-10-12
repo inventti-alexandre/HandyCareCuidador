@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -19,20 +15,8 @@ namespace HandyCareCuidador.PageModel
         public Familiar Familiar { get; set; }
         public VideoFamiliar VideoFamiliar { get; set; }
         public ImageSource VideoPaciente { get; set; }
-        public HorarioViewModel oHorario { get; set; }
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-            var x = initData as Tuple<Video, Familiar, Image>;
-            Familiar = new Familiar();
-            Video = new Video();
-            oHorario=new HorarioViewModel();
-            VideoPaciente = new StreamImageSource();
-            if (x == null) return;
-            Familiar = x.Item2;
-            Video = x.Item1;
-            VideoPaciente = x.Item3.Source;
-        }
+        public PageModelHelper oHorario { get; set; }
+
         public Command EnviarCommand
         {
             get
@@ -42,6 +26,7 @@ namespace HandyCareCuidador.PageModel
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
                     Video.Id = Guid.NewGuid().ToString();
+                    Video.CreatedAt = DateTimeOffset.Now;
                     VideoFamiliar = new VideoFamiliar
                     {
                         FamId = Familiar.Id,
@@ -54,5 +39,18 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+            var x = initData as Tuple<Video, Familiar, Image>;
+            Familiar = new Familiar();
+            Video = new Video();
+            oHorario = new PageModelHelper();
+            VideoPaciente = new StreamImageSource();
+            if (x == null) return;
+            Familiar = x.Item2;
+            Video = x.Item1;
+            VideoPaciente = x.Item3.Source;
+        }
     }
 }

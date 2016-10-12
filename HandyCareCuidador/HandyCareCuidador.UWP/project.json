@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "FreshMvvm": "2.1.0",
+    "FreshMvvm": "2.2.0",
     "Microsoft.Azure.Mobile.Client": "2.1.1",
     "Microsoft.Bcl": "1.1.10",
     "Microsoft.Bcl.Build": "1.0.21",

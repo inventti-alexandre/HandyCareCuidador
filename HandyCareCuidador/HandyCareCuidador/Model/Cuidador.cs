@@ -42,16 +42,21 @@ namespace HandyCareCuidador.Model
 
         [JsonProperty(PropertyName = "CuiEstado")]
         public string CuiEstado { get; set; }
+
         public byte[] CuiFoto { get; set; }
 
         [JsonProperty(PropertyName = "CuiGoogleId")]
         public string CuiGoogleId { get; set; }
+
         [JsonProperty(PropertyName = "CuiFacebookId")]
         public string CuiFacebookId { get; set; }
+
         [JsonProperty(PropertyName = "CuiMicrosoftId")]
         public string CuiMicrosoftId { get; set; }
+
         [JsonProperty(PropertyName = "CuiMicrosoftAdId")]
         public string CuiMicrosoftAdId { get; set; }
+
         [JsonProperty(PropertyName = "CuiTwitterId")]
         public string CuiTwitterId { get; set; }
 

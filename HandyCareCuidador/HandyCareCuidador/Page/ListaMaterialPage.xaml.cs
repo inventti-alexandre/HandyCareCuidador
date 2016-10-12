@@ -15,9 +15,7 @@ namespace HandyCareCuidador.Page
             var lstMaterial = this.FindByName<ListView>("lstMaterial");
 
             if (lstMaterial != null)
-            {
                 lstMaterial.ClearValue(ListView.SelectedItemProperty);
-            }
         }
     }
 }

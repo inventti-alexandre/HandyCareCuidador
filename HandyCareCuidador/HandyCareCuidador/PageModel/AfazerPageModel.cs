@@ -17,7 +17,7 @@ namespace HandyCareCuidador.PageModel
         public Material oMaterial { get; set; }
         public Medicamento oMedicamento { get; set; }
         public Paciente Paciente { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
@@ -34,9 +34,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     if (NewItem)
-                    {
                         Afazer.Id = Guid.NewGuid().ToString();
-                    }
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
                     Afazer.AfaPaciente = CuidadorPaciente.Id;
@@ -110,17 +108,17 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
-            oHorario = new HorarioViewModel
+            oHorario = new PageModelHelper
             {
                 HabilitarMaterial = false,
                 HabilitarMedicamento = false,
                 deleteVisible = false
             };
 
-            var x = initData as Tuple<Afazer, Paciente,CuidadorPaciente>;
+            var x = initData as Tuple<Afazer, Paciente, CuidadorPaciente>;
             Afazer = new Afazer();
-            Paciente=new Paciente();
-            CuidadorPaciente=new CuidadorPaciente();
+            Paciente = new Paciente();
+            CuidadorPaciente = new CuidadorPaciente();
             if (x != null)
             {
                 if (x.Item1 != null)
@@ -143,12 +141,8 @@ namespace HandyCareCuidador.PageModel
                 new ObservableCollection<MaterialUtilizado>(
                     await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
             if (Afazer?.Id != null)
-            {
-                //NewItem = false;
                 oHorario.deleteVisible = true;
-
-            }
-                AfazerConcluido = new ConclusaoAfazer();
+            AfazerConcluido = new ConclusaoAfazer();
         }
 
         protected override void ViewIsAppearing(object sender, EventArgs e)

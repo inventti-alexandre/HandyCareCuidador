@@ -1,15 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:customMap="clr-namespace:TK.CustomMap;assembly=TK.CustomMap"
              x:Class="HandyCareCuidador.Page.MapPage">
-<RelativeLayout x:Name="_baseLayout" VerticalOptions="FillAndExpand" />
-    
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Text="Add Route" Command="{Binding AddRouteCommand}">    </ToolbarItem>
-    <ToolbarItem Text="Clear" Command="{Binding ClearMapCommand}" />
-    <ToolbarItem Text="List" Command="{Binding ShowListCommand}" />
-    <ToolbarItem Text="Start Test" Command="{Binding RunSimulationCommand}" />
-  </ContentPage.ToolbarItems>
+    <RelativeLayout x:Name="_baseLayout" VerticalOptions="FillAndExpand" />
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add Route" Command="{Binding AddRouteCommand}" />
+        <ToolbarItem Text="Clear" Command="{Binding ClearMapCommand}" />
+        <ToolbarItem Text="List" Command="{Binding ShowListCommand}" />
+        <ToolbarItem Text="Start Test" Command="{Binding RunSimulationCommand}" />
+    </ContentPage.ToolbarItems>
 </ContentPage>

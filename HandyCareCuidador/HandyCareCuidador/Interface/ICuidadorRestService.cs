@@ -24,8 +24,12 @@ namespace HandyCareCuidador.Interface
         Task DeleteVideoFamiliarAsync(VideoFamiliar fotoFamiliar);
 
 
-        Task<ObservableCollection<ViaAdministracaoMedicamento>> RefreshViaAdministracaoMedicamentoAsync(bool syncItems = false);
-        Task<ObservableCollection<FormaApresentacaoMedicamento>> RefreshFormaApresentacaoMedicamentoAsync(bool syncItems = false);
+        Task<ObservableCollection<ViaAdministracaoMedicamento>> RefreshViaAdministracaoMedicamentoAsync(
+            bool syncItems = false);
+
+        Task<ObservableCollection<FormaApresentacaoMedicamento>> RefreshFormaApresentacaoMedicamentoAsync(
+            bool syncItems = false);
+
         Task<ObservableCollection<FotoFamiliar>> RefreshFotoFamiliarAsync(bool syncItems = false);
         Task SaveFotoFamiliarAsync(FotoFamiliar fotoFamiliar, bool isNewItem);
         Task DeleteFotoFamiliarAsync(FotoFamiliar fotoFamiliar);
@@ -51,6 +55,7 @@ namespace HandyCareCuidador.Interface
 
         Task<Cuidador> ProcurarCuidadorAsync(string id, MobileServiceAuthenticationProvider provider,
             bool syncItems = false);
+
         Task SaveCuidadorAsync(Cuidador cuidador, bool isNewItem);
         Task DeleteCuidadorAsync(Cuidador cuidador);
 
@@ -150,6 +155,7 @@ namespace HandyCareCuidador.Interface
         /// <param name="syncItems"></param>
         /// <returns></returns>
         Task<ObservableCollection<PeriodoTratamento>> RefreshPeriodoTratamentoAsync(bool syncItems = false);
+
         Task SavePeriodoTratamentoAsync(PeriodoTratamento periodoTratamento, bool isNewItem);
         Task DeletePeriodoTratamentoAsync(PeriodoTratamento periodoTratamento);
         Task<ObservableCollection<TipoCuidador>> RefreshTipoCuidadorAsync(bool syncItems = false);
@@ -158,7 +164,5 @@ namespace HandyCareCuidador.Interface
         Task<ObservableCollection<ValidacaoCuidador>> RefreshValidacaoCuidadorAsync(bool syncItems = false);
         Task SaveValidacaoCuidadorAsync(ValidacaoCuidador validacaoCuidador, bool isNewItem);
         Task DeleteValidacaoCuidadorAsync(ValidacaoCuidador validacaoCuidador);
-
-
     }
 }

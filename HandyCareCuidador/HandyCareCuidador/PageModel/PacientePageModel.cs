@@ -21,7 +21,7 @@ namespace HandyCareCuidador.PageModel
         public Cuidador Cuidador { get; set; }
         public TipoTratamento TipoTratamento { get; set; }
         public PeriodoTratamento PeriodoTratamento { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
 
         public Command SaveCommand
         {
@@ -34,9 +34,7 @@ namespace HandyCareCuidador.PageModel
                         if (oHorario.VisualizarTermino == false)
                             PeriodoTratamento.PerTermino = null;
                         else
-                        {
                             PeriodoTratamento.PerTermino = oHorario.Data;
-                        }
                         oHorario.Visualizar = false;
                         oHorario.ActivityRunning = true;
                         Paciente.Id = Guid.NewGuid().ToString();
@@ -51,11 +49,19 @@ namespace HandyCareCuidador.PageModel
                         Paciente.PacMotivoCuidado = MotivoCuidado.Id;
                         await Task.Run(async () =>
                         {
-                            await CuidadorRestService.DefaultManager.SaveMotivoCuidadoAsync(MotivoCuidado, oHorario.NovoPaciente);
-                            await CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento, oHorario.NovoPaciente);
+                            await
+                                CuidadorRestService.DefaultManager.SaveMotivoCuidadoAsync(MotivoCuidado,
+                                    oHorario.NovoPaciente);
+                            await
+                                CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento,
+                                    oHorario.NovoPaciente);
                             await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
-                            await CuidadorRestService.DefaultManager.SaveTipoTratamentoAsync(TipoTratamento, oHorario.NovoPaciente);
-                            await CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente, oHorario.NovoPaciente);
+                            await
+                                CuidadorRestService.DefaultManager.SaveTipoTratamentoAsync(TipoTratamento,
+                                    oHorario.NovoPaciente);
+                            await
+                                CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente,
+                                    oHorario.NovoPaciente);
                         });
                         await CoreMethods.PopPageModel(Paciente);
                     }
@@ -88,29 +94,29 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
-            Cuidador=new Cuidador();
+            Cuidador = new Cuidador();
             Paciente = new Paciente();
             PeriodoTratamento = new PeriodoTratamento
             {
                 PerInicio = DateTime.Now,
                 PerTermino = DateTime.Now
             };
-            TipoTratamento=new TipoTratamento();
+            TipoTratamento = new TipoTratamento();
             MotivoCuidado = new MotivoCuidado();
-            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
-            var x = initData as Tuple<Paciente, bool,Cuidador>;
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
+            var x = initData as Tuple<Paciente, bool, Cuidador>;
             if (x != null)
             {
                 oHorario.NovoPaciente = x.Item2;
                 oHorario.DadoPaciente = false;
                 Cuidador = x.Item3;
             }
-            if (oHorario.NovoPaciente==false)
+            if (oHorario.NovoPaciente == false)
             {
-                await GetInfo();
                 if (x?.Item1 != null)
                 {
                     Paciente = x.Item1;
+                    await GetInfo();
                 }
                 oHorario.DadoPaciente = true;
             }
@@ -125,10 +131,10 @@ namespace HandyCareCuidador.PageModel
                 await Task.Run(async () =>
                 {
                     var pacresult = new ObservableCollection<CuidadorPaciente>(
-                        await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
                         .FirstOrDefault(e => e.PacId == Paciente.Id);
                     PeriodoTratamento = new ObservableCollection<PeriodoTratamento>(
-                        await CuidadorRestService.DefaultManager.RefreshPeriodoTratamentoAsync())
+                            await CuidadorRestService.DefaultManager.RefreshPeriodoTratamentoAsync())
                         .FirstOrDefault(e => e.Id == pacresult.CuiPeriodoTratamento);
                     if (PeriodoTratamento.PerTermino != null)
                     {
@@ -139,6 +145,9 @@ namespace HandyCareCuidador.PageModel
                         new ObservableCollection<MotivoCuidado>(
                             await CuidadorRestService.DefaultManager.RefreshMotivoCuidadoAsync());
                     MotivoCuidado = selection.FirstOrDefault(e => e.Id.Contains(Paciente.PacMotivoCuidado));
+                    TipoTratamento = new ObservableCollection<TipoTratamento>(
+                            await CuidadorRestService.DefaultManager.RefreshTipoTratamentoAsync())
+                        .FirstOrDefault(e => e.TipCuidado.Contains(MotivoCuidado.Id));
                 });
             }
             catch (Exception e)
@@ -151,7 +160,7 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            //oHorario = new HorarioViewModel();
+            //oHorario = new PageModelHelper();
         }
     }
 }

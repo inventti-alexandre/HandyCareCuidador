@@ -21,7 +21,7 @@ namespace HandyCareCuidador.PageModel
         //IMaterialRestService _restService;
         //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
         public Paciente oPaciente { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
 
         public Command AddMaterial
@@ -60,7 +60,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = true;
                     RaisePropertyChanged("IsVisible");
-                    var x = new Tuple<Material,Paciente>(material,oPaciente);
+                    var x = new Tuple<Material, Paciente>(material, oPaciente);
                     await CoreMethods.PushPageModel<MaterialPageModel>(x);
                     material = null;
                 });
@@ -71,7 +71,7 @@ namespace HandyCareCuidador.PageModel
         {
             base.Init(initData);
             oPaciente = new Paciente();
-            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
             oPaciente = initData as Paciente;
             await GetMateriais();
         }
@@ -84,12 +84,12 @@ namespace HandyCareCuidador.PageModel
                 {
                     var pacresult =
                         new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
+                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
                             .Where(e => e.PacId == oPaciente.Id)
                             .AsEnumerable();
                     var result =
                         new ObservableCollection<Material>(
-                            await CuidadorRestService.DefaultManager.RefreshMaterialAsync(true))
+                                await CuidadorRestService.DefaultManager.RefreshMaterialAsync(true))
                             .Where(e => pacresult.Select(m => m.Id)
                                 .Contains(e.MatPacId))
                             .AsEnumerable();
@@ -110,13 +110,9 @@ namespace HandyCareCuidador.PageModel
             base.ReverseInit(returndData);
             var newMaterial = returndData as Material;
             if (!Materiais.Contains(newMaterial))
-            {
                 Materiais.Add(newMaterial);
-            }
             else
-            {
                 await GetMateriais();
-            }
         }
     }
 }

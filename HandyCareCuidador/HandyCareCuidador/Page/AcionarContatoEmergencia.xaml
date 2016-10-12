@@ -1,21 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HandyCareCuidador.Page.AcionarContatoEmergencia">
     <StackLayout>
-        <Button Text="Polícia Militar" Command="{Binding LigarPM}"/>
-        <Button Text="SAMU" Command="{Binding LigarSAMU}"/>
-        <Button Text="Corpo de Bombeiros" Command="{Binding LigarCBM}"/>
+        <Button Text="Polícia Militar" Command="{Binding LigarPM}" />
+        <Button Text="SAMU" Command="{Binding LigarSAMU}" />
+        <Button Text="Corpo de Bombeiros" Command="{Binding LigarCBM}" />
         <ListView x:Name="lstFamiliares" ItemsSource="{Binding Familiares, Mode=TwoWay}"
-                      SelectedItem="{Binding SelectedFamiliar, Mode=TwoWay}" IsVisible="True" RowHeight="60" Header="Familiares">
+                  SelectedItem="{Binding SelectedFamiliar, Mode=TwoWay}" IsVisible="True" RowHeight="60"
+                  Header="Familiares">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Vertical" Padding="10">
                             <Label Text="{Binding FamNomeCompleto}" TextColor="Black"
-                                       HorizontalOptions="StartAndExpand" FontAttributes="Bold" FontSize="20" />
+                                   HorizontalOptions="StartAndExpand" FontAttributes="Bold" FontSize="20" />
                             <Label Text="{Binding FamDescriParentesco}" TextColor="Black"
-                                       HorizontalOptions="StartAndExpand" FontSize="15" />
+                                   HorizontalOptions="StartAndExpand" FontSize="15" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

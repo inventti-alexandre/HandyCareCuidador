@@ -20,7 +20,7 @@ namespace HandyCareCuidador.PageModel
         public bool deleteVisible;
 
         public Paciente oPaciente { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public ObservableCollection<Medicamento> Medicamentos { get; set; }
 
         public Command AddMedicamento
@@ -70,7 +70,7 @@ namespace HandyCareCuidador.PageModel
         {
             base.Init(initData);
             oPaciente = initData as Paciente;
-            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
             await GetMedicamentos();
         }
 
@@ -82,20 +82,19 @@ namespace HandyCareCuidador.PageModel
                 {
                     var pacresult =
                         new ObservableCollection<CuidadorPaciente>(
-                            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
                             .Where(e => e.PacId == oPaciente.Id)
                             .AsEnumerable();
                     var x = pacresult.Count();
                     var result =
                         new ObservableCollection<Medicamento>(
-                            await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
+                                await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
                             .Where(e => pacresult.Select(m => m.Id)
                                 .Contains(e.MedPacId))
                             .AsEnumerable();
                     Medicamentos = new ObservableCollection<Medicamento>(result);
                     if (Medicamentos.Count == 0)
                         oHorario.Visualizar = true;
-
                 });
                 oHorario.ActivityRunning = false;
             }
@@ -110,9 +109,7 @@ namespace HandyCareCuidador.PageModel
             base.ReverseInit(returndData);
             var newMedicamento = returndData as Medicamento;
             if (!Medicamentos.Contains(newMedicamento))
-            {
                 Medicamentos.Add(newMedicamento);
-            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace HandyCareCuidador.Model
         {
             ContatoEmergencia = new HashSet<ContatoEmergencia>();
         }
+
         public string Id { get; set; }
 
         [Column("ConEnderecoEmail")]

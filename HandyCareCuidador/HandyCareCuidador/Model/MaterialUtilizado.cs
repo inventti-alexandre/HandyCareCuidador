@@ -18,8 +18,8 @@ namespace HandyCareCuidador.Model
 
         public int MatQuantidadeUtilizada { get; set; }
 
-        //public virtual Material Material { get; set; }
-
         //public virtual Afazer Afazer { get; set; }
+
+        //public virtual Material Material { get; set; }
     }
 }

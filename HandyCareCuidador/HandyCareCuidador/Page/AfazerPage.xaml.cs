@@ -17,7 +17,7 @@ namespace HandyCareCuidador.Page
             }
             catch (Exception ex)
             {
-               Debug.WriteLine(ex.ToString());
+                Debug.WriteLine(ex.ToString());
             }
         }
 

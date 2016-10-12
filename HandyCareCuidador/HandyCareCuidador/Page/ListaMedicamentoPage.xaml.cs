@@ -15,9 +15,7 @@ namespace HandyCareCuidador.Page
             var lstMedicamento = this.FindByName<ListView>("lstMedicamento");
 
             if (lstMedicamento != null)
-            {
                 lstMedicamento.ClearValue(ListView.SelectedItemProperty);
-            }
         }
     }
 }

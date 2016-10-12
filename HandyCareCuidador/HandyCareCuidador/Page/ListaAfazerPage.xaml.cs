@@ -15,13 +15,9 @@ namespace HandyCareCuidador.Page
             var lstAfazer = this.FindByName<ListView>("lstAfazer");
             var lstAfazerConcluido = this.FindByName<ListView>("lstAfazerConcluido");
             if (lstAfazer != null)
-            {
                 lstAfazer.ClearValue(ListView.SelectedItemProperty);
-            }
             if (lstAfazerConcluido != null)
-            {
                 lstAfazerConcluido.ClearValue(ListView.SelectedItemProperty);
-            }
         }
     }
 }

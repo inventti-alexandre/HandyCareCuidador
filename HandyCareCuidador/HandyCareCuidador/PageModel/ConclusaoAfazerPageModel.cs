@@ -22,7 +22,7 @@ namespace HandyCareCuidador.PageModel
         public bool newItem { get; set; }
         public Material oMaterial { get; set; }
         public Medicamento oMedicamento { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
         public ConclusaoAfazer AfazerConcluido { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
@@ -45,18 +45,21 @@ namespace HandyCareCuidador.PageModel
                 MedicamentosAdministrados =
                     new ObservableCollection<MedicamentoAdministrado>(
                         await
-                            CuidadorRestService.DefaultManager.RefreshMedicamentoAdministradoAsync(detalheAfazer?.Item1.Id));
+                            CuidadorRestService.DefaultManager.RefreshMedicamentoAdministradoAsync(
+                                detalheAfazer?.Item1.Id));
             }
             oMaterial = new ObservableCollection<Material>(
-                        await CuidadorRestService.DefaultManager.RefreshMaterialExistenteAsync()).FirstOrDefault(m => MateriaisUtilizados.Select(n => n.MatUtilizado).Contains(m.Id));
+                await CuidadorRestService.DefaultManager.RefreshMaterialExistenteAsync()).FirstOrDefault(
+                m => MateriaisUtilizados.Select(n => n.MatUtilizado).Contains(m.Id));
             oMedicamento = new ObservableCollection<Medicamento>(
-                        await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync()).FirstOrDefault(m => MedicamentosAdministrados.Select(n => n.MedAdministrado).Contains(m.Id));
+                await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync()).FirstOrDefault(
+                m => MedicamentosAdministrados.Select(n => n.MedAdministrado).Contains(m.Id));
         }
 
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            oHorario = new HorarioViewModel
+            oHorario = new PageModelHelper
             {
                 HabilitarMaterial = false,
                 HabilitarMedicamento = false

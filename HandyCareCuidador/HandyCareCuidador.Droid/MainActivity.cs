@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Threading;
-using Android.App;
-using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.OS;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
-using Android.Provider;
-using Android.Support.V4.OS;
+using Android.Content.PM;
+using Android.OS;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Droid.Services;
-using HandyCareCuidador.Message;
-using HandyCareCuidador.Model;
-using HandyCareCuidador.Services;
 using Java.IO;
 using Microsoft.WindowsAzure.MobileServices;
 using Plugin.Permissions;
+using Xamarin;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+using Environment = Android.OS.Environment;
+using Exception = Java.Lang.Exception;
 
 namespace HandyCareCuidador.Droid
 {
     //Microsoft.WindowsAzure.Mobile;Microsoft.WindowsAzure.Mobile.Ext
-    [Activity(Label = "Handy Care - Cuidador", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light",/* MainLauncher = true,*/ ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity, App.IAuthenticate
+    [Activity(Label = "Handy Care - Cuidador", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light",
+         /* MainLauncher = true,*/ ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : FormsApplicationActivity, App.IAuthenticate
     {
-        public event EventHandler<ServiceConnectedEventArgs> AfazerServiceConnected = delegate { };
+        private static readonly File FotoFile = new File(Environment.GetExternalStoragePublicDirectory(
+            Environment.DirectoryPictures), DateTime.Now + "handycare.jpg");
 
-        private static readonly File FotoFile = new File(Android.OS.Environment.GetExternalStoragePublicDirectory(
-                                Android.OS.Environment.DirectoryPictures), DateTime.Now.ToString() + "handycare.jpg");
-        private static readonly File VideoFile = new File(Android.OS.Environment.GetExternalStoragePublicDirectory(
-                        Android.OS.Environment.DirectoryMovies), DateTime.Now.ToString() + "handycare.mp4");
+        private static readonly File VideoFile = new File(Environment.GetExternalStoragePublicDirectory(
+            Environment.DirectoryMovies), DateTime.Now + "handycare.mp4");
+
+        protected static AfazerServiceConnection afazerServiceConnection;
 
         // declarations
         protected readonly string logTag = "App";
-        protected static AfazerServiceConnection afazerServiceConnection;
         private MobileServiceUser user;
 
         public AfazerService AfazerService
@@ -43,12 +40,11 @@ namespace HandyCareCuidador.Droid
             get
             {
                 if (afazerServiceConnection.Binder == null)
-                {
-                    throw new Java.Lang.Exception("Fodeu");
-                }
+                    throw new Exception("Fodeu");
                 return afazerServiceConnection.Binder.Service;
             }
         }
+
         public async Task<bool> Authenticate(MobileServiceAuthenticationProvider provider)
         {
             var success = false;
@@ -61,14 +57,11 @@ namespace HandyCareCuidador.Droid
                 {
                     message = $"you are now signed-in as {user.UserId}.";
                     success = true;
-                    var a = new Thread(() =>
-                    {
-                        ThreadPool.QueueUserWorkItem(async o => await StartAfazerService());
-                    });
+                    var a = new Thread(() => { ThreadPool.QueueUserWorkItem(async o => await StartAfazerService()); });
                     a.Start();
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 message = ex.Message;
             }
@@ -79,13 +72,12 @@ namespace HandyCareCuidador.Droid
             return success;
         }
 
+        public event EventHandler<ServiceConnectedEventArgs> AfazerServiceConnected = delegate { };
+
         public async Task StartAfazerService()
         {
-            afazerServiceConnection=new AfazerServiceConnection(null);
-            afazerServiceConnection.ServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
-            {
-                this.AfazerServiceConnected(this, e);
-            };
+            afazerServiceConnection = new AfazerServiceConnection(null);
+            afazerServiceConnection.ServiceConnected += (sender, e) => { AfazerServiceConnected(this, e); };
             await Task.Run(() =>
             {
                 StartService(new Intent(this, typeof(AfazerService)));
@@ -93,6 +85,7 @@ namespace HandyCareCuidador.Droid
                 BindService(afazerServiceIntent, afazerServiceConnection, Bind.AutoCreate);
             });
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -100,12 +93,11 @@ namespace HandyCareCuidador.Droid
 
         protected override void OnCreate(Bundle bundle)
         {
-
             base.OnCreate(bundle);
-            global::Xamarin.Forms.Forms.Init(this, bundle);
-            Xamarin.FormsMaps.Init(this, bundle);
+            Forms.Init(this, bundle);
+            FormsMaps.Init(this, bundle);
             CurrentPlatform.Init();
-            App.Init((App.IAuthenticate)this);
+            App.Init(this);
             LoadApplication(new App());
         }
 
@@ -117,4 +109,3 @@ namespace HandyCareCuidador.Droid
         }
     }
 }
-

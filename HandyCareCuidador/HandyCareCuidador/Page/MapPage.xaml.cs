@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using HandyCareCuidador.Page.Layout;
 using HandyCareCuidador.PageModel;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using TK.CustomMap;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using Plugin.Geolocator;
+using Position = Xamarin.Forms.Maps.Position;
 
 namespace HandyCareCuidador.Page
 {
     public partial class MapPage : ContentPage
     {
         public Position CurrentPosition;
+
         public MapPage()
         {
             InitializeComponent();
             GetLocation();
             CreateView();
-            this.BindingContext = new MapPageModel();
+            BindingContext = new MapPageModel();
         }
 
         private async void GetLocation()
@@ -31,10 +29,10 @@ namespace HandyCareCuidador.Page
                 var locator = CrossGeolocator.Current;
                 var position = await locator.GetPositionAsync(10000);
                 CurrentPosition = new Position(position.Latitude, position.Longitude);
-                Debug.WriteLine("Localização atual - Latitude: " + CurrentPosition.Latitude.ToString() + " " + "Longitude " + CurrentPosition.Longitude.ToString());
-
+                Debug.WriteLine("Localização atual - Latitude: " + CurrentPosition.Latitude + " " + "Longitude " +
+                                CurrentPosition.Longitude);
             }
-            catch (Plugin.Geolocator.Abstractions.GeolocationException e)
+            catch (GeolocationException e)
             {
                 Debug.WriteLine(e.Message);
 
@@ -44,18 +42,17 @@ namespace HandyCareCuidador.Page
 
         private void CreateView()
         {
-
-            var autoComplete = new PlacesAutoComplete { ApiToUse = PlacesAutoComplete.PlacesApi.Native };
+            var autoComplete = new PlacesAutoComplete {ApiToUse = PlacesAutoComplete.PlacesApi.Native};
             autoComplete.SetBinding(PlacesAutoComplete.PlaceSelectedCommandProperty, "PlaceSelectedCommand");
             var mapView = new TKCustomMap(MapSpan.FromCenterAndRadius(CurrentPosition,
-                Distance.FromKilometers(1)))
-            //var mapView = new TKCustomMap
-            {
-                MapCenter = CurrentPosition,
-                MapType = MapType.Hybrid,
-                IsShowingUser = true,
-                IsRegionChangeAnimated = true
-            };
+                    Distance.FromKilometers(1)))
+                //var mapView = new TKCustomMap
+                {
+                    MapCenter = CurrentPosition,
+                    MapType = MapType.Hybrid,
+                    IsShowingUser = true,
+                    IsRegionChangeAnimated = true
+                };
             mapView.SetBinding(TKCustomMap.CustomPinsProperty, "Pins");
             mapView.SetBinding(TKCustomMap.MapClickedCommandProperty, "MapClickedCommand");
             mapView.SetBinding(TKCustomMap.MapLongPressCommandProperty, "MapLongPressCommand");
@@ -77,14 +74,14 @@ namespace HandyCareCuidador.Page
             autoComplete.SetBinding(PlacesAutoComplete.BoundsProperty, "MapRegion");
 
 
-            this._baseLayout.Children.Add(
+            _baseLayout.Children.Add(
                 mapView,
                 Constraint.RelativeToView(autoComplete, (r, v) => v.X),
                 Constraint.RelativeToView(autoComplete, (r, v) => autoComplete.HeightOfSearchBar),
-                heightConstraint: Constraint.RelativeToParent((r) => r.Height - autoComplete.HeightOfSearchBar),
+                heightConstraint: Constraint.RelativeToParent(r => r.Height - autoComplete.HeightOfSearchBar),
                 widthConstraint: Constraint.RelativeToView(autoComplete, (r, v) => v.Width));
 
-            this._baseLayout.Children.Add(
+            _baseLayout.Children.Add(
                 autoComplete,
                 Constraint.Constant(0),
                 Constraint.Constant(0));

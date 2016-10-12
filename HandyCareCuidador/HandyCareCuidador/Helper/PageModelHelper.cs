@@ -4,7 +4,7 @@ using PropertyChanged;
 namespace HandyCareCuidador.Helper
 {
     [ImplementPropertyChanged]
-    public class HorarioViewModel
+    public class PageModelHelper
     {
         public DateTime Data { get; set; }
         public TimeSpan Horario { get; set; }

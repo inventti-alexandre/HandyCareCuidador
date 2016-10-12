@@ -17,7 +17,7 @@ namespace HandyCareCuidador.PageModel
 
         public Material Material { get; set; }
         public Paciente Paciente { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
 
         public Command SaveCommand
         {
@@ -53,14 +53,14 @@ namespace HandyCareCuidador.PageModel
         {
             base.Init(initData);
             var x = initData as Tuple<Material, Paciente>;
-            Material=new Material();
-            Paciente=new Paciente();
+            Material = new Material();
+            Paciente = new Paciente();
             if (x != null)
             {
                 Material = x.Item1;
                 Paciente = x.Item2;
             }
-            oHorario = new HorarioViewModel {Quantidade = null};
+            oHorario = new PageModelHelper {Quantidade = null};
             if (Material == null)
             {
                 Material = new Material();
@@ -76,7 +76,7 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            //oHorario = new HorarioViewModel();
+            //oHorario = new PageModelHelper();
             if (Material == null)
             {
                 Material = new Material();

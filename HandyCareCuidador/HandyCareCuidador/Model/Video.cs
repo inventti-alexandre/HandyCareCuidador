@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -23,6 +24,14 @@ namespace HandyCareCuidador.Model
         public string VidCuidador { get; set; }
 
         public virtual Cuidador Cuidador { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+
+        public DateTimeOffset UpdatedAt { get; set; }
+
+        [Column(TypeName = "timestamp")]
+        public byte[] Version { get; set; }
+
+        public bool? Deleted { get; set; }
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VideoFamiliar> VideoFamiliar { get; set; }

@@ -11,15 +11,19 @@
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorarioViewModel.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorarioViewModel.ActivityRunning}" />
             <Button x:Name="btnFacebook" Text="Facebook" Command="{Binding FacebookLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#3b5998" TextColor="White" />
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30"
+                    BackgroundColor="#3b5998" TextColor="White" />
             <Button x:Name="btnGoogle" Text="Google" Command="{Binding GoogleLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#dd4b39" TextColor="White" />
-            <!--<Button x:Name="btnMicrosoft" Text="Microsoft" Command="{Binding MicrosoftLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30"
+                    BackgroundColor="#dd4b39" TextColor="White" />
+            <Button x:Name="btnMicrosoft" Text="Microsoft" Command="{Binding MicrosoftLoginCommand}"
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30"
+                    BackgroundColor="#00a1f1" TextColor="White" />
+            <!--<Button x:Name="btnMicrosoftAD" Text="Microsoft" Command="{Binding AzureAdLoginCommand}"
                     IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00a1f1" TextColor="White" />-->
-            <Button x:Name="btnMicrosoftAD" Text="Microsoft" Command="{Binding AzureAdLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00a1f1" TextColor="White" />
             <Button x:Name="btnTwitter" Text="Twitter" Command="{Binding TwitterLoginCommand}"
-                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30" BackgroundColor="#00aced" TextColor="White" />
+                    IsVisible="{Binding oHorarioViewModel.Visualizar}" MinimumHeightRequest="30"
+                    BackgroundColor="#00aced" TextColor="White" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

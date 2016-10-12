@@ -64,9 +64,7 @@ namespace HandyCareCuidador
         private void InternalSelectedItemChanged()
         {
             if (_disableNestedCalls)
-            {
                 return;
-            }
 
             var selectedIndex = -1;
             object selectedValue = null;
@@ -76,7 +74,7 @@ namespace HandyCareCuidador
                 var hasSelectedValuePath = !string.IsNullOrWhiteSpace(SelectedValuePath);
                 foreach (var item in ItemsSource)
                 {
-                    if (item != null && item.Equals(SelectedItem))
+                    if ((item != null) && item.Equals(SelectedItem))
                     {
                         selectedIndex = index;
                         if (hasSelectedValuePath)
@@ -99,18 +97,14 @@ namespace HandyCareCuidador
         private void InternalSelectedValueChanged()
         {
             if (_disableNestedCalls)
-            {
                 return;
-            }
 
             if (string.IsNullOrWhiteSpace(SelectedValuePath))
-            {
                 return;
-            }
             var selectedIndex = -1;
             object selectedItem = null;
             var hasSelectedValuePath = !string.IsNullOrWhiteSpace(SelectedValuePath);
-            if (ItemsSource != null && hasSelectedValuePath)
+            if ((ItemsSource != null) && hasSelectedValuePath)
             {
                 var index = 0;
                 foreach (var item in ItemsSource)
@@ -139,9 +133,7 @@ namespace HandyCareCuidador
         private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (Equals(newValue, null) && Equals(oldValue, null))
-            {
                 return;
-            }
 
             var picker = (BindablePicker) bindable;
             picker.Items.Clear();
@@ -151,7 +143,6 @@ namespace HandyCareCuidador
                 var hasDisplayMemberPath = !string.IsNullOrWhiteSpace(picker.DisplayMemberPath);
 
                 foreach (var item in (IEnumerable) newValue)
-                {
                     if (hasDisplayMemberPath)
                     {
                         var type = item.GetType();
@@ -162,20 +153,15 @@ namespace HandyCareCuidador
                     {
                         picker.Items.Add(item.ToString());
                     }
-                }
 
                 picker._disableNestedCalls = true;
                 picker.SelectedIndex = -1;
                 picker._disableNestedCalls = false;
 
                 if (picker.SelectedItem != null)
-                {
                     picker.InternalSelectedItemChanged();
-                }
-                else if (hasDisplayMemberPath && picker.SelectedValue != null)
-                {
+                else if (hasDisplayMemberPath && (picker.SelectedValue != null))
                     picker.InternalSelectedValueChanged();
-                }
             }
             else
             {
@@ -190,17 +176,13 @@ namespace HandyCareCuidador
         private void OnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (_disableNestedCalls)
-            {
                 return;
-            }
 
-            if (SelectedIndex < 0 || ItemsSource == null || !ItemsSource.GetEnumerator().MoveNext())
+            if ((SelectedIndex < 0) || (ItemsSource == null) || !ItemsSource.GetEnumerator().MoveNext())
             {
                 _disableNestedCalls = true;
                 if (SelectedIndex != -1)
-                {
                     SelectedIndex = -1;
-                }
                 SelectedItem = null;
                 SelectedValue = null;
                 _disableNestedCalls = false;

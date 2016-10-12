@@ -17,7 +17,7 @@ namespace HandyCareCuidador.PageModel
         private App app;
         private bool authenticated;
         public Cuidador Cuidador { get; set; }
-        public HorarioViewModel oHorarioViewModel { get; set; }
+        public PageModelHelper oHorarioViewModel { get; set; }
 
         public Command GoogleLoginCommand
         {
@@ -28,10 +28,8 @@ namespace HandyCareCuidador.PageModel
                     try
                     {
                         if (App.Authenticator != null)
-                        {
                             authenticated =
                                 await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Google);
-                        }
                         if (authenticated)
                         {
                             Application.Current.Properties["UserId"] =
@@ -43,7 +41,10 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.Google);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
@@ -52,7 +53,10 @@ namespace HandyCareCuidador.PageModel
                             }
                             else
                             {
-                                var _cuidador = new Cuidador { CuiGoogleId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiGoogleId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -65,6 +69,7 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+
         public Command LoginCommand
         {
             get
@@ -74,10 +79,8 @@ namespace HandyCareCuidador.PageModel
                     try
                     {
                         if (App.Authenticator != null)
-                        {
                             authenticated =
                                 await App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.Google);
-                        }
                         if (authenticated)
                         {
                             Application.Current.Properties["UserId"] =
@@ -89,7 +92,10 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Google);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.Google);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
@@ -98,7 +104,10 @@ namespace HandyCareCuidador.PageModel
                             }
                             else
                             {
-                                var _cuidador = new Cuidador { CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -111,6 +120,7 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+
         public Command FacebookLoginCommand
         {
             get
@@ -133,17 +143,22 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Facebook, true);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.Facebook, true);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
-
                             }
                             else
                             {
-                                var _cuidador = new Cuidador { CuiFacebookId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiFacebookId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -180,17 +195,22 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.MicrosoftAccount, true);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.MicrosoftAccount, true);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
-
                             }
                             else
                             {
-                                var _cuidador = new Cuidador {CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId};
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiMicrosoftId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -203,6 +223,7 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+
         public Command TwitterLoginCommand
         {
             get
@@ -226,17 +247,22 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.Twitter, true);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.Twitter, true);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
-
                             }
                             else
                             {
-                                var _cuidador = new Cuidador { CuiTwitterId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiTwitterId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -261,7 +287,8 @@ namespace HandyCareCuidador.PageModel
                         if (App.Authenticator != null)
                             authenticated =
                                 await
-                                    App.Authenticator.Authenticate(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory);
+                                    App.Authenticator.Authenticate(
+                                        MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory);
                         if (authenticated)
                         {
                             Application.Current.Properties["UserId"] =
@@ -273,17 +300,23 @@ namespace HandyCareCuidador.PageModel
                             oHorarioViewModel.Visualizar = false;
                             oHorarioViewModel.ActivityRunning = true;
                             Cuidador =
-                                await CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId, MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, true);
+                                await
+                                    CuidadorRestService.DefaultManager.ProcurarCuidadorAsync(
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId,
+                                        MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, true);
                             if (Cuidador != null)
                             {
                                 App.Afazeres = new ObservableCollection<Afazer>();
                                 app.AbrirMainMenu(Cuidador);
                                 await App.GetAfazeres(true);
-
                             }
                             else
                             {
-                                var _cuidador = new Cuidador { CuiMicrosoftAdId = CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId };
+                                var _cuidador = new Cuidador
+                                {
+                                    CuiMicrosoftAdId =
+                                        CuidadorRestService.DefaultManager.CurrentClient.CurrentUser.UserId
+                                };
                                 app.NewCuidador(_cuidador, app);
                             }
                         }
@@ -308,12 +341,9 @@ namespace HandyCareCuidador.PageModel
         {
             base.ViewIsAppearing(sender, e);
             Cuidador = new Cuidador();
-            oHorarioViewModel = new HorarioViewModel {Visualizar = true, ActivityRunning = false};
+            oHorarioViewModel = new PageModelHelper {Visualizar = true, ActivityRunning = false};
             if (authenticated)
-            {
-                // Hide the Sign-in button.
                 oHorarioViewModel.Visualizar = false;
-            }
         }
     }
 }

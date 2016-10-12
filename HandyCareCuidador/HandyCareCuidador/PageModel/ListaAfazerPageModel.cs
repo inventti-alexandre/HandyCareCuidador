@@ -28,7 +28,7 @@ namespace HandyCareCuidador.PageModel
         public Task check;
         public bool deleteVisible;
 
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         //public Paciente oPaciente { get; set; }
         public ObservableCollection<Afazer> Afazeres { get; set; }
@@ -44,7 +44,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    var x = new Tuple<Afazer,Paciente,CuidadorPaciente>(null,oPaciente,CuidadorPaciente);
+                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente>(null, oPaciente, CuidadorPaciente);
                     await CoreMethods.PushPageModel<AfazerPageModel>(x);
                 });
             }
@@ -125,10 +125,7 @@ namespace HandyCareCuidador.PageModel
             {
                 return
                     new Command(
-                        async () =>
-                        {
-                            await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente);
-                        });
+                        async () => { await CoreMethods.PushPageModel<ListaAfazerConcluidoPageModel>(oPaciente); });
             }
         }
 
@@ -136,20 +133,19 @@ namespace HandyCareCuidador.PageModel
         {
             base.Init(initData);
             oPaciente = new Paciente();
-            CuidadorPaciente=new CuidadorPaciente();
+            CuidadorPaciente = new CuidadorPaciente();
             var x = initData as Tuple<Paciente, CuidadorPaciente>;
             if (x != null)
             {
                 oPaciente = x.Item1;
                 CuidadorPaciente = x.Item2;
-
             }
         }
 
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             AfazerSelecionado = new Afazer();
-            oHorario = new HorarioViewModel {ActivityRunning = true, Visualizar = false};
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
             await GetAfazeresConcluidos();
             await GetAfazeres();
             oHorario.ActivityRunning = false;
@@ -182,16 +178,17 @@ namespace HandyCareCuidador.PageModel
                     oHorario.ActivityRunning = true;
                     oHorario.FinalizarAfazer = false;
                     var selection =
-                        new ObservableCollection<Afazer>(await CuidadorRestService.DefaultManager.RefreshAfazerAsync(true));
-                    if (selection.Count > 0 && AfazeresConcluidos.Count > 0)
+                        new ObservableCollection<Afazer>(
+                            await CuidadorRestService.DefaultManager.RefreshAfazerAsync(true));
+                    if ((selection.Count > 0) && (AfazeresConcluidos.Count > 0))
                     {
                         var pacresult =
                             new ObservableCollection<CuidadorPaciente>(
-                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
+                                    await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
                                 .Where(e => e.PacId == oPaciente.Id)
                                 .AsEnumerable();
                         var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
-                            .Contains(e.Id))
+                                .Contains(e.Id))
                             .Where(e => pacresult.Select(m => m.Id).Contains(e.AfaPaciente))
                             .AsEnumerable();
                         Afazeres = new ObservableCollection<Afazer>(result);
@@ -202,7 +199,7 @@ namespace HandyCareCuidador.PageModel
                         Afazeres = new ObservableCollection<Afazer>(selection);
                     }
                     oHorario.ActivityRunning = false;
-                    if(Afazeres.Count==0)
+                    if (Afazeres.Count == 0)
                         oHorario.Visualizar = true;
                 });
             }
@@ -225,11 +222,6 @@ namespace HandyCareCuidador.PageModel
             if (!Afazeres.Contains(newAfazer))
             {
                 Afazeres.Add(newAfazer);
-            }
-            else
-            {
-                //await GetAfazeresConcluidos();
-                //await GetAfazeres();
             }
             //if (AfazerConcluido)
             //{

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.CustomPins;
 using PropertyChanged;
@@ -16,19 +12,9 @@ using Xamarin.Forms.Maps;
 namespace HandyCareCuidador.PageModel
 {
     [ImplementPropertyChanged]
-    public class AddRoutePageModel:FreshBasePageModel
+    public class AddRoutePageModel : FreshBasePageModel
     {
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-            var x = initData as Tuple<ObservableCollection<TKRoute>, ObservableCollection<TKCustomMapPin>, MapSpan>;
-            if (x != null)
-            {
-                Routes = x.Item1;
-                Pins = x.Item2;
-                Bounds = x.Item3;
-            }
-        }
+        private Position _from, _to;
 
         //public AddRoutePageModel(ObservableCollection<TKRoute> routes, ObservableCollection<TKCustomMapPin> pins, MapSpan bounds)
         //{
@@ -38,7 +24,6 @@ namespace HandyCareCuidador.PageModel
         //}
 
         private IPlaceResult _fromPlace, _toPlace;
-        private Position _from, _to;
 
         public ObservableCollection<TKCustomMapPin> Pins { get; private set; }
         public ObservableCollection<TKRoute> Routes { get; private set; }
@@ -48,44 +33,45 @@ namespace HandyCareCuidador.PageModel
         {
             get
             {
-                return new Command<IPlaceResult>(async (p) =>
+                return new Command<IPlaceResult>(async p =>
                 {
                     if (Device.OS == TargetPlatform.iOS)
                     {
-                        TKNativeiOSPlaceResult placeResult = (TKNativeiOSPlaceResult)p;
-                        this._fromPlace = placeResult;
-                        this._from = placeResult.Details.Coordinate;
+                        var placeResult = (TKNativeiOSPlaceResult) p;
+                        _fromPlace = placeResult;
+                        _from = placeResult.Details.Coordinate;
                     }
                     else
                     {
-                        TKNativeAndroidPlaceResult placeResult = (TKNativeAndroidPlaceResult)p;
-                        this._fromPlace = placeResult;
+                        var placeResult = (TKNativeAndroidPlaceResult) p;
+                        _fromPlace = placeResult;
                         var details = await TKNativePlacesApi.Instance.GetDetails(placeResult.PlaceId);
 
-                        this._from = details.Coordinate;
+                        _from = details.Coordinate;
                     }
                 });
             }
         }
+
         public Command<IPlaceResult> ToSelectedCommand
         {
             get
             {
-                return new Command<IPlaceResult>(async (p) =>
+                return new Command<IPlaceResult>(async p =>
                 {
                     if (Device.OS == TargetPlatform.iOS)
                     {
-                        TKNativeiOSPlaceResult placeResult = (TKNativeiOSPlaceResult)p;
-                        this._toPlace = placeResult;
-                        this._to = placeResult.Details.Coordinate;
+                        var placeResult = (TKNativeiOSPlaceResult) p;
+                        _toPlace = placeResult;
+                        _to = placeResult.Details.Coordinate;
                     }
                     else
                     {
-                        TKNativeAndroidPlaceResult placeResult = (TKNativeAndroidPlaceResult)p;
-                        this._toPlace = placeResult;
+                        var placeResult = (TKNativeAndroidPlaceResult) p;
+                        _toPlace = placeResult;
                         var details = await TKNativePlacesApi.Instance.GetDetails(placeResult.PlaceId);
 
-                        this._to = details.Coordinate;
+                        _to = details.Coordinate;
                     }
                 });
             }
@@ -97,43 +83,54 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(() =>
                 {
-                    if (this._toPlace == null || this._fromPlace == null) return;
+                    if ((_toPlace == null) || (_fromPlace == null)) return;
 
                     var route = new TKRoute
                     {
                         TravelMode = TKRouteTravelMode.Driving,
-                        Source = this._from,
-                        Destination = this._to,
+                        Source = _from,
+                        Destination = _to,
                         Color = Color.Blue
                     };
 
-                    this.Pins.Add(new RoutePin
+                    Pins.Add(new RoutePin
                     {
                         Route = route,
                         IsSource = true,
                         IsDraggable = true,
-                        Position = this._from,
-                        Title = this._fromPlace.Description,
+                        Position = _from,
+                        Title = _fromPlace.Description,
                         ShowCallout = true,
                         DefaultPinColor = Color.Green
                     });
-                    this.Pins.Add(new RoutePin
+                    Pins.Add(new RoutePin
                     {
                         Route = route,
                         IsSource = false,
                         IsDraggable = true,
-                        Position = this._to,
-                        Title = this._toPlace.Description,
+                        Position = _to,
+                        Title = _toPlace.Description,
                         ShowCallout = true,
                         DefaultPinColor = Color.Red
                     });
 
-                    this.Routes.Add(route);
+                    Routes.Add(route);
 
                     Application.Current.MainPage.Navigation.PopAsync();
                 });
             }
         }
 
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+            var x = initData as Tuple<ObservableCollection<TKRoute>, ObservableCollection<TKCustomMapPin>, MapSpan>;
+            if (x != null)
+            {
+                Routes = x.Item1;
+                Pins = x.Item2;
+                Bounds = x.Item3;
+            }
+        }
     }
 }

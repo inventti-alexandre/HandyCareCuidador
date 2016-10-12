@@ -25,7 +25,7 @@ namespace HandyCareCuidador.PageModel
         public ObservableCollection<FormaApresentacaoMedicamento> Formas { get; set; }
         public Paciente Paciente { get; set; }
         public Image MedImage { get; set; }
-        public HorarioViewModel oHorario { get; set; }
+        public PageModelHelper oHorario { get; set; }
         public ViaAdministracaoMedicamento oViaAdministracaoMedicamento { get; set; }
 
         public FormaApresentacaoMedicamento oFormaApresentacaoMedicamento { get; set; }
@@ -63,10 +63,10 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            oHorario = new HorarioViewModel
+            oHorario = new PageModelHelper
             {
                 ActivityRunning = true,
-                Visualizar =false
+                Visualizar = false
             };
 
             var x = initData as Tuple<Medicamento, Paciente>;
@@ -97,9 +97,13 @@ namespace HandyCareCuidador.PageModel
         {
             Task.Run(async () =>
             {
-                Vias = new ObservableCollection<ViaAdministracaoMedicamento>(await CuidadorRestService.DefaultManager.RefreshViaAdministracaoMedicamentoAsync());
+                Vias =
+                    new ObservableCollection<ViaAdministracaoMedicamento>(
+                        await CuidadorRestService.DefaultManager.RefreshViaAdministracaoMedicamentoAsync());
                 var x = Vias.Count;
-                Formas=new ObservableCollection<FormaApresentacaoMedicamento>(await CuidadorRestService.DefaultManager.RefreshFormaApresentacaoMedicamentoAsync());
+                Formas =
+                    new ObservableCollection<FormaApresentacaoMedicamento>(
+                        await CuidadorRestService.DefaultManager.RefreshFormaApresentacaoMedicamentoAsync());
                 var y = Formas.Count;
             });
             oHorario.ActivityRunning = false;
@@ -111,16 +115,16 @@ namespace HandyCareCuidador.PageModel
             base.ViewIsAppearing(sender, e);
         }
 
-        //    }
-        //        RaisePropertyChanged("IsVisible");
-        //            deleteVisible = true;
-        //        else
-        //            deleteVisible = false;
-        //        if (Medicamento == null)
-        //        base.ViewIsAppearing(sender, e);
-        //    {
-        //    protected override void ViewIsAppearing(object sender, EventArgs e)
-
         //}
+        //    protected override void ViewIsAppearing(object sender, EventArgs e)
+        //    {
+        //        base.ViewIsAppearing(sender, e);
+        //        if (Medicamento == null)
+        //            deleteVisible = false;
+        //        else
+        //            deleteVisible = true;
+        //        RaisePropertyChanged("IsVisible");
+
+        //    }
     }
 }

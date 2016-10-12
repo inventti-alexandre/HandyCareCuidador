@@ -10,16 +10,19 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Orientation="Vertical" Padding="5" BackgroundColor="White">
-                <StackLayout Orientation="Horizontal" >
+                <StackLayout Orientation="Horizontal">
                     <handyCareCuidador:BindablePicker DisplayMemberPath="PacNomeCompleto"
-                                            IsVisible="{Binding oHorario.Visualizar}" Title="Selecione um paciente"
-                                            ItemsSource="{Binding Pacientes}"
-                                            SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                                                      IsVisible="{Binding oHorario.Visualizar}"
+                                                      Title="Selecione um paciente"
+                                                      ItemsSource="{Binding Pacientes}"
+                                                      SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}"
+                                                      HorizontalOptions="FillAndExpand" />
                     <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
-                            HorizontalOptions="End" HeightRequest="15" Command="{Binding AddPaciente}" IsVisible="{Binding oHorario.Visualizar}"/>
+                            HorizontalOptions="End" HeightRequest="15" Command="{Binding AddPaciente}"
+                            IsVisible="{Binding oHorario.Visualizar}" />
                 </StackLayout>
                 <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
-                             IsVisible="{Binding oHorario.ActivityRunning}" />
+                                   IsVisible="{Binding oHorario.ActivityRunning}" />
                 <Grid ColumnSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -34,34 +37,52 @@
                         <!--<ColumnDefinition Width="*" />-->
                     </Grid.ColumnDefinitions>
                     <ContentView Grid.Column="0" Grid.Row="0">
-                        <Button x:Name="btnAfazer" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnAfazer" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowAfazeres}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="1" Grid.Row="0">
-                        <Button x:Name="btnMaterial" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnMaterial" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowMateriais}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="0" Grid.Row="1">
-                        <Button x:Name="btnMedicamento" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnMedicamento" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowMedicamentos}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="1" Grid.Row="1">
-                        <Button x:Name="btnPaciente" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnPaciente" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowPaciente}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="0" Grid.Row="2">
-                        <Button x:Name="btnMapa" BackgroundColor="White" BorderColor="Black" Command ="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnMapa" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowMapa}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="1" Grid.Row="2">
-                        <Button x:Name="btnFoto" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnFoto" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowFoto}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="0" Grid.Row="3">
-                        <Button x:Name="btnVideo" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowVideo}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnVideo" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowVideo}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <ContentView Grid.Column="1" Grid.Row="3">
-                        <Button x:Name="btnInfo" BackgroundColor="White" BorderColor="Black" Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="Start" />
+                        <Button x:Name="btnInfo" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
                     <!--<ContentView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalOptions="FillAndExpand">
                         <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                     </ContentView>-->
                 </Grid>
-                <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}"  HorizontalOptions="FillAndExpand" />
+                <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black"
+                        Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}"
+                        HorizontalOptions="FillAndExpand" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

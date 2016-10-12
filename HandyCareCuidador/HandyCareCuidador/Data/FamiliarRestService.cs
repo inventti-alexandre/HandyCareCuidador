@@ -66,13 +66,9 @@ namespace HandyCareCuidador.Data
         public async Task SaveFamiliarAsync(Familiar item, bool isNewItem)
         {
             if (item.Id == null)
-            {
                 await FamiliarTable.InsertAsync(item);
-            }
             else
-            {
                 await FamiliarTable.UpdateAsync(item);
-            }
         }
     }
 

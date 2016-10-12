@@ -18,12 +18,14 @@
             <Entry Text="{Binding Medicamento.MedDescricao}" IsVisible="{Binding oHorario.Visualizar}" />
             <Label Text="Quantidade" IsVisible="{Binding oHorario.Visualizar}" />
             <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
-                   Keyboard="Numeric" IsVisible="{Binding oHorario.Visualizar}"/>
+                   Keyboard="Numeric" IsVisible="{Binding oHorario.Visualizar}" />
             <local:BindablePicker DisplayMemberPath="ViaAdministracao" Title="Selecione uma via de administração"
-                                  ItemsSource="{Binding Vias}" SelectedItem="{Binding oViaAdministracaoMedicamento, Mode=TwoWay}"
+                                  ItemsSource="{Binding Vias}"
+                                  SelectedItem="{Binding oViaAdministracaoMedicamento, Mode=TwoWay}"
                                   IsVisible="{Binding oHorario.Visualizar}" />
             <local:BindablePicker DisplayMemberPath="FormaApresentacao" Title="Selecione uma forma de apresentação"
-                                  ItemsSource="{Binding Formas}" SelectedItem="{Binding oFormaApresentacaoMedicamento, Mode=TwoWay}"
+                                  ItemsSource="{Binding Formas}"
+                                  SelectedItem="{Binding oFormaApresentacaoMedicamento, Mode=TwoWay}"
                                   IsVisible="{Binding oHorario.Visualizar}" />
             <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
             <Button Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}" />
