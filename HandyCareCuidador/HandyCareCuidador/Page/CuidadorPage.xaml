@@ -41,7 +41,7 @@
                 <!--<Label Text="COREN" IsVisible="{Binding oHorario.Visualizar}" />
       <Entry Text="{Binding ValidacaoCuidador.CorenEnfermeiro}" IsEnabled="{Binding oHorario.NovoCuidador}"
              IsVisible="{Binding oHorario.Visualizar}" />-->
-                <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Salvar" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

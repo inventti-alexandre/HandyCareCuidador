@@ -52,7 +52,7 @@
                 <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}"
                             IsEnabled="{Binding oHorario.VisualizarTermino}"
                             IsVisible="{Binding oHorario.VisualizarTermino}" />
-                <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Salvar" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

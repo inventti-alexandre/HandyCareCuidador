@@ -69,20 +69,21 @@ namespace HandyCareCuidador.Data
         private readonly IMobileServiceTable<ConTelefone> ConTelefoneTable;
         private readonly IMobileServiceTable<ConCelular> ConCelularTable;
         private readonly IMobileServiceTable<TipoTratamento> TipoTratamentoTable;
+        private readonly IMobileServiceTable<MotivoNaoConclusaoTarefa> MotivoNaoConclusaoTarefaTable;
 
 #endif
 
         public CuidadorRestService()
         {
             CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
-            //#if DEBUG
-            //            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
-            //            {
-            //                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
-            //            };
-            //#else
-            //               MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
-            //#endif
+//#if DEBUG
+//            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
+//            {
+//                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
+//            };
+//#else
+//                           MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
+//#endif
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
@@ -142,7 +143,7 @@ namespace HandyCareCuidador.Data
             ConCelularTable = CurrentClient.GetTable<ConCelular>();
             ConTelefoneTable = CurrentClient.GetTable<ConTelefone>();
             TipoTratamentoTable = CurrentClient.GetTable<TipoTratamento>();
-
+            MotivoNaoConclusaoTarefaTable = CurrentClient.GetTable<MotivoNaoConclusaoTarefa>();
 #endif
         }
 
@@ -1551,5 +1552,24 @@ MotivoCuidadoTable.CreateQuery());
             }
         }
 #endif
+
+        public async Task SaveMotivoNaoConclusaoTarefa(MotivoNaoConclusaoTarefa item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                    await MotivoNaoConclusaoTarefaTable.InsertAsync(item);
+                else
+                    await MotivoNaoConclusaoTarefaTable.UpdateAsync(item);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
     }
 }

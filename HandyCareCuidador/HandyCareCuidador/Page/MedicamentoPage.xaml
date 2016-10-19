@@ -27,10 +27,11 @@
                                   ItemsSource="{Binding Formas}"
                                   SelectedItem="{Binding oFormaApresentacaoMedicamento, Mode=TwoWay}"
                                   IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Save" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
-            <Button Text="Delete" Command="{Binding DeleteCommand}" IsVisible="{Binding deleteVisible}" />
-            <BoxView HeightRequest="30" />
-            <!--<Button Text="Test Modal" Command="{Binding TestModal}"></Button>-->
+            <Button Text="Salvar" Command="{Binding SaveCommand}" BackgroundColor="White" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
+            <Button Text="Excluir" Command="{Binding DeleteCommand}" IsVisible="{Binding oHorario.deleteVisible}"
+                        BackgroundColor="Red" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

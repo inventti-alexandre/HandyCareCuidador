@@ -23,7 +23,7 @@ namespace HandyCareCuidador.PageModel
         //public ViaAdministracaoMedicamento ViaAdministracaoMedicamento { get; set; }
         //public FormaApresentacaoMedicamento FormaApresentacaoMedicamento { get; set; }
         public ObservableCollection<FormaApresentacaoMedicamento> Formas { get; set; }
-        public Paciente Paciente { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         public Image MedImage { get; set; }
         public PageModelHelper oHorario { get; set; }
         public ViaAdministracaoMedicamento oViaAdministracaoMedicamento { get; set; }
@@ -39,7 +39,7 @@ namespace HandyCareCuidador.PageModel
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
                     Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
-                    Medicamento.MedPacId = Paciente.Id;
+                    Medicamento.MedPacId = CuidadorPaciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
                     await CoreMethods.PopPageModel(Medicamento);
                 });
@@ -65,30 +65,30 @@ namespace HandyCareCuidador.PageModel
             base.Init(initData);
             oHorario = new PageModelHelper
             {
-                ActivityRunning = true,
-                Visualizar = false
+                QuantidadeF = null
             };
 
-            var x = initData as Tuple<Medicamento, Paciente>;
+            var x = initData as Tuple<Medicamento, CuidadorPaciente>;
             Medicamento = new Medicamento();
-            Paciente = new Paciente();
+            CuidadorPaciente = new CuidadorPaciente();
             GetInfoMateriais();
             //FormaApresentacaoMedicamento = new FormaApresentacaoMedicamento();
             //ViaAdministracaoMedicamento = new ViaAdministracaoMedicamento();
             if (x != null)
             {
                 Medicamento = x.Item1;
-                Paciente = x.Item2;
+                CuidadorPaciente = x.Item2;
                 oHorario.QuantidadeF = Medicamento.MedQuantidade;
             }
-            if (Medicamento == null)
+            if (Medicamento.Id == null)
             {
                 Medicamento = new Medicamento();
-                deleteVisible = false;
+                oHorario.deleteVisible = false;
                 alterar = false;
             }
             else
             {
+                oHorario.deleteVisible = true;
                 alterar = false;
             }
         }
@@ -114,17 +114,5 @@ namespace HandyCareCuidador.PageModel
         {
             base.ViewIsAppearing(sender, e);
         }
-
-        //}
-        //    protected override void ViewIsAppearing(object sender, EventArgs e)
-        //    {
-        //        base.ViewIsAppearing(sender, e);
-        //        if (Medicamento == null)
-        //            deleteVisible = false;
-        //        else
-        //            deleteVisible = true;
-        //        RaisePropertyChanged("IsVisible");
-
-        //    }
     }
 }

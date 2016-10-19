@@ -20,6 +20,7 @@ namespace HandyCareCuidador.PageModel
         public bool deleteVisible;
 
         public Paciente oPaciente { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         public PageModelHelper oHorario { get; set; }
         public ObservableCollection<Medicamento> Medicamentos { get; set; }
 
@@ -31,7 +32,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = false;
                     var medicamento = new Medicamento();
-                    var x = new Tuple<Medicamento, Paciente>(medicamento, oPaciente);
+                    var x = new Tuple<Medicamento, CuidadorPaciente>(medicamento, CuidadorPaciente);
                     await CoreMethods.PushPageModel<MedicamentoPageModel>(x);
                 });
             }
@@ -43,11 +44,9 @@ namespace HandyCareCuidador.PageModel
             set
             {
                 _selectedMedicamento = value;
-                if (value != null)
-                {
-                    MedicamentoSelected.Execute(value);
-                    SelectedMedicamento = null;
-                }
+                if (value == null) return;
+                MedicamentoSelected.Execute(value);
+                SelectedMedicamento = null;
             }
         }
 
@@ -59,7 +58,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = true;
                     RaisePropertyChanged("IsVisible");
-                    var x = new Tuple<Medicamento, Paciente>(medicamento, oPaciente);
+                    var x = new Tuple<Medicamento, CuidadorPaciente>(medicamento, CuidadorPaciente);
                     await CoreMethods.PushPageModel<MedicamentoPageModel>(x);
                     medicamento = null;
                 });
@@ -69,7 +68,10 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
-            oPaciente = initData as Paciente;
+            var x = initData as Tuple<Paciente, CuidadorPaciente>;
+            oPaciente = x.Item1;
+            CuidadorPaciente = new CuidadorPaciente();
+            CuidadorPaciente = x.Item2;
             oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
             await GetMedicamentos();
         }

@@ -6,6 +6,7 @@ using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
 using PropertyChanged;
 using Xamarin.Forms;
+using Acr.UserDialogs;
 
 namespace HandyCareCuidador.PageModel
 {
@@ -22,6 +23,7 @@ namespace HandyCareCuidador.PageModel
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
         public ConclusaoAfazer AfazerConcluido { get; set; }
+        public MotivoNaoConclusaoTarefa MotivoNaoConclusaoTarefa { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
         public ObservableCollection<Material> MateriaisEscolhidos { get; set; }
         public ObservableCollection<Medicamento> Medicamentos { get; set; }
@@ -80,13 +82,46 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    AfazerConcluido.ConConcluido = false;
-                    AfazerConcluido.ConHorarioConcluido = DateTime.Now;
-                    AfazerConcluido.ConAfazer = Afazer.Id;
-                    await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
-                    await CoreMethods.PopPageModel(Afazer);
+                    var result = await CoreMethods.DisplayActionSheet("O afazer foi finalizado corretamente?", 
+                        "Cancelar", null, "Sim","Não");
+                    switch (result)
+                    {
+                        case "Sim":
+                        {
+                                oHorario.Visualizar = false;
+                                oHorario.ActivityRunning = true;
+                                AfazerConcluido.Id = Guid.NewGuid().ToString();
+                                AfazerConcluido.ConConcluido = false;
+                                AfazerConcluido.ConHorarioConcluido = DateTime.Now;
+                                AfazerConcluido.ConAfazer = Afazer.Id;
+                                await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
+                                await CoreMethods.PopPageModel(Afazer);
+
+                            }
+                            break;
+                        case "Não":
+                        {
+                                var resulto = await UserDialogs.Instance.PromptAsync(new PromptConfig()
+
+                                                           .SetTitle("Informe o motivo da não realização da tarefa")
+                                                           .SetPlaceholder("Descreva o que aconteceu")
+                                                           .SetMaxLength(255));
+                                MotivoNaoConclusaoTarefa.Id= Guid.NewGuid().ToString();
+                                oHorario.Visualizar = false;
+                                oHorario.ActivityRunning = true;
+                                AfazerConcluido.Id = Guid.NewGuid().ToString();
+                                AfazerConcluido.ConConcluido = false;
+                                AfazerConcluido.ConHorarioConcluido = DateTime.Now;
+                                AfazerConcluido.ConAfazer = Afazer.Id;
+                                MotivoNaoConclusaoTarefa.MoAfazer = AfazerConcluido.Id;
+                                MotivoNaoConclusaoTarefa.MoExplicacao=resulto.Text;
+                                await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
+                                await CuidadorRestService.DefaultManager.SaveMotivoNaoConclusaoTarefa(MotivoNaoConclusaoTarefa, true);
+
+                                await CoreMethods.PopPageModel(Afazer);
+                         }
+                            break;
+                    }
                 });
             }
         }
@@ -114,7 +149,7 @@ namespace HandyCareCuidador.PageModel
                 HabilitarMedicamento = false,
                 deleteVisible = false
             };
-
+            MotivoNaoConclusaoTarefa=new MotivoNaoConclusaoTarefa();
             var x = initData as Tuple<Afazer, Paciente, CuidadorPaciente>;
             Afazer = new Afazer();
             Paciente = new Paciente();
@@ -125,6 +160,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     Afazer = x.Item1;
                     NewItem = false;
+                    oHorario.deleteVisible = true;
                 }
                 else
                 {
@@ -140,8 +176,6 @@ namespace HandyCareCuidador.PageModel
             MateriaisUtilizados =
                 new ObservableCollection<MaterialUtilizado>(
                     await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
-            if (Afazer?.Id != null)
-                oHorario.deleteVisible = true;
             AfazerConcluido = new ConclusaoAfazer();
         }
 

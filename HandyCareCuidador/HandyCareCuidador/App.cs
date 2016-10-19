@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Interface;
@@ -122,6 +123,8 @@ namespace HandyCareCuidador
         private void Register()
         {
             FreshIOC.Container.Register<ICuidadorRestService, CuidadorRestService>();
+            FreshIOC.Container.Register<IUserDialogs>(UserDialogs.Instance);
+
         }
 
         protected override void OnStart()

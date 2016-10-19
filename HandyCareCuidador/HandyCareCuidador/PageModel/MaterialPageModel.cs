@@ -16,7 +16,7 @@ namespace HandyCareCuidador.PageModel
         public bool novoItem = true;
 
         public Material Material { get; set; }
-        public Paciente Paciente { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
         public PageModelHelper oHorario { get; set; }
 
         public Command SaveCommand
@@ -28,7 +28,7 @@ namespace HandyCareCuidador.PageModel
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
                     Material.MatQuantidade = Convert.ToSingle(oHorario.Quantidade);
-                    Material.MatPacId = Paciente.Id;
+                    Material.MatPacId = CuidadorPaciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMaterialAsync(Material, novoItem);
                     await CoreMethods.PopPageModel(Material);
                 });
@@ -52,23 +52,24 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            var x = initData as Tuple<Material, Paciente>;
+            var x = initData as Tuple<Material, CuidadorPaciente>;
             Material = new Material();
-            Paciente = new Paciente();
+            CuidadorPaciente = new CuidadorPaciente();
             if (x != null)
             {
                 Material = x.Item1;
-                Paciente = x.Item2;
+                CuidadorPaciente = x.Item2;
             }
             oHorario = new PageModelHelper {Quantidade = null};
-            if (Material == null)
+            if (Material.Id == null)
             {
                 Material = new Material();
-                deleteVisible = false;
+                oHorario.deleteVisible = false;
                 novoItem = true;
             }
             else
             {
+                oHorario.deleteVisible = true;
                 novoItem = false;
             }
         }
@@ -76,16 +77,6 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            //oHorario = new PageModelHelper();
-            if (Material == null)
-            {
-                Material = new Material();
-                oHorario.Quantidade = null;
-            }
-            else
-            {
-                oHorario.Quantidade = Material.MatQuantidade;
-            }
         }
     }
 }

@@ -52,10 +52,11 @@
                         Command="{Binding ConcluirCommand}"
                         IsVisible="{Binding oHorario.deleteVisible}" BackgroundColor="Green" FontAttributes="Bold"
                         BorderWidth="10" FontSize="20" />
-                <Button Text="Salvar" Command="{Binding SaveCommand}" />
+                <Button Text="Salvar" Command="{Binding SaveCommand}" BackgroundColor="Blue" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
                 <Button Text="Excluir" Command="{Binding DeleteCommand}" IsVisible="{Binding oHorario.deleteVisible}"
-                        IsEnabled="{Binding oHorario.deleteVisible}" />
-                <!--<BoxView HeightRequest="30"></BoxView>-->
+                        BackgroundColor="Red" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

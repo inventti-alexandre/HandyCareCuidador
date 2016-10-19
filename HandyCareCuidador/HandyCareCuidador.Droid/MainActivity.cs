@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -98,6 +99,7 @@ namespace HandyCareCuidador.Droid
             FormsMaps.Init(this, bundle);
             CurrentPlatform.Init();
             App.Init(this);
+            UserDialogs.Init(() => this);
             LoadApplication(new App());
         }
 

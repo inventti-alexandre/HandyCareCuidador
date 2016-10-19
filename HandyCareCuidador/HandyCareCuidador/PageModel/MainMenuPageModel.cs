@@ -154,7 +154,11 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     if (SelectedPaciente != null)
-                        await CoreMethods.PushPageModel<ListaMaterialPageModel>(SelectedPaciente);
+                    {
+                        CuidadorPaciente = CuidadoresPacientes.FirstOrDefault(e => e.PacId == SelectedPaciente.Id);
+                        var x = new Tuple<Paciente,CuidadorPaciente>(SelectedPaciente,CuidadorPaciente);
+                        await CoreMethods.PushPageModel<ListaMaterialPageModel>(x);
+                    }
                     else
                         await CoreMethods.DisplayAlert("Informação",
                             "Selecione um paciente", "OK");
@@ -184,7 +188,11 @@ namespace HandyCareCuidador.PageModel
                 {
 //ENVIAR ID DO PACIENTE
                     if (SelectedPaciente != null)
-                        await CoreMethods.PushPageModel<ListaMedicamentoPageModel>(SelectedPaciente);
+                    {
+                        CuidadorPaciente = CuidadoresPacientes.FirstOrDefault(e => e.PacId == SelectedPaciente.Id);
+                        var x = new Tuple<Paciente, CuidadorPaciente>(SelectedPaciente, CuidadorPaciente);
+                        await CoreMethods.PushPageModel<ListaMedicamentoPageModel>(x);
+                    }
                     else
                         await CoreMethods.DisplayAlert("Informação",
                             "Selecione um paciente", "OK");

@@ -51,67 +51,72 @@ namespace HandyCareCuidador.PageModel
                             "Tirar foto");
 
 
-                    if (result == "Tirar foto")
+                    switch (result)
                     {
-                        var image = new Image();
-                        await CrossMedia.Current.Initialize();
-
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                        case "Tirar foto":
                         {
-                            await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
-                            return;
+                            var image = new Image();
+                            await CrossMedia.Current.Initialize();
+
+                            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                            {
+                                await CoreMethods.DisplayAlert("No Camera", ":( No camera available.", "OK");
+                                return;
+                            }
+
+                            var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                            {
+                                Directory = "Handy Care Fotos",
+                                Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium,
+                                SaveToAlbum = true
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            Foto = new Foto
+                            {
+                                FotoDados = HelperClass.ReadFully(file.GetStream()),
+                                FotCuidador = Cuidador.Id
+                            };
+                            image.Source = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
+                            var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
+                            await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
                         }
+                            break;
+                        case "Galeria":
+                        {
+                            var image = new Image();
 
-                        var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                        {
-                            Directory = "Handy Care Fotos",
-                            Name = DateTime.Now.ToString() + "HandyCareFoto.jpg",
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium,
-                            SaveToAlbum = true
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Foto = new Foto
-                        {
-                            FotoDados = HelperClass.ReadFully(file.GetStream()),
-                            FotCuidador = Cuidador.Id
-                        };
-                        image.Source = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
-                        var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
-                        await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
-                    }
-                    else if (result == "Galeria")
-                    {
-                        var image = new Image();
-
-                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-                        {
-                            CompressionQuality = 10,
-                            PhotoSize = PhotoSize.Medium
-                        });
-                        if (file == null)
-                            return;
-                        await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
-                        Foto = new Foto
-                        {
-                            FotoDados = HelperClass.ReadFully(file.GetStream()),
-                            FotCuidador = Cuidador.Id
-                        };
-                        image.Source = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            file.Dispose();
-                            return stream;
-                        });
-                        var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
-                        await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
+                            var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                            {
+                                CompressionQuality = 10,
+                                PhotoSize = PhotoSize.Medium
+                            });
+                            if (file == null)
+                                return;
+                            await CoreMethods.DisplayAlert("File Location", file.Path, "OK");
+                            Foto = new Foto
+                            {
+                                FotoDados = HelperClass.ReadFully(file.GetStream()),
+                                FotCuidador = Cuidador.Id
+                            };
+                            image.Source = ImageSource.FromStream(() =>
+                            {
+                                var stream = file.GetStream();
+                                file.Dispose();
+                                return stream;
+                            });
+                            var tupla = new Tuple<Foto, Familiar, Image>(Foto, x, image);
+                            await CoreMethods.PushPageModel<EnviarFotoPageModel>(tupla);
+                        }
+                            break;
                     }
                 });
             }

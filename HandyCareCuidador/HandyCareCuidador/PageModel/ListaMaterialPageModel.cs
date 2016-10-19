@@ -21,6 +21,8 @@ namespace HandyCareCuidador.PageModel
         //IMaterialRestService _restService;
         //private ICuidadorPacienteRestService _cuidadorPacienteRestService;
         public Paciente oPaciente { get; set; }
+        public CuidadorPaciente CuidadorPaciente { get; set; }
+
         public PageModelHelper oHorario { get; set; }
         public ObservableCollection<Material> Materiais { get; set; }
 
@@ -32,7 +34,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = false;
                     var material = new Material();
-                    var x = new Tuple<Material, Paciente>(material, oPaciente);
+                    var x = new Tuple<Material, CuidadorPaciente>(material, CuidadorPaciente);
                     await CoreMethods.PushPageModel<MaterialPageModel>(x);
                 });
             }
@@ -60,7 +62,7 @@ namespace HandyCareCuidador.PageModel
                 {
                     deleteVisible = true;
                     RaisePropertyChanged("IsVisible");
-                    var x = new Tuple<Material, Paciente>(material, oPaciente);
+                    var x = new Tuple<Material, CuidadorPaciente>(material, CuidadorPaciente);
                     await CoreMethods.PushPageModel<MaterialPageModel>(x);
                     material = null;
                 });
@@ -72,7 +74,10 @@ namespace HandyCareCuidador.PageModel
             base.Init(initData);
             oPaciente = new Paciente();
             oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
-            oPaciente = initData as Paciente;
+            var x = initData as Tuple<Paciente, CuidadorPaciente>;
+            oPaciente = x.Item1;
+            CuidadorPaciente=new CuidadorPaciente();
+            CuidadorPaciente = x.Item2;
             await GetMateriais();
         }
 
@@ -108,6 +113,7 @@ namespace HandyCareCuidador.PageModel
         public override async void ReverseInit(object returndData)
         {
             base.ReverseInit(returndData);
+            oHorario.Visualizar = false;
             var newMaterial = returndData as Material;
             if (!Materiais.Contains(newMaterial))
                 Materiais.Add(newMaterial);

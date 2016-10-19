@@ -73,7 +73,7 @@ namespace HandyCareCuidador.PageModel
                     deleteVisible = true;
                     var a = AfazerSelecionado;
                     RaisePropertyChanged("IsVisible");
-                    var x = new Tuple<Afazer, Paciente>(afazer, oPaciente);
+                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente>(afazer, oPaciente, CuidadorPaciente);
                     await CoreMethods.PushPageModel<AfazerPageModel>(x);
                     afazer = null;
                 });
