@@ -13,8 +13,6 @@ namespace HandyCareCuidador.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            var x = new ImageSourceConverter();
-            //x.ConvertFromInvariantString();
             btnAfazer.Text = "Afazeres";
             btnMedicamento.Text = "Medicamento";
             btnPaciente.Text = "Paciente";

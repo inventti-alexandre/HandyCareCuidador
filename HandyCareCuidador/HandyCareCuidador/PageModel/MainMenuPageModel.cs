@@ -13,13 +13,13 @@ namespace HandyCareCuidador.PageModel
 {
     public class MainMenuPageModel : FreshBasePageModel
     {
-        private Paciente _selectedPaciente;
         public Image image;
         private Cuidador Cuidador { get; set; }
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public PageModelHelper oHorario { get; set; }
         public Paciente oPaciente { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
+        private Paciente TempPaciente { get; set; }
         public ObservableCollection<CuidadorPaciente> CuidadoresPacientes { get; set; }
 
         public Command ShowFoto
@@ -166,19 +166,7 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
-        public Paciente SelectedPaciente
-        {
-            get { return _selectedPaciente; }
-            set
-            {
-                _selectedPaciente = value;
-                if (value != null)
-                {
-                    //ShowMedicamentos.Execute(value);
-                    //SelectedPaciente = null;
-                }
-            }
-        }
+        public Paciente SelectedPaciente { get; set; }
 
         public Command ShowMedicamentos
         {
@@ -212,9 +200,9 @@ namespace HandyCareCuidador.PageModel
 
         public override void Init(object initData)
         {
+            base.Init(initData);
             try
             {
-                base.Init(initData);
                 Cuidador = new Cuidador();
                 Cuidador = initData as Cuidador;
             }
@@ -224,6 +212,7 @@ namespace HandyCareCuidador.PageModel
                 throw;
             }
         }
+
 
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
@@ -245,12 +234,6 @@ namespace HandyCareCuidador.PageModel
             {
                 await Task.Run(async () =>
                 {
-                    //CuidadorRestService.DefaultManager.RefreshPacienteAsync();
-                    //CuidadorPaciente = new CuidadorPaciente();
-                    //CuidadorPaciente =
-                    //    new ObservableCollection<CuidadorPaciente>(
-                    //        await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).FirstOrDefault(
-                    //            e => e.CuiId == Cuidador.Id);
                     var cuidadoresPacientes = new ObservableCollection<CuidadorPaciente>(
                         await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync()).Where(
                         e => e.CuiId == Cuidador.Id).AsEnumerable();
