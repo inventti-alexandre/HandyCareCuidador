@@ -76,6 +76,12 @@
                                 Command="{Binding ShowCuidador}" IsVisible="{Binding oHorario.Visualizar}"
                                 VerticalOptions="Center" HorizontalOptions="Start" />
                     </ContentView>
+                    <ContentView Grid.Column="0" Grid.Row="4">
+                        <Button x:Name="btnCodigo" BackgroundColor="White" BorderColor="Black"
+                                Command="{Binding ShowCodigo}" IsVisible="{Binding oHorario.Visualizar}"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
+                    </ContentView>
+
                     <!--<ContentView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalOptions="FillAndExpand">
                         <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                     </ContentView>-->

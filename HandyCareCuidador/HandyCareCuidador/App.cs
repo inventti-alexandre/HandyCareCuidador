@@ -10,8 +10,11 @@ using HandyCareCuidador.Interface;
 using HandyCareCuidador.Model;
 using HandyCareCuidador.PageModel;
 using Microsoft.WindowsAzure.MobileServices;
+using Octane.Xam.VideoPlayer;
+using Rox;
 using TK.CustomMap.Api.Google;
 using Xamarin.Forms;
+using ZXing.Mobile;
 
 namespace HandyCareCuidador
 {
@@ -124,7 +127,10 @@ namespace HandyCareCuidador
         {
             FreshIOC.Container.Register<ICuidadorRestService, CuidadorRestService>();
             FreshIOC.Container.Register<IUserDialogs>(UserDialogs.Instance);
+            FreshIOC.Container.Register<MobileBarcodeScanner>(new MobileBarcodeScanner());
 
+            //FreshIOC.Container.Resolve<VideoView>();
+            //FreshIOC.Container.Register<VideoPlayer>(new VideoPlayer());
         }
 
         protected override void OnStart()

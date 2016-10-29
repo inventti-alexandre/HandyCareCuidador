@@ -46,7 +46,8 @@ namespace HandyCareCuidador.Model
 
         [JsonProperty(PropertyName = "FamTwitterId")]
         public string FamTwitterId { get; set; }
-
+        public string FamInstallationId { get; set; }
+        public string FamRegistrationId { get; set; }
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Avaliacao> Avaliacao { get; set; }

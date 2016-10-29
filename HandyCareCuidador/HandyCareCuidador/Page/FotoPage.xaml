@@ -14,7 +14,7 @@
                         <StackLayout Orientation="Vertical" Padding="10">
                             <Label Text="{Binding FamNomeCompleto}" TextColor="Black"
                                    HorizontalOptions="StartAndExpand" FontAttributes="Bold" FontSize="20" />
-                            <Label Text="{Binding ParDescricao}" TextColor="Black"
+                            <Label Text="{Binding FamDescriParentesco}" TextColor="Black"
                                    HorizontalOptions="StartAndExpand" FontSize="15" />
                         </StackLayout>
                     </ViewCell>

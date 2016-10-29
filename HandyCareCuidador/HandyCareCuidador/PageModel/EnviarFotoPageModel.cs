@@ -3,6 +3,7 @@ using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
+using Octane.Xam.VideoPlayer;
 using PropertyChanged;
 using Xamarin.Forms;
 
@@ -49,7 +50,6 @@ namespace HandyCareCuidador.PageModel
             if (x == null) return;
             Familiar = x.Item2;
             Foto = x.Item1;
-            FotoPaciente = x.Item3.Source;
-        }
+            FotoPaciente = x.Item3.Source;        }
     }
 }

@@ -16,6 +16,7 @@ namespace HandyCareCuidador.PageModel
     public class PacientePageModel : FreshBasePageModel
     {
         public Paciente Paciente { get; set; }
+        public bool NovoPaciente;
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public MotivoCuidado MotivoCuidado { get; set; }
         public Cuidador Cuidador { get; set; }
@@ -51,17 +52,17 @@ namespace HandyCareCuidador.PageModel
                         {
                             await
                                 CuidadorRestService.DefaultManager.SaveMotivoCuidadoAsync(MotivoCuidado,
-                                    oHorario.NovoPaciente);
+                                    NovoPaciente);
                             await
                                 CuidadorRestService.DefaultManager.SavePeriodoTratamentoAsync(PeriodoTratamento,
-                                    oHorario.NovoPaciente);
-                            await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, oHorario.NovoPaciente);
+                                    NovoPaciente);
+                            await CuidadorRestService.DefaultManager.SavePacienteAsync(Paciente, NovoPaciente);
                             await
                                 CuidadorRestService.DefaultManager.SaveTipoTratamentoAsync(TipoTratamento,
-                                    oHorario.NovoPaciente);
+                                    NovoPaciente);
                             await
                                 CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente,
-                                    oHorario.NovoPaciente);
+                                    NovoPaciente);
                         });
                         await CoreMethods.PopPageModel(Paciente);
                     }
@@ -90,6 +91,16 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+        public Command EditarCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    oHorario.NovoPaciente = !oHorario.NovoPaciente;
+                });
+            }
+        }
 
         public override async void Init(object initData)
         {
@@ -103,15 +114,15 @@ namespace HandyCareCuidador.PageModel
             };
             TipoTratamento = new TipoTratamento();
             MotivoCuidado = new MotivoCuidado();
-            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false, NovoPaciente = false};
             var x = initData as Tuple<Paciente, bool, Cuidador>;
             if (x != null)
             {
-                oHorario.NovoPaciente = x.Item2;
+                NovoPaciente = x.Item2;
                 oHorario.DadoPaciente = false;
                 Cuidador = x.Item3;
             }
-            if (oHorario.NovoPaciente == false)
+            if (NovoPaciente == false)
             {
                 if (x?.Item1 != null)
                 {
@@ -160,7 +171,12 @@ namespace HandyCareCuidador.PageModel
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            //oHorario = new PageModelHelper();
+            if (NovoPaciente)
+                oHorario.NovoPaciente = true;
+            else
+            {
+                oHorario.NovoPaciente = false;
+            }
         }
     }
 }

@@ -13,7 +13,8 @@
     "Xam.Plugin.Geolocator": "3.0.4",
     "Xam.Plugin.Media": "2.5.1-beta40",
     "Xamarin.Forms": "2.3.1.114",
-    "Xamarin.Forms.Maps": "2.3.1.114"
+    "Xamarin.Forms.Maps": "2.3.1.114",
+    "ZXing.Net.Mobile.Forms": "2.1.47"
   },
   "frameworks": {
     "uap10.0": {}

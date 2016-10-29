@@ -50,9 +50,14 @@
                 <Switch IsToggled="{Binding oHorario.VisualizarTermino, Mode=TwoWay}"
                         IsVisible="{Binding oHorario.Visualizar}" />
                 <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}"
-                            IsEnabled="{Binding oHorario.VisualizarTermino}"
+                            IsEnabled="{Binding oHorario.NovoPaciente}"
                             IsVisible="{Binding oHorario.VisualizarTermino}" />
-                <Button Text="Salvar" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Editar" Command="{Binding EditarCommand}" IsVisible="{Binding oHorario.Visualizar}" 
+                        BackgroundColor="White" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
+                <Button Text="Salvar" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" 
+                        BackgroundColor="White" FontAttributes="Bold"
+                        BorderWidth="10" FontSize="20" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

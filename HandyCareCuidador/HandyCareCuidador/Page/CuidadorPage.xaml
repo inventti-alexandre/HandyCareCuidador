@@ -10,17 +10,19 @@
                 <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                    IsVisible="{Binding oHorario.ActivityRunning}" />
                 <Label Text="Suas informações" IsVisible="{Binding oHorario.Visualizar}" />
-                <Button Text="Sua foto" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <StackLayout Orientation="Horizontal">
+                    <Button Text="Sua foto" IsEnabled="{Binding oHorario.NovoCuidador}"
                         Command="{Binding FotoCui}"
                         IsVisible="{Binding oHorario.Visualizar}" />
-                <Image Source="{Binding CuidadorFoto}" />
-                <Label Text="Nome" />
-                <Entry Text="{Binding Cuidador.CuiNomeCompleto}" IsEnabled="{Binding oHorario.CuidadorExibicao}"
+                    <Image Source="{Binding CuidadorFoto}" />
+                    <Label Text="Nome" />
+                    <Entry Text="{Binding Cuidador.CuiNomeCompleto}" IsEnabled="{Binding oHorario.CuidadorExibicao}"
                        IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Cuidador.CuiNome}" IsEnabled="{Binding oHorario.NovoCadastro}"
+                    <Entry Text="{Binding Cuidador.CuiNome}" IsEnabled="{Binding oHorario.NovoCadastro}"
                        IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Cuidador.CuiSobrenome}" IsEnabled="{Binding oHorario.NovoCadastro}"
+                    <Entry Text="{Binding Cuidador.CuiSobrenome}" IsEnabled="{Binding oHorario.NovoCadastro}"
                        IsVisible="{Binding oHorario.Visualizar}" />
+                </StackLayout>
                 <Label Text="Cidade" IsVisible="{Binding oHorario.Visualizar}" />
                 <Entry Text="{Binding Cuidador.CuiCidade}" IsEnabled="{Binding oHorario.NovoCuidador}"
                        IsVisible="{Binding oHorario.Visualizar}" />

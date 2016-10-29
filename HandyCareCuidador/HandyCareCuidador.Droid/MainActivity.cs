@@ -10,6 +10,7 @@ using HandyCareCuidador.Data;
 using HandyCareCuidador.Droid.Services;
 using Java.IO;
 using Microsoft.WindowsAzure.MobileServices;
+using Octane.Xam.VideoPlayer.Android;
 using Plugin.Permissions;
 using Xamarin;
 using Xamarin.Forms;
@@ -100,6 +101,8 @@ namespace HandyCareCuidador.Droid
             CurrentPlatform.Init();
             App.Init(this);
             UserDialogs.Init(() => this);
+            FormsVideoPlayer.Init();
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
         }
 

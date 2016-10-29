@@ -121,8 +121,24 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    var x = new Tuple<Paciente, bool, Cuidador>(SelectedPaciente, true, Cuidador);
+                var result = await CoreMethods.DisplayActionSheet("Informe o que você deseja fazer",
+                    "Cancelar", null, "Realizar novo cadastro", "Vincular com cadastro existente");
+                switch (result)
+                {
+                    case "Realizar novo cadastro":
+                        {
+
+                            var x = new Tuple<Paciente, bool, Cuidador>(SelectedPaciente, true, Cuidador);
                     await CoreMethods.PushPageModel<PacientePageModel>(x);
+                            }
+                            break;
+                        case "Vincular com cadastro existente":
+                            {
+                                await CoreMethods.PushPageModel<CustomScanPageModel>(Cuidador);
+                            }
+                            break;
+                    }
+
                 });
             }
         }
@@ -146,6 +162,25 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+        public Command ShowCodigo
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    if (SelectedPaciente != null)
+                    {
+                        await CoreMethods.PushPageModel<BarcodeViewPageModel>(SelectedPaciente);
+                    }
+                    else
+                    {
+                        await CoreMethods.DisplayAlert("Informação",
+                            "Selecione um paciente", "OK");
+                    }
+                });
+            }
+        }
+
 
         public Command ShowMateriais
         {
@@ -244,7 +279,10 @@ namespace HandyCareCuidador.PageModel
                             new ObservableCollection<Paciente>(
                                 CuidadorRestService.DefaultManager.RefreshPacienteAsync().Result);
                         var resulto =
-                            result.Where(e => CuidadoresPacientes.Select(m => m.PacId).Contains(e.Id)).AsEnumerable();
+                            result.Where(e => CuidadoresPacientes.Select(m => m.PacId)
+                            .Contains(e.Id))
+                            .AsEnumerable()
+                            .OrderBy(e=>e.PacNomeCompleto);
                         Pacientes = new ObservableCollection<Paciente>(resulto);
                     }
                     oHorario.ActivityRunning = false;

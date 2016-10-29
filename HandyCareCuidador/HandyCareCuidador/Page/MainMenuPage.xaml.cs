@@ -22,6 +22,7 @@ namespace HandyCareCuidador.Page
             btnMaterial.Text = "Material";
             btnVideo.Text = "Vídeo";
             btnMapa.Text = "Mapa";
+            btnCodigo.Text = "Gerar código";
 
             btnAfazer.Image = (FileImageSource) ImageSource.FromFile("calendar.png");
             btnMedicamento.Image = (FileImageSource) ImageSource.FromFile("pills.png");
