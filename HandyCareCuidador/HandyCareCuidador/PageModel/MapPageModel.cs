@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FreshMvvm;
 using HandyCareCuidador.CustomPins;
 using HandyCareCuidador.Page;
+using HandyCareCuidador.Page.Layout;
 using Plugin.Geolocator;
 using PropertyChanged;
 using TK.CustomMap;
@@ -40,6 +41,27 @@ namespace HandyCareCuidador.PageModel
             _pins = new ObservableCollection<TKCustomMapPin>();
             _circles = new ObservableCollection<TKCircle>();
         }
+
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+            //GetPlaces();
+        }
+
+        //private void GetPlaces()
+        //{
+        //    var b = new GmsPlaceResult();
+        //    b.
+        //    GeoDataApi.GetPlaceTypes();
+        //    var pin = new TKCustomMapPin
+        //    {
+        //        Position = position,
+        //        Title = $"Pin {position.Latitude}, {position.Longitude}",
+        //        ShowCallout = true,
+        //        IsDraggable = true
+        //    };
+        //    _pins.Add(pin);
+        //}
 
         public TKTileUrlOptions TilesUrlOptions
         {

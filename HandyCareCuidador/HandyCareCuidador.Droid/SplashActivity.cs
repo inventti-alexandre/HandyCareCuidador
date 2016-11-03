@@ -9,11 +9,8 @@ using Android.OS;
 
 namespace HandyCareCuidador.Droid
 {
-    //, ScreenOrientation = ScreenOrientation.Portrait
-    [Activity(Label = "Handy Care", Theme = "@style/Theme.Splash"
-         /*"@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"*/, MainLauncher = true, NoHistory = true,
-         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    //[Activity(Label = "Handy Care", Theme = "@style/Theme.Splash" /*"@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"*/, MainLauncher = true, NoHistory = true)]
+    [Activity(Label = "Handy Care - Cuidador", Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true, 
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

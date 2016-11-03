@@ -19,6 +19,7 @@ namespace HandyCareCuidador.Model
 
         [Column("ConNumTelefone")]
         public string ConNumTelefone { get; set; }
+        public bool Deleted { get; set; }
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContatoEmergencia> ContatoEmergencia { get; set; }

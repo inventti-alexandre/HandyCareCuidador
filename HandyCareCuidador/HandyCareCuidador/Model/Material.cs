@@ -23,6 +23,7 @@ namespace HandyCareCuidador.Model
 
         public float MatQuantidade { get; set; }
         public string MatPacId { get; set; }
+        public string MatUnidade { get; set; }
 
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MaterialUtilizado> MaterialUtilizado { get; set; }

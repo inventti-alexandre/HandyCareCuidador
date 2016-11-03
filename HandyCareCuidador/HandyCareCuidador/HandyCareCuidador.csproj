@@ -37,16 +37,21 @@
   <ItemGroup>
     <Compile Include="Helper\AlertaHorario.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Helper\ColorList.cs" />
     <Compile Include="Helper\Constants.cs" />
     <Compile Include="CustomPins\RoutePin.cs" />
     <Compile Include="Data\CuidadorRestService.cs" />
     <Compile Include="Data\FamiliarRestService.cs" />
     <Compile Include="Helper\BindablePicker.cs" />
+    <Compile Include="Helper\Convertion.cs" />
+    <Compile Include="Helper\Geoname.cs" />
     <Compile Include="Helper\HelperClass.cs" />
+    <Compile Include="Helper\MonthInlineAppointmentBehavior.cs" />
     <Compile Include="Helper\PageModelHelper.cs" />
     <Compile Include="Helper\ILoginManager.cs" />
     <Compile Include="Helper\ListSwitch.cs" />
     <Compile Include="Helper\NullableValueConverter.cs" />
+    <Compile Include="Helper\TimePicker24.cs" />
     <Compile Include="Message\HorarioAfazerMessage.cs" />
     <Compile Include="Interface\ICuidadorRestService.cs" />
     <Compile Include="Interface\IFamiliarRestService.cs" />
@@ -85,7 +90,7 @@
     <Compile Include="Model\ViaAdministracaoMedicamento.cs" />
     <Compile Include="Model\Video.cs" />
     <Compile Include="Model\VideoFamiliar.cs" />
-    <Compile Include="PageModel\AcionarContatoEmergencia.cs" />
+    <Compile Include="PageModel\AcionarContatoEmergenciaPageModel.cs" />
     <Compile Include="PageModel\AddRoutePageModel.cs" />
     <Compile Include="PageModel\AfazerPageModel.cs" />
     <Compile Include="PageModel\BarcodeViewPageModel.cs" />
@@ -109,8 +114,8 @@
     <Compile Include="PageModel\MedicamentoPageModel.cs" />
     <Compile Include="PageModel\PacientePageModel.cs" />
     <Compile Include="PageModel\VideoPageModel.cs" />
-    <Compile Include="Page\AcionarContatoEmergencia.xaml.cs">
-      <DependentUpon>AcionarContatoEmergencia.xaml</DependentUpon>
+    <Compile Include="Page\AcionarContatoEmergenciaPage.xaml.cs">
+      <DependentUpon>AcionarContatoEmergenciaPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Page\AddRoutePage.xaml.cs">
       <DependentUpon>AddRoutePage.xaml</DependentUpon>
@@ -270,6 +275,14 @@
     </Reference>
     <Reference Include="SQLitePCL, Version=3.8.7.2, Culture=neutral, PublicKeyToken=bddade01e9c850c5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCL.3.8.7.2\lib\portable-net45+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\SQLitePCL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfCalendar.XForms, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfCalendar.14.3.0.52\lib\portable-win+net45+wp80+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Syncfusion.SfCalendar.XForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfSchedule.XForms, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfSchedule.14.3.0.52\lib\portable-win+net45+wp80+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Syncfusion.SfSchedule.XForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -445,7 +458,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Page\AcionarContatoEmergencia.xaml">
+    <EmbeddedResource Include="Page\AcionarContatoEmergenciaPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -152,7 +153,7 @@ namespace HandyCareCuidador.PageModel
                     if (SelectedPaciente != null)
                     {
                         var tupla = new Tuple<Cuidador, Paciente>(Cuidador, SelectedPaciente);
-                        await CoreMethods.PushPageModel<AcionarContatoEmergencia>(tupla);
+                        await CoreMethods.PushPageModel<AcionarContatoEmergenciaPageModel>(tupla);
                     }
                     else
                     {

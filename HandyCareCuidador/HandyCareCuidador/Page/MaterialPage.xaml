@@ -12,9 +12,17 @@
         <StackLayout Padding="15">
             <Label Text="Material" />
             <Entry Text="{Binding Material.MatDescricao}" />
-            <Label Text="Quantidade (Cx, un, ml, l, etc...)" />
-            <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
-                   Keyboard="Numeric" Placeholder="agua" />
+            <Label Text="Quantidade" />
+            <StackLayout Orientation="Horizontal">
+                <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
+                   Keyboard="Numeric" Placeholder="agua" HorizontalOptions="FillAndExpand" />
+                <local:BindablePicker IsVisible="True"
+                                                      Title="Cx, ml, l, g..."
+                                                      ItemsSource="{Binding Unidades}"
+                                                      SelectedItem="{Binding SelectedUnidade, Mode=TwoWay}"
+                                                      HorizontalOptions="End" />
+
+            </StackLayout>
             <Button Text="Salvar" Command="{Binding SaveCommand}" BackgroundColor="White" FontAttributes="Bold"
                         BorderWidth="10" FontSize="20" />
             <Button Text="Excluir" Command="{Binding DeleteCommand}" IsVisible="{Binding oHorario.deleteVisible}"

@@ -12,12 +12,6 @@ namespace HandyCareCuidador.PageModel
     [ImplementPropertyChanged]
     public class ConclusaoAfazerPageModel : FreshBasePageModel
     {
-        //IAfazerRestService _restService;
-        //IMaterialRestService _materialRestService;
-        //IConclusaoAfazerRestService _concluirRestService;
-        //IMaterialUtilizadoRestService _materialUtilizadoRestService;
-        //IMedicamentoRestService _medicamentoRestService;
-        //private IMedicamentoAdministradoRestService _medicamentoAdministradoRestService;
         public Afazer Afazer { get; set; }
         public bool newItem { get; set; }
         public Material oMaterial { get; set; }

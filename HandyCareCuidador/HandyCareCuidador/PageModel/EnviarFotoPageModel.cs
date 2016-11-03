@@ -1,4 +1,5 @@
 ﻿using System;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -36,6 +37,8 @@ namespace HandyCareCuidador.PageModel
                     await CuidadorRestService.DefaultManager.SaveFotoAsync(Foto, true);
                     await CuidadorRestService.DefaultManager.SaveFotoFamiliarAsync(FotoFamiliar, true);
                     await CoreMethods.PopPageModel();
+                    UserDialogs.Instance.ShowSuccess("Foto enviada com sucesso", 4000);
+
                 });
             }
         }

@@ -36,12 +36,15 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AotAssemblies>False</AotAssemblies>
+    <EnableLLVM>False</EnableLLVM>
+    <EnableProguard>False</EnableProguard>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -157,6 +160,30 @@
     </Reference>
     <Reference Include="SQLitePCL.Ext, Version=3.8.7.2, Culture=neutral, PublicKeyToken=bddade01e9c850c5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCL.3.8.7.2\lib\MonoAndroid\SQLitePCL.Ext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfCalendar.Android, Version=14.3451.0.52, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfCalendar.Android.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfCalendar.Android.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfCalendar.XForms, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfCalendar.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfCalendar.XForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfCalendar.XForms.Android, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfCalendar.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfCalendar.XForms.Android.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfSchedule.Android, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfSchedule.Android.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfSchedule.Android.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfSchedule.XForms, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfSchedule.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfSchedule.XForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfSchedule.XForms.Android, Version=14.3451.0.52, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Xamarin.SfSchedule.14.3.0.52\lib\MonoAndroid10\Syncfusion.SfSchedule.XForms.Android.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -282,6 +309,7 @@
     <Compile Include="Services\AfazerServiceConnection.cs" />
     <Compile Include="Services\AndroidLocalNotification.cs" />
     <Compile Include="Services\HorarioAfazerBinder.cs" />
+    <Compile Include="Services\NativePlacesApi.cs" />
     <Compile Include="Services\NotificationPublisher.cs" />
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="SplashActivity.cs" />

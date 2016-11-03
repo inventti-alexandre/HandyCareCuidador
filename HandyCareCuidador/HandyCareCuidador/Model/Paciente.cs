@@ -15,7 +15,6 @@ namespace HandyCareCuidador.Model
         public Paciente()
         {
             CuidadorPaciente = new HashSet<CuidadorPaciente>();
-            Familiar = new HashSet<Familiar>();
         }
 
         public string Id { get; set; }
@@ -40,7 +39,5 @@ namespace HandyCareCuidador.Model
 
         public virtual MotivoCuidado MotivoCuidado { get; set; }
 
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Familiar> Familiar { get; set; }
     }
 }

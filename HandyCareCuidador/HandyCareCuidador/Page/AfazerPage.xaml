@@ -11,11 +11,18 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="15">
-                <Label Text="Horário Previsto" />
+                <Label Text="Horário previsto de início do afazer" />
                 <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" />
-                <TimePicker Time="{Binding oHorario.Horario, Mode=TwoWay}" />
+                <TimePicker x:Name="Hora" Time="{Binding oHorario.Horario, Mode=TwoWay}" ></TimePicker>
+                <Label Text="Horário previsto de término do afazer" />
+                <DatePicker Date="{Binding oHorario.DataTermino, Mode=TwoWay}" />
+                <TimePicker Time="{Binding oHorario.HorarioTermino, Mode=TwoWay}" />
                 <Label Text="Observação" />
                 <Entry Text="{Binding Afazer.AfaObservacao}" Placeholder="Descreva o que deverá ser feito" />
+                <local:BindablePicker DisplayMemberPath="Cor" Title="Selecione uma cor"
+                                          ItemsSource="{Binding ListaCores}"
+                                          SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+                                          HorizontalOptions="FillAndExpand" />
                 <Label Text="Material" />
                 <Switch IsToggled="{Binding oHorario.HabilitarMaterial, Mode=TwoWay}" />
                 <StackLayout Orientation="Horizontal">
@@ -26,12 +33,9 @@
                                           HorizontalOptions="FillAndExpand" />
                     <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
                             HorizontalOptions="End" HeightRequest="15" IsVisible="{Binding oHorario.HabilitarMaterial}" />
-                    <!--Command="{Binding AddPaciente}"-->
-
                 </StackLayout>
                 <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}" />
-                <Entry
-                    Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
+                <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
                     Keyboard="Numeric" IsVisible="{Binding oHorario.HabilitarMaterial}" />
                 <Label Text="Medicamento" />
                 <Switch IsToggled="{Binding oHorario.HabilitarMedicamento, Mode=TwoWay}" />

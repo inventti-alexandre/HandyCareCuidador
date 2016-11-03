@@ -21,6 +21,8 @@ namespace HandyCareCuidador.PageModel
         public Paciente Paciente { get; set; }
         public PageModelHelper oHorario { get; set; }
         public MaterialUtilizado oMaterialUtilizado { get; set; }
+        public Dictionary<string, Color> colorDict;
+        public ObservableCollection<ColorList> ListaCores { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public MedicamentoAdministrado oMedicamentoAdministrado { get; set; }
         public ConclusaoAfazer AfazerConcluido { get; set; }
@@ -29,6 +31,8 @@ namespace HandyCareCuidador.PageModel
         public ObservableCollection<Material> MateriaisEscolhidos { get; set; }
         public ObservableCollection<Medicamento> Medicamentos { get; set; }
         public ObservableCollection<MaterialUtilizado> MateriaisUtilizados { get; set; }
+        public ColorList SelectedColor { get; set; }
+        public Color Color { get; set; }
 
         public Command SaveCommand
         {
@@ -39,9 +43,13 @@ namespace HandyCareCuidador.PageModel
                     if (NewItem)
                         Afazer.Id = Guid.NewGuid().ToString();
                     oHorario.Visualizar = false;
+                    var a = Color;
                     oHorario.ActivityRunning = true;
                     Afazer.AfaPaciente = CuidadorPaciente.Id;
                     Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
+                    Afazer.AfaHorarioPrevistoTermino= oHorario.DataTermino.Date + oHorario.HorarioTermino;
+                    var rgbString = $"#{(int) (SelectedColor.Color.R*255):X2}{(int) (SelectedColor.Color.G*255):X2}{(int) (SelectedColor.Color.B*255):X2}";
+                    Afazer.AfaCor = rgbString;
                     await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
                     if (oMaterial != null)
                     {
@@ -73,6 +81,7 @@ namespace HandyCareCuidador.PageModel
                                 oMedicamentoAdministrado, true);
                     }
                     await CoreMethods.PopPageModel(Afazer);
+                    UserDialogs.Instance.ShowSuccess("Afazer registrado com sucesso", 4000);
                 });
             }
         }
@@ -97,6 +106,7 @@ namespace HandyCareCuidador.PageModel
                                 AfazerConcluido.ConAfazer = Afazer.Id;
                                 await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
                                 await CoreMethods.PopPageModel(Afazer);
+                                UserDialogs.Instance.ShowSuccess("Afazer concluído com sucesso", 4000);
 
                             }
                             break;
@@ -120,7 +130,9 @@ namespace HandyCareCuidador.PageModel
                                 await CuidadorRestService.DefaultManager.SaveMotivoNaoConclusaoTarefa(MotivoNaoConclusaoTarefa, true);
 
                                 await CoreMethods.PopPageModel(Afazer);
-                         }
+                                UserDialogs.Instance.ShowSuccess("Afazer concluído com sucesso", 4000);
+
+                            }
                             break;
                     }
                 });
@@ -144,6 +156,8 @@ namespace HandyCareCuidador.PageModel
         public override async void Init(object initData)
         {
             base.Init(initData);
+            Color=new Color();
+            SelectedColor=new ColorList();
             oHorario = new PageModelHelper
             {
                 HabilitarMaterial = false,
@@ -151,7 +165,7 @@ namespace HandyCareCuidador.PageModel
                 deleteVisible = false
             };
             MotivoNaoConclusaoTarefa=new MotivoNaoConclusaoTarefa();
-            var x = initData as Tuple<Afazer, Paciente, CuidadorPaciente>;
+            var x = initData as Tuple<Afazer, Paciente, CuidadorPaciente,DateTime>;
             Afazer = new Afazer();
             Paciente = new Paciente();
             CuidadorPaciente = new CuidadorPaciente();
@@ -169,6 +183,8 @@ namespace HandyCareCuidador.PageModel
                 }
                 Paciente = x.Item2;
                 CuidadorPaciente = x.Item3;
+                oHorario.Data = x.Item4;
+                oHorario.DataTermino = x.Item4.AddDays(1);
             }
             Materiais =
                 new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
@@ -178,8 +194,67 @@ namespace HandyCareCuidador.PageModel
                 new ObservableCollection<MaterialUtilizado>(
                     await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
             AfazerConcluido = new ConclusaoAfazer();
-        }
 
+            ListaCores = new ObservableCollection<ColorList>
+            {
+                new ColorList
+                {
+                    Cor = "Padrão",
+                    Color = Color.Default
+                },
+                new ColorList
+                {
+                                        Cor = "Laranja escuro",
+                    Color =  Color.FromHex("#FF5722")
+
+                },
+                                new ColorList
+                {
+                    Cor = "Cinza azulado",
+                    Color = Color.FromHex("#607D8B")
+
+                },                new ColorList
+                {
+                                        Cor = "Ciano",
+                    Color = Color.FromHex("#00BCD4")
+
+                },                new ColorList
+                {
+                                        Cor = "Roxo escuro",
+                    Color = Color.FromHex("#673AB7")
+
+                },                new ColorList
+                {
+                                        Cor = "Cinza",
+                    Color = Color.FromHex("#9E9E9E")
+
+                },                new ColorList
+                {
+                                        Cor = "Azul claro",
+                    Color = Color.FromHex("#02A8F3")
+
+                },                new ColorList
+                {
+                                        Cor = "Vermelho",
+                    Color = Color.FromHex("#D32F2F")
+
+                },
+            };
+        //    colorDict = new Dictionary<string, Color>
+        //{
+        //    { "Default", Color.Default },                  { "Amber", Color.FromHex("#FFC107") },
+        //    { "Black", Color.FromHex("#212121") },         { "Blue", Color.FromHex("#2196F3") },
+        //    { "Blue Grey", Color.FromHex("#607D8B") },     { "Brown", Color.FromHex("#795548") },
+        //    { "Cyan", Color.FromHex("#00BCD4") },          { "Dark Orange", Color.FromHex("#FF5722") },
+        //    { "Dark Purple", Color.FromHex("#673AB7") },   { "Green", Color.FromHex("#4CAF50") },
+        //    { "Grey", Color.FromHex("#9E9E9E") },          { "Indigo", Color.FromHex("#3F51B5") },
+        //    { "Light Blue", Color.FromHex("#02A8F3") },    { "Light Green", Color.FromHex("#8AC249") },
+        //    { "Lime", Color.FromHex("#CDDC39") },          { "Orange", Color.FromHex("#FF9800") },
+        //    { "Pink", Color.FromHex("#E91E63") },          { "Purple", Color.FromHex("#94499D") },
+        //    { "Red", Color.FromHex("#D32F2F") },           { "Teal", Color.FromHex("#009587") },
+        //    { "White", Color.FromHex("#FFFFFF") },         { "Yellow", Color.FromHex("#FFEB3B") },
+        //};
+        }
         protected override void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
@@ -188,6 +263,8 @@ namespace HandyCareCuidador.PageModel
                 //oHorario.deleteVisible = false;
                 oHorario.Data = DateTime.Now;
                 oHorario.Horario = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                oHorario.DataTermino = DateTime.Now;
+                oHorario.HorarioTermino = new TimeSpan(DateTime.Now.Hour+1, DateTime.Now.Minute, DateTime.Now.Second);
             }
             else
             {

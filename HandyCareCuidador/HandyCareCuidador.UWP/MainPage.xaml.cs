@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using HandyCareCuidador.Data;
 using Microsoft.WindowsAzure.MobileServices;
+using Syncfusion.SfSchedule.XForms.UWP;
 using Xamarin;
 
 namespace HandyCareCuidador.UWP
@@ -17,6 +18,7 @@ namespace HandyCareCuidador.UWP
             FormsMaps.Init(
                 "tXakENkxNjW1qFQiJRLW~yQ_ShKb5OpjWdZgk71L9Vw~An7iTGagwyp_wS_UaGiToWHo55PM90MaAVUKrceSfmxHHmKb4ZYZm8i88jeTh-hs");
             HandyCareCuidador.App.Init(this);
+            new SfScheduleRenderer();
             ZXing.Net.Mobile.Forms.WindowsUniversal.ZXingScannerViewRenderer.Init();
             LoadApplication(new HandyCareCuidador.App());
         }

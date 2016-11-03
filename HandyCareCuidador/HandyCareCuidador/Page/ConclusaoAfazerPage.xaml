@@ -5,18 +5,24 @@
              x:Class="HandyCareCuidador.Page.ConclusaoAfazerPage">
     <ContentPage.Content>
         <StackLayout Padding="15">
-            <Label Text="Horário Previsto" />
+            <Label Text="Horário prevista de início" FontSize="20" FontAttributes="Bold"/>
             <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" IsEnabled="False" />
             <TimePicker Time="{Binding oHorario.Horario, Mode=TwoWay}" IsEnabled="False" />
-            <Label Text="Observação" />
+            <Label Text="Horário prevista de término" FontSize="20" FontAttributes="Bold"/>
+            <DatePicker Date="{Binding oHorario.DataTermino, Mode=TwoWay}" IsEnabled="False" />
+            <TimePicker Time="{Binding oHorario.HorarioTermino, Mode=TwoWay}" IsEnabled="False" />
+            <Label Text="Horário de conclusão" FontSize="20" FontAttributes="Bold"/>
+            <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" IsEnabled="False" />
+            <TimePicker Time="{Binding oHorario.Horario, Mode=TwoWay}" IsEnabled="False" />
+            <Label Text="Observação" FontSize="20" FontAttributes="Bold"/>
             <Label Text="{Binding Afazer.AfaObservacao}" />
-            <Label Text="Material" />
+            <Label Text="Material utilizado" FontSize="20" FontAttributes="Bold"/>
             <Label Text="{Binding oMaterial.MatDescricao, Mode=TwoWay}" IsEnabled="False" />
-            <Label Text="Quantidade de material" />
+            <Label Text="Quantidade de material" FontSize="20" FontAttributes="Bold"/>
             <Label Text="{Binding oMaterial.MatQuantidade, Mode=TwoWay}" IsEnabled="False" />
-            <Label Text="Medicamento" />
+            <Label Text="Medicamento utilizado" FontSize="20" FontAttributes="Bold" />
             <Label Text="{Binding oMedicamento.MedDescricao, Mode=TwoWay}" IsEnabled="False" />
-            <Label Text="Quantidade de medicamento" />
+            <Label Text="Quantidade de medicamento" FontSize="20" FontAttributes="Bold"/>
             <Label Text="{Binding oMedicamento.MedQuantidade, Mode=TwoWay}" />
         </StackLayout>
     </ContentPage.Content>

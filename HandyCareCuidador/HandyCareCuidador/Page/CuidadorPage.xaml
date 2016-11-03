@@ -10,25 +10,39 @@
                 <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                    IsVisible="{Binding oHorario.ActivityRunning}" />
                 <Label Text="Suas informações" IsVisible="{Binding oHorario.Visualizar}" />
-                <StackLayout Orientation="Horizontal">
                     <Button Text="Sua foto" IsEnabled="{Binding oHorario.NovoCuidador}"
                         Command="{Binding FotoCui}"
                         IsVisible="{Binding oHorario.Visualizar}" />
-                    <Image Source="{Binding CuidadorFoto}" />
-                    <Label Text="Nome" />
-                    <Entry Text="{Binding Cuidador.CuiNomeCompleto}" IsEnabled="{Binding oHorario.CuidadorExibicao}"
+                <Image Source="{Binding CuidadorFoto}" IsVisible="{Binding oHorario.Visualizar}"/>
+                <Label Text="Nome" IsVisible="{Binding oHorario.Visualizar}"/>
+                <Entry Text="{Binding Cuidador.CuiNome}" IsEnabled="{Binding oHorario.NovoCadastro}"
                        IsVisible="{Binding oHorario.Visualizar}" />
-                    <Entry Text="{Binding Cuidador.CuiNome}" IsEnabled="{Binding oHorario.NovoCadastro}"
-                       IsVisible="{Binding oHorario.Visualizar}" />
-                    <Entry Text="{Binding Cuidador.CuiSobrenome}" IsEnabled="{Binding oHorario.NovoCadastro}"
-                       IsVisible="{Binding oHorario.Visualizar}" />
-                </StackLayout>
-                <Label Text="Cidade" IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Cuidador.CuiCidade}" IsEnabled="{Binding oHorario.NovoCuidador}"
+                <Label Text="Sobrenome" IsVisible="{Binding oHorario.Visualizar}"/>
+                <Entry Text="{Binding Cuidador.CuiSobrenome}" IsEnabled="{Binding oHorario.NovoCadastro}"
                        IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Estado" IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Cuidador.CuiEstado}" IsEnabled="{Binding oHorario.NovoCuidador}"
-                       IsVisible="{Binding oHorario.Visualizar}" />
+                <handyCareCuidador:BindablePicker DisplayMemberPath="name" Title="Selecione um Estado"
+                                          ItemsSource="{Binding ListaEstados}"
+                                          SelectedItem="{Binding SelectedEstado, Mode=TwoWay}"
+                                          IsVisible="{Binding oHorario.Visualizar}"
+                                          HorizontalOptions="FillAndExpand" />
+                <Label Text="Cidade" IsVisible="{Binding oHorario.Visualizar}" />
+                <handyCareCuidador:BindablePicker DisplayMemberPath="name" Title="Selecione uma Cidade"
+                                          ItemsSource="{Binding ListaCidades}"
+                                          SelectedItem="{Binding Cidade, Mode=TwoWay}"
+                                          IsVisible="{Binding oHorario.Visualizar}"
+                                          HorizontalOptions="FillAndExpand" />
+
+                <Label Text="Celular" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding ConCelular.ConNumCelular}" IsEnabled="{Binding NovoCuidador}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="Telefone" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding ConTelefone.ConNumTelefone}" IsEnabled="{Binding NovoCuidador}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+                <Label Text="E-mail" IsVisible="{Binding oHorario.Visualizar}" />
+                <Entry Text="{Binding ConEmail.ConEnderecoEmail}" IsEnabled="{Binding NovoCuidador}"
+             IsVisible="{Binding oHorario.Visualizar}" />
+
                 <Label Text="Profissão" IsVisible="{Binding oHorario.Visualizar}" />
                 <handyCareCuidador:BindablePicker DisplayMemberPath="TipDescricao" Title="Selecione uma profissão"
                                                   ItemsSource="{Binding TiposCuidadores}"
@@ -39,11 +53,10 @@
                 <Button Text="Foto do documento" IsEnabled="{Binding oHorario.NovoCuidador}"
                         Command="{Binding FotoDoc}"
                         IsVisible="{Binding oHorario.Visualizar}" />
-                <Image Source="{Binding Documento}" />
-                <!--<Label Text="COREN" IsVisible="{Binding oHorario.Visualizar}" />
-      <Entry Text="{Binding ValidacaoCuidador.CorenEnfermeiro}" IsEnabled="{Binding oHorario.NovoCuidador}"
-             IsVisible="{Binding oHorario.Visualizar}" />-->
+                <Image Source="{Binding Documento}" IsVisible="{Binding oHorario.Visualizar}"/>
                 <Button Text="Salvar" Command="{Binding SaveCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+                <Button Text="Alterar" Command="{Binding AlterarCommand}" IsVisible="{Binding oHorario.Visualizar}" />
+
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -22,7 +22,7 @@ namespace HandyCareCuidador.PageModel
         public Result Teste { get; set; }
         public Cuidador Cuidador { get; set; }
         public Paciente Paciente { get; set; }
-        private Tuple<Paciente, bool, Cuidador> oi;
+        public Tuple<Paciente, bool, Cuidador> oi;
         public PageModelHelper PageModelHelper { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public override void Init(object initData)
@@ -46,12 +46,10 @@ namespace HandyCareCuidador.PageModel
                     {
                         await Task.Run(async () =>
                         {
-                            Teste = scan;
                             Paciente = new ObservableCollection<Paciente>(
-                                await CuidadorRestService.DefaultManager.RefreshPacienteAsync())
-                                .FirstOrDefault(e => e.Id == Teste.Text);
+                                await CuidadorRestService.DefaultManager.RefreshPacienteAsync(scan.Text)).FirstOrDefault();
+                            oi = new Tuple<Paciente, bool, Cuidador>(Paciente, false, Cuidador);
                         });
-                        oi = new Tuple<Paciente, bool, Cuidador>(Paciente, false, Cuidador);
                         await CoreMethods.PushPageModel<PacientePageModel>(oi);
                     });
                 });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,10 @@ using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
 using HandyCareCuidador.Model;
 using PropertyChanged;
+using Syncfusion.SfCalendar.XForms;
+using Syncfusion.SfSchedule.XForms;
 using Xamarin.Forms;
+using MonthViewSettings = Syncfusion.SfSchedule.XForms.MonthViewSettings;
 
 namespace HandyCareCuidador.PageModel
 {
@@ -29,9 +33,16 @@ namespace HandyCareCuidador.PageModel
         public bool deleteVisible;
 
         public PageModelHelper oHorario { get; set; }
+        public DayViewSettings ConfigDias { get; set; }
+        private IEnumerable<Afazer> result;
+        public MonthViewSettings ConfigMeses { get; set; }
+        public DayLabelSettings ConfigExibDias { get; set; }
+        public DateTime InicioData { get; set; }
         public CuidadorPaciente CuidadorPaciente { get; set; }
         //public Paciente oPaciente { get; set; }
         public ObservableCollection<Afazer> Afazeres { get; set; }
+        public CalendarEventCollection DataRealizacaoAfazeres { get; set; }
+        public ScheduleAppointmentCollection DataAfazeres { get; set; }
         public ObservableCollection<Afazer> ConcluidosAfazeres { get; set; }
 
         public ObservableCollection<ConclusaoAfazer> AfazeresConcluidos { get; set; }
@@ -44,7 +55,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente>(null, oPaciente, CuidadorPaciente);
+                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente,DateTime>(null, oPaciente, CuidadorPaciente,InicioData);
                     await CoreMethods.PushPageModel<AfazerPageModel>(x);
                 });
             }
@@ -70,9 +81,6 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command<Afazer>(async afazer =>
                 {
-                    deleteVisible = true;
-                    var a = AfazerSelecionado;
-                    RaisePropertyChanged("IsVisible");
                     var x = new Tuple<Afazer, Paciente, CuidadorPaciente>(afazer, oPaciente, CuidadorPaciente);
                     await CoreMethods.PushPageModel<AfazerPageModel>(x);
                     afazer = null;
@@ -98,9 +106,45 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command<Afazer>(async afazer =>
                 {
-                    var a = afazer;
+                    var a = afazer.AfaHorarioPrevisto;
                     await CoreMethods.PushPageModel<AfazerPageModel>(afazer);
                     afazer = null;
+                });
+            }
+        }
+        public Command<CalendarEventCollection> AfazeresCalendario
+        {
+            get
+            {
+                return new Command<CalendarEventCollection>(afazer =>
+                {
+                    Afazeres.Clear();
+                    oHorario.DadoPaciente = false;
+                    if(afazer.Count==0)
+                        InicioData=DateTime.Now;
+                    foreach (var item in afazer)
+                    {
+                        InicioData = item.StartTime;
+                        foreach (var item2 in App.Afazeres)
+                        {
+                            if ((item.StartTime == item2.AfaHorarioPrevisto) && (item.Subject == item2.AfaObservacao))
+                            {
+                                Afazeres.Add(new Afazer
+                                {
+                                    AfaHorarioPrevisto = item.StartTime,
+                                    AfaObservacao = item.Subject,
+                                    AfaPaciente = item2.AfaPaciente,
+                                    Id = item2.Id,
+                                    AfaHorarioPrevistoTermino = item.EndTime,
+                                    AfaCor = item2.AfaCor
+                                });
+                            }
+
+                        }
+                        //Debug.WriteLine(item.StyleId);
+                    }
+                    oHorario.DadoPaciente = true;
+                    var a = Afazeres.Count;
                 });
             }
         }
@@ -145,10 +189,18 @@ namespace HandyCareCuidador.PageModel
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             AfazerSelecionado = new Afazer();
-            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
+            InicioData = new DateTime();
+            Afazeres = new ObservableCollection<Afazer>();
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false,DadoPaciente = true,CuidadorExibicao = false};
+            DataAfazeres = new ScheduleAppointmentCollection();
+            DataRealizacaoAfazeres=new CalendarEventCollection();
+            ConfigExibDias=new DayLabelSettings();
+            ConfigDias = new DayViewSettings {ShowAllDay = true,};
             await GetAfazeresConcluidos();
             await GetAfazeres();
             oHorario.ActivityRunning = false;
+            oHorario.CuidadorExibicao = true;
+
         }
 
         public async Task GetAfazeresConcluidos()
@@ -187,19 +239,51 @@ namespace HandyCareCuidador.PageModel
                                     await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync(true))
                                 .Where(e => e.PacId == oPaciente.Id)
                                 .AsEnumerable();
-                        var result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
+                        result = selection.Where(e => !AfazeresConcluidos.Select(m => m.ConAfazer)
                                 .Contains(e.Id))
                             .Where(e => pacresult.Select(m => m.Id).Contains(e.AfaPaciente))
                             .AsEnumerable();
-                        Afazeres = new ObservableCollection<Afazer>(result);
+                        //Afazeres = new ObservableCollection<Afazer>(result);
+                        foreach (var afazer in result)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                DataRealizacaoAfazeres.Add(new CalendarInlineEvent
+                                {
+                                    StartTime = afazer.AfaHorarioPrevisto,
+                                    EndTime = afazer.AfaHorarioPrevistoTermino,
+                                    Subject = afazer.AfaObservacao,
+                                    Color = Color.FromHex(afazer.AfaCor),
+                                    StyleId = afazer.Id
+                                });
+                            });
+                        }
                         App.Afazeres = new ObservableCollection<Afazer>(result);
                     }
                     else
                     {
-                        Afazeres = new ObservableCollection<Afazer>(selection);
+                        App.Afazeres = new ObservableCollection<Afazer>(selection);
+                        foreach (var afazer in selection)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                DataRealizacaoAfazeres.Add(new CalendarInlineEvent
+                                {
+                                    StartTime = afazer.AfaHorarioPrevisto,
+                                    EndTime = DateTime.Now,
+                                    Subject = afazer.AfaObservacao,
+                                    Color = Color.Aqua,
+                                    AutomationId = afazer.Id,
+                                    ClassId = afazer.AfaPaciente
+
+                                });
+                            });
+                        }
+
                     }
                     oHorario.ActivityRunning = false;
-                    if (Afazeres.Count == 0)
+                    oHorario.CuidadorExibicao = true;
+                    if (selection.Count == 0)
                         oHorario.Visualizar = true;
                 });
             }
@@ -218,11 +302,14 @@ namespace HandyCareCuidador.PageModel
         public override void ReverseInit(object returndData)
         {
             base.ReverseInit(returndData);
-            var newAfazer = returndData as Afazer;
-            if (!Afazeres.Contains(newAfazer))
-            {
-                Afazeres.Add(newAfazer);
-            }
+            //await GetAfazeresConcluidos();
+            //await GetAfazeres();
+
+            //var newAfazer = returndData as Afazer;
+            //if (!Afazeres.Contains(newAfazer))
+            //{
+            //    Afazeres.Add(newAfazer);
+            //}
             //if (AfazerConcluido)
             //{
             //    Task.Run(async () => await GetAfazeresConcluidos());

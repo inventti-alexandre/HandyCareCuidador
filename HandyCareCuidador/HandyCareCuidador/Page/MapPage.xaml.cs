@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using HandyCareCuidador.Page.Layout;
 using HandyCareCuidador.PageModel;
 using Plugin.Geolocator;
@@ -19,24 +20,26 @@ namespace HandyCareCuidador.Page
             InitializeComponent();
             GetLocation();
             CreateView();
-            BindingContext = new MapPageModel();
+            //BindingContext = new MapPageModel();
         }
 
         private async void GetLocation()
         {
             try
             {
-                var locator = CrossGeolocator.Current;
-                var position = await locator.GetPositionAsync(10000);
-                CurrentPosition = new Position(position.Latitude, position.Longitude);
-                Debug.WriteLine("Localização atual - Latitude: " + CurrentPosition.Latitude + " " + "Longitude " +
-                                CurrentPosition.Longitude);
+                await Task.Run(async () =>
+                {
+                    var locator = CrossGeolocator.Current;
+                    var position = await locator.GetPositionAsync(10000);
+                    CurrentPosition = new Position(position.Latitude, position.Longitude);
+                    Debug.WriteLine("Localização atual - Latitude: " + CurrentPosition.Latitude + " " + "Longitude " +
+                                    CurrentPosition.Longitude);
+
+                });
             }
             catch (GeolocationException e)
             {
                 Debug.WriteLine(e.Message);
-
-                throw;
             }
         }
 
@@ -72,7 +75,6 @@ namespace HandyCareCuidador.Page
             mapView.SetBinding(TKCustomMap.MapFunctionsProperty, "MapFunctions");
 
             autoComplete.SetBinding(PlacesAutoComplete.BoundsProperty, "MapRegion");
-
 
             _baseLayout.Children.Add(
                 mapView,

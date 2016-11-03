@@ -22,6 +22,7 @@ namespace HandyCareCuidador.Model
 
         public bool ValValidado { get; set; }
         public string CorenEnfermeiro { get; set; }
+        public bool Deleted { get; set; }
 
         public virtual CorenEnfermeiro CorenEnfermeiro1 { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -45,6 +46,7 @@ namespace HandyCareCuidador.PageModel
                     await CuidadorRestService.DefaultManager.SaveVideoAsync(Video, true);
                     await CuidadorRestService.DefaultManager.SaveVideoFamiliarAsync(VideoFamiliar, true);
                     await CoreMethods.PopPageModel();
+                    UserDialogs.Instance.ShowSuccess("Vídeo enviado com sucesso", 4000);
                 });
             }
         }

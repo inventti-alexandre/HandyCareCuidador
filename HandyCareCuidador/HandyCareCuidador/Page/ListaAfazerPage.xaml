@@ -1,50 +1,59 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HandyCareCuidador.Page.ListaAfazerPage">
+             x:Class="HandyCareCuidador.Page.ListaAfazerPage"
+             xmlns:schedule="clr-namespace:Syncfusion.SfSchedule.XForms;assembly=Syncfusion.SfSchedule.XForms"
+             xmlns:calendar="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
+             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
+             xmlns:helper="clr-namespace:HandyCareCuidador.Helper;assembly=HandyCareCuidador">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helper:Convertion x:Key="SelectedItemConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="Novo afazer" Command="{Binding AddAfazer}" Order="Primary" Priority="0" />
         <ToolbarItem Name="Visualizar afazeres concluídos" Command="{Binding VisualizarConcluidos}" Order="Primary"
                      Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
+        <ScrollView>
+            <StackLayout BackgroundColor="White">
+                <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
-            <Label Text="Nenhum afazer registrado" IsVisible="{Binding oHorario.Visualizar}" />
-            <ListView x:Name="lstAfazer" ItemsSource="{Binding Afazeres, Mode=TwoWay}"
+                <Label Text="Nenhum afazer registrado" IsVisible="{Binding oHorario.Visualizar}" />
+                <calendar:SfCalendar x:Name="Calendar" DataSource="{Binding DataRealizacaoAfazeres}"
+                                 ViewMode="MonthView" ShowInlineEvents="{Binding oHorario.DadoPaciente}" 
+                                     IsVisible="{Binding oHorario.CuidadorExibicao}">
+                    <calendar:SfCalendar.Behaviors>
+                        <helper:MonthInlineAppointmentBehavior Command="{Binding AfazeresCalendario}" 
+                                                               Converter="{StaticResource SelectedItemConverter}"/>
+                    </calendar:SfCalendar.Behaviors>
+                </calendar:SfCalendar>
+                <ListView x:Name="lstAfazer" ItemsSource="{Binding Afazeres, Mode=TwoWay}"
                       SelectedItem="{Binding SelectedAfazer}" IsVisible="True" RowHeight="60">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Vertical" Padding="10">
-                                <Label Text="{Binding AfaHorarioPrevisto}" TextColor="Black"
-                                       HorizontalOptions="StartAndExpand" FontAttributes="Bold" FontSize="20" />
-                                <Label Text="{Binding AfaObservacao}" TextColor="Black"
-                                       HorizontalOptions="StartAndExpand" FontSize="15" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Padding="10" BackgroundColor="{Binding AfaCor}">
+                                    <Label Text="{Binding AfaHorarioPrevisto}" TextColor="Black"
+                                       HorizontalOptions="StartAndExpand" />
+                                    <Label Text="{Binding AfaObservacao}" TextColor="Black"
+                                       HorizontalOptions="StartAndExpand" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
-
-<!--<ListView x:Name="lstAfazerConcluido" ItemsSource="{Binding ConcluidosAfazeres, Mode=TwoWay}"  IsVisible="True" RowHeight="60">
-  <ListView.Header>
-    <StackLayout Padding="10">
-      <Label Text="Afazeres concluídos" FontAttributes="Bold" FontSize="22" />
-    </StackLayout>
-  </ListView.Header>
-  <ListView.ItemTemplate>
-    <DataTemplate>
-      <ViewCell>
-        <StackLayout Orientation="Vertical" Padding="10">
-          <Label Text="{Binding AfaHorarioPrevisto}" TextColor="Black" HorizontalOptions="StartAndExpand" FontAttributes="Bold"/>
-          <Label Text="{Binding AfaObservacao}" HorizontalOptions="StartAndExpand" TextColor="Green" FontSize="15"/>
-        </StackLayout>
-      </ViewCell>
-    </DataTemplate>
-  </ListView.ItemTemplate>
-</ListView>-->
+<!--<schedule:SfSchedule x:Name="Schedule" DataSource="{Binding DataAfazeres}" 
+                                 ScheduleView="DayView" ShowAppointmentsInline="True" ScheduleCellTapped="Schedule_OnScheduleCellTapped"  >-->
+<!--MonthInlineAppointmentTapped="Schedule_OnMonthInlineAppointmentTapped"-->
+<!--
+                <schedule:SfSchedule.Behaviors>
+                    <helper:MonthInlineAppointmentBehavior Command="{Binding AfazerSelected}" Converter="{StaticResource SelectedItemConverter}"></helper:MonthInlineAppointmentBehavior>
+                </schedule:SfSchedule.Behaviors>
+            </schedule:SfSchedule>-->

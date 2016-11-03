@@ -18,14 +18,16 @@ namespace HandyCareCuidador.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            BarcodeImageView.IsScanning = true;
+
         }
 
         protected override void OnDisappearing()
         {
-            BarcodeImageView.RemoveBinding(ZXingScannerView.IsScanningProperty);
             BarcodeImageView.IsScanning = false;
 
             base.OnDisappearing();
+
         }
     }
 }

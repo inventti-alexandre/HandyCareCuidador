@@ -2,9 +2,9 @@
 
 namespace HandyCareCuidador.Page
 {
-    public partial class AcionarContatoEmergencia : ContentPage
+    public partial class AcionarContatoEmergenciaPage : ContentPage
     {
-        public AcionarContatoEmergencia()
+        public AcionarContatoEmergenciaPage()
         {
             InitializeComponent();
         }

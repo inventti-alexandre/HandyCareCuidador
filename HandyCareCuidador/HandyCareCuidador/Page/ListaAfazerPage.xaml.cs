@@ -1,4 +1,7 @@
-﻿using Xamarin.Forms;
+﻿using System.Globalization;
+using Syncfusion.SfCalendar.XForms;
+using Syncfusion.SfSchedule.XForms;
+using Xamarin.Forms;
 
 namespace HandyCareCuidador.Page
 {
@@ -7,17 +10,12 @@ namespace HandyCareCuidador.Page
         public ListaAfazerPage()
         {
             InitializeComponent();
+            Calendar.Locale = new CultureInfo("pt-BR");
         }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            var lstAfazer = this.FindByName<ListView>("lstAfazer");
-            var lstAfazerConcluido = this.FindByName<ListView>("lstAfazerConcluido");
-            if (lstAfazer != null)
-                lstAfazer.ClearValue(ListView.SelectedItemProperty);
-            if (lstAfazerConcluido != null)
-                lstAfazerConcluido.ClearValue(ListView.SelectedItemProperty);
+            lstAfazer.ClearValue(ListView.SelectedItemProperty);
         }
     }
 }

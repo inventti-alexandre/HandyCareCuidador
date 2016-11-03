@@ -7,7 +7,7 @@
         <scan:ZXingScannerView x:Name="BarcodeImageView" HorizontalOptions="FillAndExpand" 
                                 VerticalOptions="FillAndExpand" 
                                 AutomationId="zxingScannerView" Result="{Binding Teste}" 
-                                ScanResultCommand="{Binding ScanCommand}" IsScanning="{Binding PageModelHelper.Visualizar}" >
+                                ScanResultCommand="{Binding ScanCommand}" >
         </scan:ZXingScannerView>
         <scan:ZXingDefaultOverlay ShowFlashButton="True" TopText="Aproxime o celular perto do QRCode">
         </scan:ZXingDefaultOverlay>

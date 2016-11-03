@@ -96,7 +96,7 @@ namespace HandyCareCuidador.Page.Layout
 
         private void Init()
         {
-            OsmNominatim.Instance.CountryCodes.Add("de");
+            OsmNominatim.Instance.CountryCodes.Add("br");
 
             _autoCompleteListView = new ListView
             {

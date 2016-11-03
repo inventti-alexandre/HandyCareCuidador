@@ -2,7 +2,7 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HandyCareCuidador.Page.LoginPage">
+             x:Class="HandyCareCuidador.Page.LoginPage" Title="Handy Care - Cuidador">
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Label Text=" " />

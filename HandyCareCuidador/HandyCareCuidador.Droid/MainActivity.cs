@@ -9,14 +9,18 @@ using Android.OS;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Droid.Services;
 using Java.IO;
+using Java.Lang;
 using Microsoft.WindowsAzure.MobileServices;
 using Octane.Xam.VideoPlayer.Android;
 using Plugin.Permissions;
+using Syncfusion.SfCalendar.XForms.Droid;
+using Syncfusion.SfSchedule.XForms;
 using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Environment = Android.OS.Environment;
 using Exception = Java.Lang.Exception;
+using Thread = System.Threading.Thread;
 
 namespace HandyCareCuidador.Droid
 {
@@ -57,7 +61,7 @@ namespace HandyCareCuidador.Droid
                     provider);
                 if (user != null)
                 {
-                    message = $"you are now signed-in as {user.UserId}.";
+                    message = "Login realizado com sucesso"; /*$"you are now signed-in as {user.UserId}.";*/
                     success = true;
                     var a = new Thread(() => { ThreadPool.QueueUserWorkItem(async o => await StartAfazerService()); });
                     a.Start();
@@ -69,7 +73,7 @@ namespace HandyCareCuidador.Droid
             }
             var builder = new AlertDialog.Builder(this);
             builder.SetMessage(message);
-            builder.SetTitle("Sign-in result");
+            builder.SetTitle("Status de login");
             builder.Create().Show();
             return success;
         }
@@ -100,6 +104,8 @@ namespace HandyCareCuidador.Droid
             FormsMaps.Init(this, bundle);
             CurrentPlatform.Init();
             App.Init(this);
+            new SfScheduleRenderer();
+            new SfCalendarRenderer();
             UserDialogs.Init(() => this);
             FormsVideoPlayer.Init();
             ZXing.Net.Mobile.Forms.Android.Platform.Init();

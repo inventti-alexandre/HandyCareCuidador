@@ -8,6 +8,9 @@ namespace HandyCareCuidador.Helper
     {
         public DateTime Data { get; set; }
         public TimeSpan Horario { get; set; }
+        public DateTime DataTermino { get; set; }
+        public TimeSpan HorarioTermino { get; set; }
+
         public bool deleteVisible { get; set; }
         public bool ActivityRunning { get; set; }
         public bool Visualizar { get; set; }

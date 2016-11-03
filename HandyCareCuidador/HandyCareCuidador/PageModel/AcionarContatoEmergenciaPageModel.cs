@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace HandyCareCuidador.PageModel
 {
     [ImplementPropertyChanged]
-    public class AcionarContatoEmergencia : FreshBasePageModel
+    public class AcionarContatoEmergenciaPageModel : FreshBasePageModel
     {
         private Familiar _selectedFamiliar;
         public Cuidador Cuidador { get; set; }
@@ -118,7 +118,7 @@ namespace HandyCareCuidador.PageModel
         public override void Init(object initData)
         {
             base.Init(initData);
-            oHorario = new PageModelHelper {ActivityRunning = true};
+            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false};
             Cuidador = new Cuidador();
             Paciente = new Paciente();
             var tupla = initData as Tuple<Cuidador, Paciente>;
@@ -128,6 +128,7 @@ namespace HandyCareCuidador.PageModel
                 Paciente = tupla.Item2;
             }
             GetFamiliares();
+            oHorario.Visualizar = true;
         }
 
         private void GetFamiliares()

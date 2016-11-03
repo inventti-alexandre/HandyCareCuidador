@@ -12,6 +12,8 @@ using HandyCareCuidador.PageModel;
 using Microsoft.WindowsAzure.MobileServices;
 using Octane.Xam.VideoPlayer;
 using Rox;
+using Syncfusion.SfCalendar.XForms;
+using Syncfusion.SfSchedule.XForms;
 using TK.CustomMap.Api.Google;
 using Xamarin.Forms;
 using ZXing.Mobile;
@@ -31,6 +33,8 @@ namespace HandyCareCuidador
             var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>(this);
             var mainPage = new FreshNavigationContainer(page);
             MainPage = mainPage;
+
+
         }
 
         public static IAuthenticate Authenticator { get; private set; }
@@ -128,6 +132,8 @@ namespace HandyCareCuidador
             FreshIOC.Container.Register<ICuidadorRestService, CuidadorRestService>();
             FreshIOC.Container.Register<IUserDialogs>(UserDialogs.Instance);
             FreshIOC.Container.Register<MobileBarcodeScanner>(new MobileBarcodeScanner());
+            FreshIOC.Container.Register<SfSchedule>(new SfSchedule());
+            FreshIOC.Container.Register<SfCalendar>(new SfCalendar());
 
             //FreshIOC.Container.Resolve<VideoView>();
             //FreshIOC.Container.Register<VideoPlayer>(new VideoPlayer());

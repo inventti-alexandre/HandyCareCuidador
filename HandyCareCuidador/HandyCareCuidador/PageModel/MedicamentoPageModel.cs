@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -16,8 +18,11 @@ namespace HandyCareCuidador.PageModel
         public bool alterar;
         //IMedicamentoRestService _restService;
         public bool deleteVisible = true;
-
+        private ViaAdministracaoMedicamento _oVia;
+        private FormaApresentacaoMedicamento _oForma;
         public Medicamento Medicamento { get; set; }
+        public ObservableCollection<string> Unidades { get; set; }
+        public string SelectedUnidade { get; set; }
 
         public ObservableCollection<ViaAdministracaoMedicamento> Vias { get; set; }
         //public ViaAdministracaoMedicamento ViaAdministracaoMedicamento { get; set; }
@@ -26,9 +31,37 @@ namespace HandyCareCuidador.PageModel
         public CuidadorPaciente CuidadorPaciente { get; set; }
         public Image MedImage { get; set; }
         public PageModelHelper oHorario { get; set; }
-        public ViaAdministracaoMedicamento oViaAdministracaoMedicamento { get; set; }
 
-        public FormaApresentacaoMedicamento oFormaApresentacaoMedicamento { get; set; }
+        public ViaAdministracaoMedicamento oViaAdministracaoMedicamento
+        {
+            get { return _oVia; }
+            set
+            {
+                _oVia = value;
+                if (value != null)
+                {
+                    //ShowMedicamentos.Execute(value);
+                    //SelectedPaciente = null;
+                }
+
+            }
+        }
+
+        public FormaApresentacaoMedicamento oFormaApresentacaoMedicamento
+        {
+            get { return _oForma; }
+            set
+            {
+                _oForma = value;
+                if (value != null)
+                {
+                    //ShowMedicamentos.Execute(value);
+                    //SelectedPaciente = null;
+                }
+
+            }
+        }
+
 
         public Command SaveCommand
         {
@@ -36,12 +69,15 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
+                    Medicamento.MedUnidade = SelectedUnidade;
                     oHorario.Visualizar = false;
                     oHorario.ActivityRunning = true;
                     Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
                     Medicamento.MedPacId = CuidadorPaciente.Id;
                     await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
                     await CoreMethods.PopPageModel(Medicamento);
+                    UserDialogs.Instance.ShowSuccess("Medicamento cadastrado com sucesso", 4000);
+
                 });
             }
         }
@@ -65,9 +101,12 @@ namespace HandyCareCuidador.PageModel
             base.Init(initData);
             oHorario = new PageModelHelper
             {
-                QuantidadeF = null
+                QuantidadeF = 0
             };
+            Unidades = new ObservableCollection<string> { "Cx", "ml", "l", "kg", "g", "mg", "un" };
 
+            oViaAdministracaoMedicamento = new ViaAdministracaoMedicamento();
+            oFormaApresentacaoMedicamento=new FormaApresentacaoMedicamento();
             var x = initData as Tuple<Medicamento, CuidadorPaciente>;
             Medicamento = new Medicamento();
             CuidadorPaciente = new CuidadorPaciente();
@@ -100,11 +139,15 @@ namespace HandyCareCuidador.PageModel
                 Vias =
                     new ObservableCollection<ViaAdministracaoMedicamento>(
                         await CuidadorRestService.DefaultManager.RefreshViaAdministracaoMedicamentoAsync());
-                var x = Vias.Count;
                 Formas =
                     new ObservableCollection<FormaApresentacaoMedicamento>(
                         await CuidadorRestService.DefaultManager.RefreshFormaApresentacaoMedicamentoAsync());
-                var y = Formas.Count;
+                if (Medicamento.Id != null)
+                {
+                    oFormaApresentacaoMedicamento = Formas.FirstOrDefault(e=>e.Id==Medicamento.MedApresentacao);
+                    oViaAdministracaoMedicamento = Vias.FirstOrDefault(e=>e.Id==Medicamento.MedViaAdministracao);
+                    SelectedUnidade = Medicamento.MedUnidade;
+                }
             });
             oHorario.ActivityRunning = false;
             oHorario.Visualizar = true;

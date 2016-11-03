@@ -6,6 +6,7 @@
 //#define OFFLINE_SYNC_ENABLED
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -70,20 +71,21 @@ namespace HandyCareCuidador.Data
         private readonly IMobileServiceTable<ConCelular> ConCelularTable;
         private readonly IMobileServiceTable<TipoTratamento> TipoTratamentoTable;
         private readonly IMobileServiceTable<MotivoNaoConclusaoTarefa> MotivoNaoConclusaoTarefaTable;
+        private readonly IMobileServiceTable<ConEmail> ConEmailTable;
 
 #endif
 
         public CuidadorRestService()
         {
             CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
-//#if DEBUG
-//            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
-//            {
-//                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
-//            };
-//#else
-//                           MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
-//#endif
+            //#if DEBUG
+            //            CurrentClient = new MobileServiceClient("http://DESKTOP-5TG6LTC/handycareappService/")
+            //            {
+            //                AlternateLoginHost = new Uri("https://handycareapp.azurewebsites.net/")
+            //            };
+            //#else
+            //     ////MobileService = new MobileServiceClient("https://{servicename}.azurewebsites.net/");  
+            //#endif
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore("localstore.db");
             store.DefineTable<Cuidador>();
@@ -144,6 +146,7 @@ namespace HandyCareCuidador.Data
             ConTelefoneTable = CurrentClient.GetTable<ConTelefone>();
             TipoTratamentoTable = CurrentClient.GetTable<TipoTratamento>();
             MotivoNaoConclusaoTarefaTable = CurrentClient.GetTable<MotivoNaoConclusaoTarefa>();
+            ConEmailTable = CurrentClient.GetTable<ConEmail>();
 #endif
         }
 
@@ -792,7 +795,7 @@ namespace HandyCareCuidador.Data
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e);
+                Debug.WriteLine(@"Sync error: {0}", e.ToString());
             }
             return null;
         }
@@ -989,11 +992,11 @@ namespace HandyCareCuidador.Data
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(msioe.Message);
+                Debug.WriteLine(msioe.ToString());
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -1261,7 +1264,6 @@ namespace HandyCareCuidador.Data
 #endif
                 var items = await MotivoCuidadoTable
                     .ToEnumerableAsync();
-                var a = items.Count();
                 return new ObservableCollection<MotivoCuidado>(items);
             }
             catch (MobileServiceInvalidOperationException msioe)
@@ -1569,6 +1571,97 @@ MotivoCuidadoTable.CreateQuery());
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
+            }
+        }
+
+        public async Task<ObservableCollection<ConEmail>> RefreshConEmailAsync(bool syncItems = false)
+        {
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await SyncAsync();
+                }
+#endif
+
+                var items = await ConEmailTable
+                    .ToEnumerableAsync();
+                return new ObservableCollection<ConEmail>(items);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", TipoTratamentoTable.TableName, msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"Sync error: {0}", e);
+            }
+            return null;
+
+        }
+
+        public async Task SaveConEmailAsync(ConEmail item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                    await ConEmailTable.InsertAsync(item);
+                else
+                    await ConEmailTable.UpdateAsync(item);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+        }
+
+        public async Task SaveConTelefoneAsync(ConTelefone item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                    await ConTelefoneTable.InsertAsync(item);
+                else
+                    await ConTelefoneTable.UpdateAsync(item);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+        }
+
+        public async Task SaveContatoEmergenciaAsync(ContatoEmergencia item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                    await ContatoEmergenciaTable.InsertAsync(item);
+                else
+                    await ContatoEmergenciaTable.UpdateAsync(item);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
+            }
+        }
+
+        public async Task SaveConCelularAsync(ConCelular item, bool isNewItem)
+        {
+            try
+            {
+                if (isNewItem)
+                    await ConCelularTable.InsertAsync(item);
+                else
+                    await ConCelularTable.UpdateAsync(item);
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"Invalid sync operation at {0}: {1}", FotoTable.TableName, msioe.Message);
+                Debug.WriteLine(msioe.ToString());
             }
         }
     }

@@ -7,6 +7,7 @@ namespace HandyCareCuidador.Page
         public PacientePage()
         {
             InitializeComponent();
+
         }
     }
 }

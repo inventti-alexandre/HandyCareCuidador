@@ -31,8 +31,14 @@
                        IsEnabled="{Binding oHorario.NovoPaciente}"
                        IsVisible="{Binding oHorario.Visualizar}" />
                 <Label Text="Tipo sanguíneo" IsVisible="{Binding oHorario.Visualizar}" />
-                <Entry Text="{Binding Paciente.PacTipoSanguineo}" IsEnabled="{Binding oHorario.NovoPaciente}"
-                       IsVisible="{Binding oHorario.Visualizar}" />
+                <handyCareCuidador:BindablePicker x:Name="GrupoSanguineo" 
+                                                  IsEnabled="{Binding oHorario.NovoPaciente}"
+                                                  IsVisible="{Binding oHorario.Visualizar}" ItemsSource="{Binding GrupoSanguineo}"
+                                                  SelectedItem="{Binding SelectedGrupo}"/>
+                <handyCareCuidador:BindablePicker x:Name="Fator" 
+                                                  IsEnabled="{Binding oHorario.NovoPaciente}"
+                                                  IsVisible="{Binding oHorario.Visualizar}" ItemsSource="{Binding Fator}"
+                                                  SelectedItem="{Binding SelectedFator}"/>
                 <Label Text="Data de nascimento" IsVisible="{Binding oHorario.Visualizar}" />
                 <DatePicker Date="{Binding Paciente.PacIdade, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoPaciente}"
                             IsVisible="{Binding oHorario.Visualizar}" />

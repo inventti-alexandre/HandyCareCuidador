@@ -14,6 +14,7 @@ namespace HandyCareCuidador.Page
 
             {
                 InitializeComponent();
+                Hora.Format = String.Format("{0:HH:m:s tt");
             }
             catch (Exception ex)
             {

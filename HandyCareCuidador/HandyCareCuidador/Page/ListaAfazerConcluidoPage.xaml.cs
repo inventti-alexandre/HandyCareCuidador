@@ -8,5 +8,10 @@ namespace HandyCareCuidador.Page
         {
             InitializeComponent();
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            lstAfazerConcluido.ClearValue(ListView.SelectedItemProperty);
+        }
     }
 }

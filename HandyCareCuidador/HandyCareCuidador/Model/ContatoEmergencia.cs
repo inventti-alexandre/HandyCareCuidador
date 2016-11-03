@@ -23,6 +23,7 @@ namespace HandyCareCuidador.Model
 
         [Column(Order = 2)]
         public string ConPessoa { get; set; }
+        public bool Deleted { get; set; }
 
         public virtual ConCelular ConCelular1 { get; set; }
 
