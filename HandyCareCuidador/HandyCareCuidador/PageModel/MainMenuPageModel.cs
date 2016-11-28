@@ -15,6 +15,7 @@ namespace HandyCareCuidador.PageModel
     public class MainMenuPageModel : FreshBasePageModel
     {
         public Image image;
+        private Paciente _selectedPaciente;
         private Cuidador Cuidador { get; set; }
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public PageModelHelper oHorario { get; set; }
@@ -85,7 +86,10 @@ namespace HandyCareCuidador.PageModel
                     {
                         CuidadorPaciente = CuidadoresPacientes.FirstOrDefault(e => e.PacId == SelectedPaciente.Id);
                         var x = new Tuple<Paciente, CuidadorPaciente>(SelectedPaciente, CuidadorPaciente);
-                        await CoreMethods.PushPageModel<ListaAfazerPageModel>(x);
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await CoreMethods.PushPageModel<ListaAfazerPageModel>(x);
+                        });
                     }
                     else
                     {
@@ -202,7 +206,22 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
-        public Paciente SelectedPaciente { get; set; }
+        public Paciente SelectedPaciente
+        {
+            get { return _selectedPaciente; }
+            set
+            {
+                _selectedPaciente = value;
+                if (value != null)
+                {
+                }
+            }
+        }
+        public override void ReverseInit(object returnedData)
+        {
+            base.ReverseInit(returnedData);
+            SelectedPaciente = returnedData as Paciente;
+        }
 
         public Command ShowMedicamentos
         {
@@ -253,7 +272,6 @@ namespace HandyCareCuidador.PageModel
         protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
-            oPaciente = new Paciente();
             oHorario = new PageModelHelper
             {
                 ActivityRunning = true,
@@ -261,6 +279,11 @@ namespace HandyCareCuidador.PageModel
                 BoasVindas = "Olá, " + Cuidador.CuiNomeCompleto
             };
             await GetPacientes();
+            //if ((SelectedPaciente?.Id != null))
+            //{
+            //    oHorario.Index = Pacientes.IndexOf(SelectedPaciente);
+            //}
+
             //MedImage = new Image {Source = ImageSource.FromFile("pills.png")};
         }
 

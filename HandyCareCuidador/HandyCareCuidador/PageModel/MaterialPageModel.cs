@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -27,13 +29,26 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    Material.MatUnidade = SelectedUnidade;
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    Material.MatQuantidade = Convert.ToSingle(oHorario.Quantidade);
-                    Material.MatPacId = CuidadorPaciente.Id;
-                    await CuidadorRestService.DefaultManager.SaveMaterialAsync(Material, novoItem);
-                    await CoreMethods.PopPageModel(Material);
+                    try
+                    {
+                        Material.MatUnidade = SelectedUnidade;
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        Material.MatQuantidade = Convert.ToSingle(oHorario.Quantidade);
+                        Material.MatPacId = CuidadorPaciente.Id;
+                        await CuidadorRestService.DefaultManager.SaveMaterialAsync(Material, novoItem);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Material);
+                        UserDialogs.Instance.ShowSuccess("Material cadastrado com sucesso", 4000);
+
+                    }
                 });
             }
         }
@@ -44,10 +59,23 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    await CuidadorRestService.DefaultManager.DeleteMaterialAsync(Material);
-                    await CoreMethods.PopPageModel(Material);
+                    try
+                    {
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        await CuidadorRestService.DefaultManager.DeleteMaterialAsync(Material);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Material);
+                        UserDialogs.Instance.ShowSuccess("Material excluido com sucesso", 4000);
+
+                    }
                 });
             }
         }

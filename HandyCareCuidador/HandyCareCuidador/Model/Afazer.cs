@@ -24,7 +24,9 @@ namespace HandyCareCuidador.Model
         public string AfaPaciente { get; set; }
         public DateTime AfaHorarioPrevistoTermino { get; set; }
         public string AfaCor { get; set; }
-
+        [Column("AfaTitulo")]
+        public string AfaTitulo { get; set; }
+        public bool AfaRecorrente { get; set; }
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         //public virtual ICollection<ConclusaoAfazer> ConclusaoAfazer { get; set; }
 

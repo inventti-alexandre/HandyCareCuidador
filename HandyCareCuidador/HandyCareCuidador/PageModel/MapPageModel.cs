@@ -507,13 +507,15 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command<TKCustomMapPin>(pin =>
                 {
+                    if (pin == null) return;
                     var routePin = pin as RoutePin;
-
                     if (routePin != null)
+                    {
                         if (routePin.IsSource)
                             routePin.Route.Source = pin.Position;
                         else
                             routePin.Route.Destination = pin.Position;
+                    }
                 });
             }
         }

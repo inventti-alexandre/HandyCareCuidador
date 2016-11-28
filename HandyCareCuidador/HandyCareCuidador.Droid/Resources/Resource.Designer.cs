@@ -1844,6 +1844,8 @@ namespace HandyCareCuidador.Droid
 			global::Octane.Xam.VideoPlayer.Android.Resource.Styleable.ViewStubCompat_android_id = global::HandyCareCuidador.Droid.Resource.Styleable.ViewStubCompat_android_id;
 			global::Octane.Xam.VideoPlayer.Android.Resource.Styleable.ViewStubCompat_android_inflatedId = global::HandyCareCuidador.Droid.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::Octane.Xam.VideoPlayer.Android.Resource.Styleable.ViewStubCompat_android_layout = global::HandyCareCuidador.Droid.Resource.Styleable.ViewStubCompat_android_layout;
+			global::Poz1.NFCForms.Droid.Resource.String.ApplicationName = global::HandyCareCuidador.Droid.Resource.String.ApplicationName;
+			global::Poz1.NFCForms.Droid.Resource.String.Hello = global::HandyCareCuidador.Droid.Resource.String.Hello;
 			global::RoxVideo.Resource.Animation.abc_fade_in = global::HandyCareCuidador.Droid.Resource.Animation.abc_fade_in;
 			global::RoxVideo.Resource.Animation.abc_fade_out = global::HandyCareCuidador.Droid.Resource.Animation.abc_fade_out;
 			global::RoxVideo.Resource.Animation.abc_grow_fade_in_from_bottom = global::HandyCareCuidador.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;

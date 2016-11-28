@@ -82,17 +82,16 @@ namespace HandyCareCuidador.PageModel
             {
                 await Task.Run(async () =>
                 {
-                    var pacresult =
-                        new ObservableCollection<CuidadorPaciente>(
-                                await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
-                            .Where(e => e.PacId == oPaciente.Id)
-                            .AsEnumerable();
-                    var x = pacresult.Count();
+                    //var pacresult =
+                    //    new ObservableCollection<CuidadorPaciente>(
+                    //            await CuidadorRestService.DefaultManager.RefreshCuidadorPacienteAsync())
+                    //        .Where(e => e.PacId == oPaciente.Id)
+                    //        .AsEnumerable();
+                    //var x = pacresult.Count();
                     var result =
                         new ObservableCollection<Medicamento>(
                                 await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
-                            .Where(e => pacresult.Select(m => m.Id)
-                                .Contains(e.MedPacId))
+                            .Where(e => e.MedPacId == CuidadorPaciente.Id)
                             .AsEnumerable();
                     Medicamentos = new ObservableCollection<Medicamento>(result);
                     if (Medicamentos.Count == 0)

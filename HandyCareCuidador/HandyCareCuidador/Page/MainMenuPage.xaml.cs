@@ -16,7 +16,7 @@ namespace HandyCareCuidador.Page
             btnAfazer.Text = "Afazeres";
             btnMedicamento.Text = "Medicamento";
             btnPaciente.Text = "Paciente";
-            btnContato.Text = "Acionar contatos";
+            btnContato.Text = "CONTATOS DE EMERGÊNCIA";
             btnFoto.Text = "Foto";
             btnInfo.Text = "Suas informações";
             btnMaterial.Text = "Material";

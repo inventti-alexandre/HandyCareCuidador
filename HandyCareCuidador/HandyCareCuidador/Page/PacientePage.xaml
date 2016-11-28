@@ -34,11 +34,11 @@
                 <handyCareCuidador:BindablePicker x:Name="GrupoSanguineo" 
                                                   IsEnabled="{Binding oHorario.NovoPaciente}"
                                                   IsVisible="{Binding oHorario.Visualizar}" ItemsSource="{Binding GrupoSanguineo}"
-                                                  SelectedItem="{Binding SelectedGrupo}"/>
+                                                  SelectedItem="{Binding SelectedGrupo}" Title="Grupo sanguíneo"/>
                 <handyCareCuidador:BindablePicker x:Name="Fator" 
                                                   IsEnabled="{Binding oHorario.NovoPaciente}"
                                                   IsVisible="{Binding oHorario.Visualizar}" ItemsSource="{Binding Fator}"
-                                                  SelectedItem="{Binding SelectedFator}"/>
+                                                  SelectedItem="{Binding SelectedFator}" Title="Fator"/>
                 <Label Text="Data de nascimento" IsVisible="{Binding oHorario.Visualizar}" />
                 <DatePicker Date="{Binding Paciente.PacIdade, Mode=TwoWay}" IsEnabled="{Binding oHorario.NovoPaciente}"
                             IsVisible="{Binding oHorario.Visualizar}" />

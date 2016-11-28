@@ -28,7 +28,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(() =>
                 {
 #if DEBUG
-                    Device.OpenUri(new Uri("tel:0"));
+                    Device.OpenUri(new Uri("tel:190"));
 #else
                     Device.OpenUri(new Uri("tel:190"));
 #endif
@@ -43,7 +43,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(() =>
                 {
 #if DEBUG
-                    Device.OpenUri(new Uri("tel:0"));
+                    Device.OpenUri(new Uri("tel:192"));
 #else
                     Device.OpenUri(new Uri("tel:192"));
 #endif
@@ -58,7 +58,7 @@ namespace HandyCareCuidador.PageModel
                 return new Command(() =>
                 {
 #if DEBUG
-                    Device.OpenUri(new Uri("tel:0"));
+                    Device.OpenUri(new Uri("tel:193"));
 #else
                     Device.OpenUri(new Uri("tel:193"));
 #endif

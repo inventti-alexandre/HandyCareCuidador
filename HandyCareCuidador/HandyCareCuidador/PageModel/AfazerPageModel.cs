@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using FreshMvvm;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Helper;
@@ -34,54 +36,92 @@ namespace HandyCareCuidador.PageModel
         public ColorList SelectedColor { get; set; }
         public Color Color { get; set; }
 
+        public Command AddMaterial
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    var material = new Material();
+                    var x = new Tuple<Material, CuidadorPaciente>(material, CuidadorPaciente);
+                    await CoreMethods.PushPageModel<MaterialPageModel>(x);
+                });
+            }
+        }
+
+        public Command AddMedicamento
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    var medicamento = new Medicamento();
+                    var x = new Tuple<Medicamento, CuidadorPaciente>(medicamento, CuidadorPaciente);
+                    await CoreMethods.PushPageModel<MedicamentoPageModel>(x);
+                });
+            }
+        }
+
         public Command SaveCommand
         {
             get
             {
                 return new Command(async () =>
                 {
-                    if (NewItem)
-                        Afazer.Id = Guid.NewGuid().ToString();
-                    oHorario.Visualizar = false;
-                    var a = Color;
-                    oHorario.ActivityRunning = true;
-                    Afazer.AfaPaciente = CuidadorPaciente.Id;
-                    Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
-                    Afazer.AfaHorarioPrevistoTermino= oHorario.DataTermino.Date + oHorario.HorarioTermino;
-                    var rgbString = $"#{(int) (SelectedColor.Color.R*255):X2}{(int) (SelectedColor.Color.G*255):X2}{(int) (SelectedColor.Color.B*255):X2}";
-                    Afazer.AfaCor = rgbString;
-                    await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
-                    if (oMaterial != null)
+                    try
                     {
-                        oMaterialUtilizado = new MaterialUtilizado
+                        if (NewItem)
+                            Afazer.Id = Guid.NewGuid().ToString();
+                        oHorario.Visualizar = false;
+                        var a = Color;
+                        oHorario.ActivityRunning = true;
+                        Afazer.AfaPaciente = CuidadorPaciente.Id;
+                        Afazer.AfaHorarioPrevisto = oHorario.Data.Date + oHorario.Horario;
+                        Afazer.AfaHorarioPrevistoTermino = oHorario.DataTermino.Date + oHorario.HorarioTermino;
+                        var rgbString =
+                            $"#{(int) (SelectedColor.Color.R*255):X2}{(int) (SelectedColor.Color.G*255):X2}{(int) (SelectedColor.Color.B*255):X2}";
+                        Afazer.AfaCor = rgbString;
+                        await CuidadorRestService.DefaultManager.SaveAfazerAsync(Afazer, true);
+                        if (oMaterial != null)
                         {
-                            MatAfazer = Afazer.Id,
-                            MatUtilizado = oMaterial.Id,
-                            MatQuantidadeUtilizada = Convert.ToInt32(oHorario.Quantidade),
-                            Id = Guid.NewGuid().ToString()
-                        };
-                        oMaterial.MatQuantidade -= oMaterialUtilizado.MatQuantidadeUtilizada;
-                        oMaterial.MaterialUtilizado.Add(oMaterialUtilizado);
-                        await CuidadorRestService.DefaultManager.SaveMaterialAsync(oMaterial, false);
-                        await CuidadorRestService.DefaultManager.SaveMaterialUtilizadoAsync(oMaterialUtilizado, true);
+                            oMaterialUtilizado = new MaterialUtilizado
+                            {
+                                MatAfazer = Afazer.Id,
+                                MatUtilizado = oMaterial.Id,
+                                MatQuantidadeUtilizada = Convert.ToInt32(oHorario.Quantidade),
+                                Id = Guid.NewGuid().ToString()
+                            };
+                            oMaterial.MatQuantidade -= oMaterialUtilizado.MatQuantidadeUtilizada;
+                            oMaterial.MaterialUtilizado.Add(oMaterialUtilizado);
+                            await CuidadorRestService.DefaultManager.SaveMaterialAsync(oMaterial, false);
+                            await
+                                CuidadorRestService.DefaultManager.SaveMaterialUtilizadoAsync(oMaterialUtilizado, true);
+                        }
+                        if (oMedicamento != null)
+                        {
+                            oMedicamentoAdministrado = new MedicamentoAdministrado
+                            {
+                                MedAfazer = Afazer.Id,
+                                MedAdministrado = oMedicamento.Id,
+                                MemQuantidadeAdministrada = Convert.ToInt32(oHorario.Quantidade),
+                                Id = Guid.NewGuid().ToString()
+                            };
+                            oMedicamento.MedQuantidade -= oMedicamentoAdministrado.MemQuantidadeAdministrada;
+                            await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(oMedicamento, false);
+                            await
+                                CuidadorRestService.DefaultManager.SaveMedicamentoAdministradoAsync(
+                                    oMedicamentoAdministrado, true);
+                        }
                     }
-                    if (oMedicamento != null)
+                    catch (Exception e)
                     {
-                        oMedicamentoAdministrado = new MedicamentoAdministrado
-                        {
-                            MedAfazer = Afazer.Id,
-                            MedAdministrado = oMedicamento.Id,
-                            MemQuantidadeAdministrada = Convert.ToInt32(oHorario.Quantidade),
-                            Id = Guid.NewGuid().ToString()
-                        };
-                        oMedicamento.MedQuantidade -= oMedicamentoAdministrado.MemQuantidadeAdministrada;
-                        await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(oMedicamento, false);
-                        await
-                            CuidadorRestService.DefaultManager.SaveMedicamentoAdministradoAsync(
-                                oMedicamentoAdministrado, true);
+                        Debug.WriteLine(e.ToString());
                     }
-                    await CoreMethods.PopPageModel(Afazer);
-                    UserDialogs.Instance.ShowSuccess("Afazer registrado com sucesso", 4000);
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Afazer);
+                        UserDialogs.Instance.ShowSuccess("Afazer registrado com sucesso", 4000);
+                    }
                 });
             }
         }
@@ -92,12 +132,14 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    var result = await CoreMethods.DisplayActionSheet("O afazer foi finalizado corretamente?", 
-                        "Cancelar", null, "Sim","Não");
-                    switch (result)
+                    try
                     {
-                        case "Sim":
+                        var result = await CoreMethods.DisplayActionSheet("O afazer foi finalizado corretamente?",
+                            "Cancelar", null, "Sim", "Não");
+                        switch (result)
                         {
+                            case "Sim":
+                            {
                                 oHorario.Visualizar = false;
                                 oHorario.ActivityRunning = true;
                                 AfazerConcluido.Id = Guid.NewGuid().ToString();
@@ -105,19 +147,17 @@ namespace HandyCareCuidador.PageModel
                                 AfazerConcluido.ConHorarioConcluido = DateTime.Now;
                                 AfazerConcluido.ConAfazer = Afazer.Id;
                                 await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
-                                await CoreMethods.PopPageModel(Afazer);
-                                UserDialogs.Instance.ShowSuccess("Afazer concluído com sucesso", 4000);
 
                             }
-                            break;
-                        case "Não":
-                        {
+                                break;
+                            case "Não":
+                            {
                                 var resulto = await UserDialogs.Instance.PromptAsync(new PromptConfig()
 
-                                                           .SetTitle("Informe o motivo da não realização da tarefa")
-                                                           .SetPlaceholder("Descreva o que aconteceu")
-                                                           .SetMaxLength(255));
-                                MotivoNaoConclusaoTarefa.Id= Guid.NewGuid().ToString();
+                                    .SetTitle("Informe o motivo da não realização da tarefa")
+                                    .SetPlaceholder("Descreva o que aconteceu")
+                                    .SetMaxLength(255));
+                                MotivoNaoConclusaoTarefa.Id = Guid.NewGuid().ToString();
                                 oHorario.Visualizar = false;
                                 oHorario.ActivityRunning = true;
                                 AfazerConcluido.Id = Guid.NewGuid().ToString();
@@ -125,15 +165,25 @@ namespace HandyCareCuidador.PageModel
                                 AfazerConcluido.ConHorarioConcluido = DateTime.Now;
                                 AfazerConcluido.ConAfazer = Afazer.Id;
                                 MotivoNaoConclusaoTarefa.MoAfazer = AfazerConcluido.Id;
-                                MotivoNaoConclusaoTarefa.MoExplicacao=resulto.Text;
+                                MotivoNaoConclusaoTarefa.MoExplicacao = resulto.Text;
                                 await CuidadorRestService.DefaultManager.SaveConclusaoAfazerAsync(AfazerConcluido, true);
-                                await CuidadorRestService.DefaultManager.SaveMotivoNaoConclusaoTarefa(MotivoNaoConclusaoTarefa, true);
-
-                                await CoreMethods.PopPageModel(Afazer);
-                                UserDialogs.Instance.ShowSuccess("Afazer concluído com sucesso", 4000);
+                                await
+                                    CuidadorRestService.DefaultManager.SaveMotivoNaoConclusaoTarefa(
+                                        MotivoNaoConclusaoTarefa, true);
 
                             }
-                            break;
+                                break;
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Afazer);
+                        UserDialogs.Instance.ShowSuccess("Afazer concluído com sucesso", 4000);
                     }
                 });
             }
@@ -145,10 +195,20 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    await CuidadorRestService.DefaultManager.DeleteAfazerAsync(Afazer);
-                    await CoreMethods.PopPageModel(Afazer);
+                    try
+                    {
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        await CuidadorRestService.DefaultManager.DeleteAfazerAsync(Afazer);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Afazer);
+                    }
                 });
             }
         }
@@ -186,13 +246,6 @@ namespace HandyCareCuidador.PageModel
                 oHorario.Data = x.Item4;
                 oHorario.DataTermino = x.Item4.AddDays(1);
             }
-            Materiais =
-                new ObservableCollection<Material>(await CuidadorRestService.DefaultManager.RefreshMaterialAsync());
-            Medicamentos =
-                new ObservableCollection<Medicamento>(await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync());
-            MateriaisUtilizados =
-                new ObservableCollection<MaterialUtilizado>(
-                    await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
             AfazerConcluido = new ConclusaoAfazer();
 
             ListaCores = new ObservableCollection<ColorList>
@@ -255,7 +308,7 @@ namespace HandyCareCuidador.PageModel
         //    { "White", Color.FromHex("#FFFFFF") },         { "Yellow", Color.FromHex("#FFEB3B") },
         //};
         }
-        protected override void ViewIsAppearing(object sender, EventArgs e)
+        protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             base.ViewIsAppearing(sender, e);
             if (Afazer?.Id == null)
@@ -272,6 +325,22 @@ namespace HandyCareCuidador.PageModel
                 oHorario.Horario = Afazer.AfaHorarioPrevisto.TimeOfDay;
                 //oHorario.deleteVisible = true;
             }
+            var result =
+                new ObservableCollection<Material>(
+                        await CuidadorRestService.DefaultManager.RefreshMaterialAsync(true))
+                    .Where(i => i.MatPacId == CuidadorPaciente.Id)
+                    .AsEnumerable();
+            Materiais = new ObservableCollection<Material>(result);
+            var resulto =
+                new ObservableCollection<Medicamento>(
+                        await CuidadorRestService.DefaultManager.RefreshMedicamentoAsync())
+                    .Where(o => o.MedPacId == CuidadorPaciente.Id)
+                    .AsEnumerable();
+            Medicamentos = new ObservableCollection<Medicamento>(resulto);
+            //MateriaisUtilizados =
+            //    new ObservableCollection<MaterialUtilizado>(
+            //        await CuidadorRestService.DefaultManager.RefreshMaterialUtilizadoAsync(Afazer?.Id));
+
         }
     }
 }

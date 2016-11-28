@@ -52,6 +52,7 @@ namespace HandyCareCuidador.PageModel
                 }
             }
         }
+
         public Command AlterarCommand
         {
             get
@@ -65,6 +66,7 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+
         public Geoname SelectedEstado
         {
             get { return _selectedEstado; }
@@ -236,48 +238,65 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    if (Cidade.name != null)
+                    try
                     {
-                        Cuidador.CuiCidade = Cidade.name;
-                        Cuidador.CuiEstado = SelectedEstado.name;
+                        if (Cidade.name != null)
+                        {
+                            Cuidador.CuiCidade = Cidade.name;
+                            Cuidador.CuiEstado = SelectedEstado.name;
+                        }
+
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        if (oHorario.NovoCuidador)
+                        {
+                            ValidacaoCuidador.Id = Guid.NewGuid().ToString();
+                            ValidacaoCuidador.ValValidado = true;
+                            Cuidador.CuiContatoEmergencia = ContatoEmergencia.Id;
+                            ContatoEmergencia.ConEmail = ConEmail.Id;
+                            ContatoEmergencia.ConCelular = ConCelular.Id;
+                            ContatoEmergencia.ConTelefone = ConTelefone.Id;
+                            ContatoEmergencia.ConTipo = "E15C9314-AD3A-47E1-A89F-BEEBB46460B1";
+
+                            Cuidador.CuiValidacaoCuidador = ValidacaoCuidador.Id;
+                            Cuidador.CuiTipoCuidador = SelectedTipoCuidador.Id;
+
+                        }
+                        ValidacaoCuidador.Deleted = false;
+                        ConCelular.Deleted = false;
+                        ConEmail.Deleted = false;
+                        ConTelefone.Deleted = false;
+                        ContatoEmergencia.Deleted = false;
+                        Cuidador.Deleted = false;
+                        await Task.Run(async () =>
+                        {
+                            await
+                                CuidadorRestService.DefaultManager.SaveValidacaoCuidadorAsync(ValidacaoCuidador,
+                                    oHorario.NovoCuidador);
+                            await
+                                CuidadorRestService.DefaultManager.SaveConCelularAsync(ConCelular, oHorario.NovoCuidador);
+                            await CuidadorRestService.DefaultManager.SaveConEmailAsync(ConEmail, oHorario.NovoCuidador);
+                            await
+                                CuidadorRestService.DefaultManager.SaveConTelefoneAsync(ConTelefone,
+                                    oHorario.NovoCuidador);
+                            await
+                                CuidadorRestService.DefaultManager.SaveContatoEmergenciaAsync(ContatoEmergencia,
+                                    oHorario.NovoCuidador);
+                            await CuidadorRestService.DefaultManager.SaveCuidadorAsync(Cuidador, oHorario.NovoCuidador);
+                        });
+
                     }
-
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    if (oHorario.NovoCuidador)
+                    catch (Exception e)
                     {
-                        ValidacaoCuidador.Id = Guid.NewGuid().ToString();
-                        ValidacaoCuidador.ValValidado = true;
-                        Cuidador.CuiContatoEmergencia = ContatoEmergencia.Id;
-                        ContatoEmergencia.ConEmail = ConEmail.Id;
-                        ContatoEmergencia.ConCelular = ConCelular.Id;
-                        ContatoEmergencia.ConTelefone = ConTelefone.Id;
-                        ContatoEmergencia.ConTipo = "E15C9314-AD3A-47E1-A89F-BEEBB46460B1";
-
-                        Cuidador.CuiValidacaoCuidador = ValidacaoCuidador.Id;
-                        Cuidador.CuiTipoCuidador = SelectedTipoCuidador.Id;
-
+                        Debug.WriteLine(e.ToString());
                     }
-                    ValidacaoCuidador.Deleted = false;
-                    ConCelular.Deleted = false;
-                    ConEmail.Deleted = false;
-                    ConTelefone.Deleted = false;
-                    ContatoEmergencia.Deleted = false;
-                    Cuidador.Deleted = false;
-                    await Task.Run(async () =>
+                    finally
                     {
-                        await CuidadorRestService.DefaultManager.SaveValidacaoCuidadorAsync(ValidacaoCuidador, oHorario.NovoCuidador);
-                        await CuidadorRestService.DefaultManager.SaveConCelularAsync(ConCelular, oHorario.NovoCuidador);
-                        await CuidadorRestService.DefaultManager.SaveConEmailAsync(ConEmail, oHorario.NovoCuidador);
-                        await CuidadorRestService.DefaultManager.SaveConTelefoneAsync(ConTelefone, oHorario.NovoCuidador);
-                        await CuidadorRestService.DefaultManager.SaveContatoEmergenciaAsync(ContatoEmergencia, oHorario.NovoCuidador);
-                        await CuidadorRestService.DefaultManager.SaveCuidadorAsync(Cuidador, oHorario.NovoCuidador);
-                    });
-                    if (oHorario.NovoCuidador)
-                        app.AbrirMainMenu(Cuidador);
-                    else
-                        await CoreMethods.PopPageModel(Cuidador);
-
+                        if (oHorario.NovoCuidador)
+                            app.AbrirMainMenu(Cuidador);
+                        else
+                            await CoreMethods.PopPageModel(Cuidador);
+                    }
                     //                        await CoreMethods.PushPageModelWithNewNavigation<MainMenuPageModel>(Cuidador);
                 });
             }

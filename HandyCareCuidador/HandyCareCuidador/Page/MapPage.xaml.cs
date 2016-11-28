@@ -14,13 +14,36 @@ namespace HandyCareCuidador.Page
     public partial class MapPage : ContentPage
     {
         public Position CurrentPosition;
-
+        private TKCustomMap mapView;
         public MapPage()
         {
             InitializeComponent();
             GetLocation();
             CreateView();
             //BindingContext = new MapPageModel();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            mapView.RemoveBinding(TKCustomMap.CustomPinsProperty);
+            mapView.RemoveBinding(TKCustomMap.MapClickedCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.MapLongPressCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.MapCenterProperty);
+            mapView.RemoveBinding(TKCustomMap.PinSelectedCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.SelectedPinProperty);
+            mapView.RemoveBinding(TKCustomMap.RoutesProperty);
+            mapView.RemoveBinding(TKCustomMap.PinDragEndCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.CirclesProperty);
+            mapView.RemoveBinding(TKCustomMap.CalloutClickedCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.PolylinesProperty);
+            mapView.RemoveBinding(TKCustomMap.PolygonsProperty);
+            mapView.RemoveBinding(TKCustomMap.MapRegionProperty);
+            mapView.RemoveBinding(TKCustomMap.RouteClickedCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.RouteCalculationFinishedCommandProperty);
+            mapView.RemoveBinding(TKCustomMap.TilesUrlOptionsProperty);
+            mapView.RemoveBinding(TKCustomMap.MapFunctionsProperty);
+
         }
 
         private async void GetLocation()
@@ -47,9 +70,8 @@ namespace HandyCareCuidador.Page
         {
             var autoComplete = new PlacesAutoComplete {ApiToUse = PlacesAutoComplete.PlacesApi.Native};
             autoComplete.SetBinding(PlacesAutoComplete.PlaceSelectedCommandProperty, "PlaceSelectedCommand");
-            var mapView = new TKCustomMap(MapSpan.FromCenterAndRadius(CurrentPosition,
+            mapView = new TKCustomMap(MapSpan.FromCenterAndRadius(CurrentPosition,
                     Distance.FromKilometers(1)))
-                //var mapView = new TKCustomMap
                 {
                     MapCenter = CurrentPosition,
                     MapType = MapType.Hybrid,
@@ -88,5 +110,6 @@ namespace HandyCareCuidador.Page
                 Constraint.Constant(0),
                 Constraint.Constant(0));
         }
+        
     }
 }

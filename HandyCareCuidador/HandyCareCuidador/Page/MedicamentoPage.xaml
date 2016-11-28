@@ -14,7 +14,7 @@
             <ActivityIndicator Color="Blue" IsRunning="{Binding oHorario.ActivityRunning, Mode=TwoWay}"
                                IsVisible="{Binding oHorario.ActivityRunning}" />
 
-            <Label Text="Material" IsVisible="{Binding oHorario.Visualizar}" />
+            <Label Text="Medicamento" IsVisible="{Binding oHorario.Visualizar}" />
             <Entry Text="{Binding Medicamento.MedDescricao}" IsVisible="{Binding oHorario.Visualizar}" />
             <Label Text="Quantidade" IsVisible="{Binding oHorario.Visualizar}" />
             <StackLayout Orientation="Horizontal">

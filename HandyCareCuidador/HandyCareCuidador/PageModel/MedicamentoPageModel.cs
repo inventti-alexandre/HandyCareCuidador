@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -69,15 +70,28 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    Medicamento.MedUnidade = SelectedUnidade;
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    Medicamento.MedQuantidade = Convert.ToSingle(oHorario.Quantidade);
-                    Medicamento.MedPacId = CuidadorPaciente.Id;
-                    await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
-                    await CoreMethods.PopPageModel(Medicamento);
-                    UserDialogs.Instance.ShowSuccess("Medicamento cadastrado com sucesso", 4000);
+                    try
+                    {
+                        Medicamento.MedUnidade = SelectedUnidade;
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        Medicamento.MedViaAdministracao = oViaAdministracaoMedicamento.Id;
+                        Medicamento.MedApresentacao = oFormaApresentacaoMedicamento.Id;
+                        Medicamento.MedQuantidade = Convert.ToSingle(oHorario.QuantidadeF);
+                        Medicamento.MedPacId = CuidadorPaciente.Id;
+                        await CuidadorRestService.DefaultManager.SaveMedicamentoAsync(Medicamento, alterar);
 
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Medicamento);
+                        UserDialogs.Instance.ShowSuccess("Medicamento cadastrado com sucesso", 4000);
+
+                    }
                 });
             }
         }
@@ -88,10 +102,22 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    await CuidadorRestService.DefaultManager.DeleteMedicamentoAsync(Medicamento);
-                    await CoreMethods.PopPageModel(Medicamento);
+                    try
+                    {
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        await CuidadorRestService.DefaultManager.DeleteMedicamentoAsync(Medicamento);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Medicamento);
+                        UserDialogs.Instance.ShowSuccess("Medicamento excluído com sucesso", 4000);
+                    }
                 });
             }
         }
@@ -123,7 +149,7 @@ namespace HandyCareCuidador.PageModel
             {
                 Medicamento = new Medicamento();
                 oHorario.deleteVisible = false;
-                alterar = false;
+                alterar = true;
             }
             else
             {

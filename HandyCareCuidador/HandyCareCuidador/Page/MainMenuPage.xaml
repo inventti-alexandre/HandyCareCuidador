@@ -16,7 +16,7 @@
                                                       Title="Selecione um paciente"
                                                       ItemsSource="{Binding Pacientes}"
                                                       SelectedItem="{Binding SelectedPaciente, Mode=TwoWay}"
-                                                      HorizontalOptions="FillAndExpand" />
+                                                      HorizontalOptions="FillAndExpand" SelectedIndex="{Binding oHorario.Index}"/>
                     <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
                             HorizontalOptions="End" HeightRequest="15" Command="{Binding AddPaciente}"
                             IsVisible="{Binding oHorario.Visualizar}" />
@@ -86,7 +86,7 @@
                         <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
                     </ContentView>-->
                 </Grid>
-                <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black"
+                <Button x:Name="btnContato" BackgroundColor="Red" BorderColor="Black" TextColor="White"
                         Command="{Binding AlertarContatos}" IsVisible="{Binding oHorario.Visualizar}"
                         HorizontalOptions="FillAndExpand" />
             </StackLayout>

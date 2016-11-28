@@ -2,9 +2,7 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HandyCareCuidador.Page.ListaAfazerPage"
-             xmlns:schedule="clr-namespace:Syncfusion.SfSchedule.XForms;assembly=Syncfusion.SfSchedule.XForms"
              xmlns:calendar="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
-             xmlns:local="clr-namespace:HandyCareCuidador;assembly=HandyCareCuidador"
              xmlns:helper="clr-namespace:HandyCareCuidador.Helper;assembly=HandyCareCuidador">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -49,11 +47,3 @@
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>
-<!--<schedule:SfSchedule x:Name="Schedule" DataSource="{Binding DataAfazeres}" 
-                                 ScheduleView="DayView" ShowAppointmentsInline="True" ScheduleCellTapped="Schedule_OnScheduleCellTapped"  >-->
-<!--MonthInlineAppointmentTapped="Schedule_OnMonthInlineAppointmentTapped"-->
-<!--
-                <schedule:SfSchedule.Behaviors>
-                    <helper:MonthInlineAppointmentBehavior Command="{Binding AfazerSelected}" Converter="{StaticResource SelectedItemConverter}"></helper:MonthInlineAppointmentBehavior>
-                </schedule:SfSchedule.Behaviors>
-            </schedule:SfSchedule>-->

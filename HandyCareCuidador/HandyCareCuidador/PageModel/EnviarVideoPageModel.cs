@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Acr.UserDialogs;
 using FreshMvvm;
@@ -34,19 +35,31 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    Video.Id = Guid.NewGuid().ToString();
-                    Video.CreatedAt = DateTimeOffset.Now;
-                    VideoFamiliar = new VideoFamiliar
+                    try
                     {
-                        FamId = Familiar.Id,
-                        VidId = Video.Id
-                    };
-                    await CuidadorRestService.DefaultManager.SaveVideoAsync(Video, true);
-                    await CuidadorRestService.DefaultManager.SaveVideoFamiliarAsync(VideoFamiliar, true);
-                    await CoreMethods.PopPageModel();
-                    UserDialogs.Instance.ShowSuccess("Vídeo enviado com sucesso", 4000);
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        Video.Id = Guid.NewGuid().ToString();
+                        Video.CreatedAt = DateTimeOffset.Now;
+                        VideoFamiliar = new VideoFamiliar
+                        {
+                            FamId = Familiar.Id,
+                            VidId = Video.Id
+                        };
+                        await CuidadorRestService.DefaultManager.SaveVideoAsync(Video, true);
+                        await CuidadorRestService.DefaultManager.SaveVideoFamiliarAsync(VideoFamiliar, true);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel();
+                        UserDialogs.Instance.ShowSuccess("Vídeo enviado com sucesso", 4000);
+
+                    }
                 });
             }
         }

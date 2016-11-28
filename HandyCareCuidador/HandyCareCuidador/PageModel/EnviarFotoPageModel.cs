@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Acr.UserDialogs;
 using FreshMvvm;
 using HandyCareCuidador.Data;
@@ -25,19 +26,30 @@ namespace HandyCareCuidador.PageModel
             {
                 return new Command(async () =>
                 {
-                    oHorario.Visualizar = false;
-                    oHorario.ActivityRunning = true;
-                    Foto.Id = Guid.NewGuid().ToString();
-                    Foto.CreatedAt = DateTimeOffset.Now;
-                    FotoFamiliar = new FotoFamiliar
+                    try
                     {
-                        FamId = Familiar.Id,
-                        FotId = Foto.Id
-                    };
-                    await CuidadorRestService.DefaultManager.SaveFotoAsync(Foto, true);
-                    await CuidadorRestService.DefaultManager.SaveFotoFamiliarAsync(FotoFamiliar, true);
-                    await CoreMethods.PopPageModel();
-                    UserDialogs.Instance.ShowSuccess("Foto enviada com sucesso", 4000);
+                        oHorario.Visualizar = false;
+                        oHorario.ActivityRunning = true;
+                        Foto.Id = Guid.NewGuid().ToString();
+                        Foto.CreatedAt = DateTimeOffset.Now;
+                        FotoFamiliar = new FotoFamiliar
+                        {
+                            FamId = Familiar.Id,
+                            FotId = Foto.Id
+                        };
+                        await CuidadorRestService.DefaultManager.SaveFotoAsync(Foto, true);
+                        await CuidadorRestService.DefaultManager.SaveFotoFamiliarAsync(FotoFamiliar, true);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel();
+                        UserDialogs.Instance.ShowSuccess("Foto enviada com sucesso", 4000);
+                    }
 
                 });
             }
@@ -53,6 +65,7 @@ namespace HandyCareCuidador.PageModel
             if (x == null) return;
             Familiar = x.Item2;
             Foto = x.Item1;
-            FotoPaciente = x.Item3.Source;        }
+            FotoPaciente = x.Item3.Source;
+        }
     }
 }

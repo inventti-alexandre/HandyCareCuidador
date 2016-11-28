@@ -38,6 +38,11 @@ namespace HandyCareCuidador.PageModel
             }
         }
 
+        protected override async void ViewIsDisappearing(object sender, EventArgs e)
+        {
+            base.ViewIsDisappearing(sender, e);
+        }
+
         public Command<Familiar> FamiliarSelected
         {
             get

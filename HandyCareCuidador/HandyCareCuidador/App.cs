@@ -15,6 +15,7 @@ using Rox;
 using Syncfusion.SfCalendar.XForms;
 using Syncfusion.SfSchedule.XForms;
 using TK.CustomMap.Api.Google;
+
 using Xamarin.Forms;
 using ZXing.Mobile;
 
@@ -134,6 +135,7 @@ namespace HandyCareCuidador
             FreshIOC.Container.Register<MobileBarcodeScanner>(new MobileBarcodeScanner());
             FreshIOC.Container.Register<SfSchedule>(new SfSchedule());
             FreshIOC.Container.Register<SfCalendar>(new SfCalendar());
+            //FreshIOC.Container.Register<INfcForms, NfcForms>();
 
             //FreshIOC.Container.Resolve<VideoView>();
             //FreshIOC.Container.Register<VideoPlayer>(new VideoPlayer());

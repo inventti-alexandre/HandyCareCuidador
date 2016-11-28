@@ -55,7 +55,8 @@ namespace HandyCareCuidador.PageModel
                 return new Command(async () =>
                 {
                     deleteVisible = false;
-                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente,DateTime>(null, oPaciente, CuidadorPaciente,InicioData);
+                    var x = new Tuple<Afazer, Paciente, CuidadorPaciente, DateTime>(null, oPaciente, CuidadorPaciente,
+                        InicioData);
                     await CoreMethods.PushPageModel<AfazerPageModel>(x);
                 });
             }
@@ -112,6 +113,7 @@ namespace HandyCareCuidador.PageModel
                 });
             }
         }
+
         public Command<CalendarEventCollection> AfazeresCalendario
         {
             get
@@ -120,8 +122,8 @@ namespace HandyCareCuidador.PageModel
                 {
                     Afazeres.Clear();
                     oHorario.DadoPaciente = false;
-                    if(afazer.Count==0)
-                        InicioData=DateTime.Now;
+                    if (afazer.Count == 0)
+                        InicioData = DateTime.Now;
                     foreach (var item in afazer)
                     {
                         InicioData = item.StartTime;
@@ -191,10 +193,16 @@ namespace HandyCareCuidador.PageModel
             AfazerSelecionado = new Afazer();
             InicioData = new DateTime();
             Afazeres = new ObservableCollection<Afazer>();
-            oHorario = new PageModelHelper {ActivityRunning = true, Visualizar = false,DadoPaciente = true,CuidadorExibicao = false};
+            oHorario = new PageModelHelper
+            {
+                ActivityRunning = true,
+                Visualizar = false,
+                DadoPaciente = true,
+                CuidadorExibicao = false
+            };
             DataAfazeres = new ScheduleAppointmentCollection();
-            DataRealizacaoAfazeres=new CalendarEventCollection();
-            ConfigExibDias=new DayLabelSettings();
+            DataRealizacaoAfazeres = new CalendarEventCollection();
+            ConfigExibDias = new DayLabelSettings();
             ConfigDias = new DayViewSettings {ShowAllDay = true,};
             await GetAfazeresConcluidos();
             await GetAfazeres();
@@ -209,9 +217,17 @@ namespace HandyCareCuidador.PageModel
             {
                 await Task.Run(async () =>
                 {
-                    AfazeresConcluidos =
-                        new ObservableCollection<ConclusaoAfazer>(
-                            await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync(true));
+                    try
+                    {
+                        AfazeresConcluidos =
+    new ObservableCollection<ConclusaoAfazer>(
+        await CuidadorRestService.DefaultManager.RefreshConclusaoAfazerAsync(true));
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                    }
                 });
             }
             catch (Exception)
@@ -243,7 +259,6 @@ namespace HandyCareCuidador.PageModel
                                 .Contains(e.Id))
                             .Where(e => pacresult.Select(m => m.Id).Contains(e.AfaPaciente))
                             .AsEnumerable();
-                        //Afazeres = new ObservableCollection<Afazer>(result);
                         foreach (var afazer in result)
                         {
                             Device.BeginInvokeOnMainThread(() =>
@@ -290,7 +305,6 @@ namespace HandyCareCuidador.PageModel
             catch (ArgumentNullException e)
             {
                 Debug.WriteLine(e.Message);
-                throw;
             }
         }
 

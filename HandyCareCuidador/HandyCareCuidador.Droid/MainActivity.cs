@@ -5,6 +5,7 @@ using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Nfc;
 using Android.OS;
 using HandyCareCuidador.Data;
 using HandyCareCuidador.Droid.Services;
@@ -13,6 +14,7 @@ using Java.Lang;
 using Microsoft.WindowsAzure.MobileServices;
 using Octane.Xam.VideoPlayer.Android;
 using Plugin.Permissions;
+using Poz1.NFCForms.Droid;
 using Syncfusion.SfCalendar.XForms.Droid;
 using Syncfusion.SfSchedule.XForms;
 using Xamarin;
@@ -27,6 +29,7 @@ namespace HandyCareCuidador.Droid
     //Microsoft.WindowsAzure.Mobile;Microsoft.WindowsAzure.Mobile.Ext
     [Activity(Label = "Handy Care - Cuidador", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light",
          /* MainLauncher = true,*/ ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+
     public class MainActivity : FormsApplicationActivity, App.IAuthenticate
     {
         private static readonly File FotoFile = new File(Environment.GetExternalStoragePublicDirectory(
@@ -36,7 +39,8 @@ namespace HandyCareCuidador.Droid
             Environment.DirectoryMovies), DateTime.Now + "handycare.mp4");
 
         protected static AfazerServiceConnection afazerServiceConnection;
-
+        public NfcAdapter NFCdevice;
+        public NfcForms x;
         // declarations
         protected readonly string logTag = "App";
         private MobileServiceUser user;
@@ -109,6 +113,8 @@ namespace HandyCareCuidador.Droid
             UserDialogs.Init(() => this);
             FormsVideoPlayer.Init();
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            NfcManager NfcManager = (NfcManager)Android.App.Application.Context.GetSystemService(Context.NfcService);
+            NFCdevice = NfcManager.DefaultAdapter;
             LoadApplication(new App());
         }
 

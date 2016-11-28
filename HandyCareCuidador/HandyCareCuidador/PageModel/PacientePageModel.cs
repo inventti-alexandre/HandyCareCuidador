@@ -69,19 +69,15 @@ namespace HandyCareCuidador.PageModel
                                 CuidadorRestService.DefaultManager.SaveCuidadorPacienteAsync(CuidadorPaciente,
                                     oHorario.NovoPaciente);
                         });
-                        await CoreMethods.PopPageModel(Paciente);
-                        UserDialogs.Instance.ShowSuccess("Paciente cadastrado com sucesso", 4000);
-
-                    }
-                    catch (NullReferenceException e)
-                    {
-                        Debug.WriteLine(e.ToString());
-                        throw;
                     }
                     catch (Exception e)
                     {
                         Debug.WriteLine(e.ToString());
-                        throw;
+                    }
+                    finally
+                    {
+                        await CoreMethods.PopPageModel(Paciente);
+                        UserDialogs.Instance.ShowSuccess("Paciente cadastrado com sucesso", 4000);
                     }
                 });
             }

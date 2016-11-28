@@ -11,6 +11,8 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="15">
+                <Label Text="Título da tarefa" />
+                <Entry Text="{Binding Afazer.AfaTitulo}" Placeholder="Descreva o que deverá ser feito" />
                 <Label Text="Horário previsto de início do afazer" />
                 <DatePicker Date="{Binding oHorario.Data, Mode=TwoWay}" />
                 <TimePicker x:Name="Hora" Time="{Binding oHorario.Horario, Mode=TwoWay}" ></TimePicker>
@@ -32,7 +34,8 @@
                                           IsVisible="{Binding oHorario.HabilitarMaterial}"
                                           HorizontalOptions="FillAndExpand" />
                     <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
-                            HorizontalOptions="End" HeightRequest="15" IsVisible="{Binding oHorario.HabilitarMaterial}" />
+                            HorizontalOptions="End" HeightRequest="15" Command="{Binding AddMaterial}"
+                            IsVisible="{Binding oHorario.HabilitarMaterial}" />
                 </StackLayout>
                 <Label Text="Quantidade de material" IsVisible="{Binding oHorario.HabilitarMaterial}" />
                 <Entry Text="{Binding oHorario.Quantidade, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"
@@ -46,7 +49,7 @@
                                           IsVisible="{Binding oHorario.HabilitarMedicamento}"
                                           HorizontalOptions="FillAndExpand" />
                     <Button Text="+" FontAttributes="Bold" BackgroundColor="Green" TextColor="White"
-                            HorizontalOptions="End" HeightRequest="15"
+                            HorizontalOptions="End" HeightRequest="15" Command="{Binding AddMedicamento}"
                             IsVisible="{Binding oHorario.HabilitarMedicamento}" />
                 </StackLayout>
                 <Label Text="Quantidade de medicamento" IsVisible="{Binding oHorario.HabilitarMedicamento}" />

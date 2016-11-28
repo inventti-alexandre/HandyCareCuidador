@@ -12,7 +12,6 @@ namespace HandyCareCuidador.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            var lstFamiliares = this.FindByName<ListView>("lstFamiliares");
             lstFamiliares?.ClearValue(ListView.SelectedItemProperty);
         }
     }
